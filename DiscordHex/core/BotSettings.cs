@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DiscordHex.core
+namespace DiscordHex.Core
 {
     internal sealed class BotSettings
     {
@@ -15,8 +15,9 @@ namespace DiscordHex.core
         internal bool AllowAll { get; set; }
         internal ulong SelfId { get; set; }
         internal Dictionary<string, string> Hexes { get; set; }
-        internal List<ulong> ApprovedWitches { get; set; }
+        internal List<ulong> AuthorizedWitches { get; set; }
         internal Random RandomNumber { get; private set; }
+        internal Dictionary<string, string> CommandHelpTexts { get; set; }
 
         #endregion
 

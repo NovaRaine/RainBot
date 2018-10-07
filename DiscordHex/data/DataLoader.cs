@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using Discord.WebSocket;
-using DiscordHex.core;
+using DiscordHex.Core;
 
 namespace DiscordHex.Data
 {
@@ -21,7 +21,7 @@ namespace DiscordHex.Data
             con.Open();
 
             // Withces
-            BotSettings.Instance.ApprovedWitches = GetAuthorizedWitches(con);
+            BotSettings.Instance.AuthorizedWitches = GetAuthorizedWitches(con);
 
             // Hexes
             BotSettings.Instance.Hexes = GetSpellBook(con);
@@ -56,10 +56,10 @@ namespace DiscordHex.Data
             GetDebugSettings(settings);
 #endif
 #if !DEBUG
-            GetLiveSettings(ref botSettings, settings);
+            GetLiveSettings(settings);
 #endif
 
-            BotSettings.Instance.Prefix = settings["delimiter"];
+            BotSettings.Instance.Prefix = settings["prefix"];
             var allowAll = settings["allowall"];
             BotSettings.Instance.AllowAll = allowAll.ToLower() == "true";
         }

@@ -1,12 +1,14 @@
 ﻿using System.Threading.Tasks;
 using Discord.WebSocket;
 using System.Linq;
-using DiscordHex.core;
+using DiscordHex.Core;
 
 namespace DiscordHex.Commands
 {
     internal class Hex : ICommand
     {
+        public string Description => "Cast a hex on someone. Or everyone. Whatever.";
+
         public async Task Execute(string[] tokens, SocketMessage message)
         {
             if (message.MentionedUsers.Any(x => x.Id == BotSettings.Instance.SelfId))
@@ -50,7 +52,7 @@ namespace DiscordHex.Commands
             if (BotSettings.Instance.AllowAll)
                 return true;
             else
-                return BotSettings.Instance.ApprovedWitches.Contains(id);
+                return BotSettings.Instance.AuthorizedWitches.Contains(id);
         }
     }
 }

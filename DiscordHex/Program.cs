@@ -4,8 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using DiscordHex.Data;
-using DiscordHex.Commands;
-using DiscordHex.core;
+using DiscordHex.Core;
 
 namespace DiscordHex
 {
@@ -50,58 +49,12 @@ namespace DiscordHex
         {
             if (message.Content.StartsWith((BotSettings.Instance.Prefix)))
             {
-                var content = message.Content.Substring((BotSettings.Instance.Prefix.Length));
-                var tokens = content.Split(' ');
+                var tokens = message.Content.Substring((BotSettings.Instance.Prefix.Length)).Split(' ');
                 if (tokens.Any())
                 {
                     await _commandHandler.ExecuteCommand(tokens, message);
                 }
             }
         }
-
-        //private async Task backupcrap(SocketMessage message)
-        //{
-        //    if (message.Content.ToLower().StartsWith($"{Prefix}nyanta"))
-        //    {
-        //        var e = new EmbedBuilder();
-        //        e.ImageUrl = "https://cdn.weeb.sh/images/r17lwymiZ.gif";
-        //        e.Description = $"Nyanta is the cutest smol bean!";
-
-        //        await message.Channel.SendMessageAsync("", false, e);
-        //        return;
-        //    }
-
-        //    if (message.Content.ToLower().StartsWith($"{Prefix}mionee"))
-        //    {
-        //        var e = new EmbedBuilder();
-        //        e.ImageUrl = "https://cdn.weeb.sh/images/By03IkXsZ.gif";
-        //        e.Description = $"Mionee is the cutest smol bean!";
-
-        //        await message.Channel.SendMessageAsync("", false, e);
-        //        return;
-        //    }
-
-        //    if (message.Content.ToLower().StartsWith($"{Prefix}deni"))
-        //    {
-        //        var e = new EmbedBuilder();
-        //        e.ImageUrl = "https://cdn.weeb.sh/images/SJYxIUmD-.gif";
-        //        e.Description = $"Cuddlepuff!";
-
-        //        await message.Channel.SendMessageAsync("", false, e);
-        //        return;
-        //    }
-
-
-        //    if (message.Content.ToLower().StartsWith($"{Prefix}atumra"))
-        //    {
-        //        await message.Channel.SendMessageAsync($"You silly baby..");
-        //        return;
-        //    }
-
-        //    if (message.Content.ToLower().StartsWith($"{Prefix}hex"))
-        //    {
-                
-        //    }
-        //}
     }
 }

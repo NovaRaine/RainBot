@@ -6,5 +6,6 @@ namespace DiscordHex.Commands
     internal interface ICommand
     {
         Task Execute(string[] tokens, SocketMessage message);
+        string Description { get; }
     }
 }
