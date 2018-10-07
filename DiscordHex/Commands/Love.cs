@@ -34,10 +34,6 @@ namespace DiscordHex.Commands
                     e.ImageUrl = "https://cdn.weeb.sh/images/By03IkXsZ.gif";
                     e.Description = $"{message.MentionedUsers.First().Username} is the cutest smol bean! Everyone loves you <3";
                     break;
-                case 312934158693564416:
-                    e.ImageUrl = "https://cdn.weeb.sh/images/SyJzRTKFW.gif";
-                    e.Description = $"{message.MentionedUsers.First().Username}!! {message.Author.Username} \"loves you\"";
-                    break;
 
                 default:
                     e.ImageUrl = "https://cdn.weeb.sh/images/HkzArUmvZ.gif";
