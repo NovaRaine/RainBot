@@ -1,8 +1,11 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using DiscordHex.Data;
+using DiscordHex.Commands;
+using DiscordHex.core;
 
 namespace DiscordHex
 {
@@ -10,11 +13,7 @@ namespace DiscordHex
     public class Program
     {
         private DataLoader _loader;
-
-        private List<ulong> _approvedWitches = new List<ulong>();
-        private SpellBook _spellBook;
-        private string Token { get; set; }
-        private string Delimiter { get; set; } = ">>";
+        private CommandHandler _commandHandler = new CommandHandler();
 
         public static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
@@ -28,7 +27,7 @@ namespace DiscordHex
             client.Log += Log;
             client.MessageReceived += MessageReceived;
             
-            await client.LoginAsync(TokenType.Bot, Token);
+            await client.LoginAsync(TokenType.Bot, BotSettings.Instance.Token);
             await client.StartAsync();
 
             // Block this task until the program is closed.
@@ -39,10 +38,6 @@ namespace DiscordHex
         {
             _loader = new DataLoader();
             _loader.LoadData();
-            Token = _loader.BotSettings.Token;
-            Delimiter = _loader.BotSettings.Delimiter;
-            _spellBook = _spellBook = new SpellBook(_loader.Hexes);
-            _approvedWitches = _loader.AuthorizedWitches;
         }
 
         private Task Log(LogMessage msg)
@@ -53,24 +48,60 @@ namespace DiscordHex
 
         private async Task MessageReceived(SocketMessage message)
         {
-            SaveUser(message);
-            var authorizedWitch = _approvedWitches.Contains(message.Author.Id);
-
-            if (authorizedWitch && message.Content.ToLower() == $"{Delimiter}reloaddata")
+            if (message.Content.StartsWith((BotSettings.Instance.Prefix)))
             {
-                LoadData();
-                await message.Channel.SendMessageAsync("Data reloaded.");
-            }
-
-            if (message.Content.ToLower().StartsWith($"{Delimiter}hex"))
-            {
-                await _spellBook.CastHex(message, !authorizedWitch);
+                var content = message.Content.Substring((BotSettings.Instance.Prefix.Length));
+                var tokens = content.Split(' ');
+                if (tokens.Any())
+                {
+                    await _commandHandler.ExecuteCommand(tokens, message);
+                }
             }
         }
 
-        private void SaveUser(SocketMessage message)
-        {
-            _loader.SaveUser(message);
-        }
+        //private async Task backupcrap(SocketMessage message)
+        //{
+        //    if (message.Content.ToLower().StartsWith($"{Prefix}nyanta"))
+        //    {
+        //        var e = new EmbedBuilder();
+        //        e.ImageUrl = "https://cdn.weeb.sh/images/r17lwymiZ.gif";
+        //        e.Description = $"Nyanta is the cutest smol bean!";
+
+        //        await message.Channel.SendMessageAsync("", false, e);
+        //        return;
+        //    }
+
+        //    if (message.Content.ToLower().StartsWith($"{Prefix}mionee"))
+        //    {
+        //        var e = new EmbedBuilder();
+        //        e.ImageUrl = "https://cdn.weeb.sh/images/By03IkXsZ.gif";
+        //        e.Description = $"Mionee is the cutest smol bean!";
+
+        //        await message.Channel.SendMessageAsync("", false, e);
+        //        return;
+        //    }
+
+        //    if (message.Content.ToLower().StartsWith($"{Prefix}deni"))
+        //    {
+        //        var e = new EmbedBuilder();
+        //        e.ImageUrl = "https://cdn.weeb.sh/images/SJYxIUmD-.gif";
+        //        e.Description = $"Cuddlepuff!";
+
+        //        await message.Channel.SendMessageAsync("", false, e);
+        //        return;
+        //    }
+
+
+        //    if (message.Content.ToLower().StartsWith($"{Prefix}atumra"))
+        //    {
+        //        await message.Channel.SendMessageAsync($"You silly baby..");
+        //        return;
+        //    }
+
+        //    if (message.Content.ToLower().StartsWith($"{Prefix}hex"))
+        //    {
+                
+        //    }
+        //}
     }
 }
