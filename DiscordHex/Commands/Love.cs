@@ -2,6 +2,7 @@
 using Discord.WebSocket;
 using System.Linq;
 using Discord;
+using DiscordHex.Core;
 
 namespace DiscordHex.Commands
 {
@@ -19,9 +20,10 @@ namespace DiscordHex.Commands
 
             var e = new EmbedBuilder();
 
-            // user specific ones
+            
             switch (message.MentionedUsers.First().Id)
             {
+                // User specific ones
                 case 122444132156309506:
                     e.ImageUrl = "https://cdn.weeb.sh/images/r17lwymiZ.gif";
                     e.Description = $"Feel the love damnit!";
@@ -35,6 +37,7 @@ namespace DiscordHex.Commands
                     e.Description = $"{message.MentionedUsers.First().Username} is the cutest smol bean! Everyone loves you <3";
                     break;
 
+                // Default = everyone else
                 default:
                     e.ImageUrl = "https://cdn.weeb.sh/images/HkzArUmvZ.gif";
                     e.Description = $"{message.MentionedUsers.First().Username}!! {message.Author.Username} loves you <3";

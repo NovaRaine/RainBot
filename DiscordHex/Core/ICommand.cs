@@ -1,7 +1,7 @@
 ﻿using Discord.WebSocket;
 using System.Threading.Tasks;
 
-namespace DiscordHex.Commands
+namespace DiscordHex.Core
 {
     internal interface ICommand
     {
