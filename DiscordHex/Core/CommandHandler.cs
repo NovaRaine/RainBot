@@ -17,7 +17,8 @@ namespace DiscordHex.Core
                 { "hex", new Hex() },
                 { "love", new Love() },
                 { "witchylove", new Love() },
-                { "help", new Help() }
+                { "help", new Help() },
+                { "esuna", new Esuna() }
             };
 
             BotSettings.Instance.CommandHelpTexts = new Dictionary<string, string>();
