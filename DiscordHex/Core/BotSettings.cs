@@ -9,11 +9,6 @@ namespace DiscordHex.Core
 
         #region Members
 
-        internal string Token { get; set; }
-        internal string Prefix { get; set; } = ">>";
-        internal string ImageBasePath { get; set; }
-        internal bool AllowAll { get; set; }
-        internal ulong SelfId { get; set; }
         internal Dictionary<string, string> Hexes { get; set; }
         internal List<ulong> AuthorizedWitches { get; set; }
         internal Random RandomNumber { get; private set; }

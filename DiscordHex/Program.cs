@@ -21,6 +21,8 @@ namespace DiscordHex
 
         public async Task MainAsync()
         {
+            Environment.SetEnvironmentVariable("Version", "2.0.0");
+
             var services = ConfigureServices();
 
             LoadData();
@@ -30,7 +32,7 @@ namespace DiscordHex
             client.Log += Log;
             services.GetRequiredService<CommandService>().Log += Log;
             
-            await client.LoginAsync(TokenType.Bot, BotSettings.Instance.Token);
+            await client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("Settings_Token"));
             await client.StartAsync();
 
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();

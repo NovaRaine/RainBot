@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordHex.Services;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -22,10 +23,10 @@ namespace DiscordHex.Modules
             Discord = discord;
         }
 
-        [Command("ping")]
-        [Alias("hello")]
+        [Command("version")]
+        [Alias("ver")]
         public Task PingAsync()
-            => ReplyAsync("pong");
+            => ReplyAsync(Environment.GetEnvironmentVariable("Version"));
 
         [Command("tea")]
         public async Task ServeTea(params IUser[] user)

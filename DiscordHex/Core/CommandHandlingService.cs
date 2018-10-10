@@ -35,9 +35,8 @@ namespace DiscordHex.Core
             if (message.Source != MessageSource.User) return;
 
             // This value holds the offset where the prefix ends
-            var prefix = ">>";
+            var prefix = Environment.GetEnvironmentVariable("Settings_Prefix");
             var argPos = prefix.Length;
-            //if (!message.HasMentionPrefix(_discord.CurrentUser, ref argPos)) return;
             
             if (!message.HasStringPrefix(prefix, ref argPos)) return;
 
