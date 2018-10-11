@@ -7,7 +7,7 @@ namespace DiscordHex.Services
 {
     public class FfxivSpellService
     {
-        public EmbedBuilder CastEsuna(IUser[] users, IReadOnlyCollection<SocketRole> mentionedRoles, string caster)
+        public EmbedBuilder CastEsuna(IReadOnlyCollection<IUser> users, IReadOnlyCollection<SocketRole> mentionedRoles, string caster)
         {
             var e = new EmbedBuilder();
 
