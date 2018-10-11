@@ -52,21 +52,21 @@ namespace DiscordHex.Modules
         [Command("hex")]
         public async Task CastHex(params IUser[] users)
         {
-            var embedded = HexingService.CastHex(users, Context.Message.MentionedRoles, Discord.CurrentUser.Id);
+            var embedded = HexingService.CastHex(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Discord.CurrentUser.Id);
             await ReplyAsync("", false, embedded.Build());
         }
 
         [Command("esuna")]
         public async Task CastEsuna(params IUser[] users)
         {
-            var embedded = FfxivSpellService.CastEsuna(users, Context.Message.MentionedRoles, Context.Message.Author.Username);
+            var embedded = FfxivSpellService.CastEsuna(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Context.Message.Author.Username);
             await ReplyAsync("", false, embedded.Build());
         }
 
         [Command("love")]
         public async Task LoveSomeone(params IUser[] users)
         {
-            var embedded = CommonCommands.LoveSomeone(users, Context.Message.MentionedRoles, Context.Message.Author.Username);
+            var embedded = CommonCommands.LoveSomeone(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Context.Message.Author.Username);
             await ReplyAsync("", false, embedded.Build());
         }
     }

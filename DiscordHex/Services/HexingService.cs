@@ -8,7 +8,7 @@ namespace DiscordHex.Services
 {
     public class HexingService
     {
-        public EmbedBuilder CastHex(IUser[] users, IReadOnlyCollection<SocketRole> mentionedRoles, ulong botId)
+        public EmbedBuilder CastHex(IReadOnlyCollection<IUser> users, IReadOnlyCollection<SocketRole> mentionedRoles, ulong botId)
         {
             var e = new EmbedBuilder();
 
@@ -19,7 +19,7 @@ namespace DiscordHex.Services
                 return e;
             }
 
-            if (users != null && users.Length > 0 && users.Any(x => x.Id == botId))
+            if (users != null && users.Count > 0 && users.Any(x => x.Id == botId))
             {
                 e.Description = "You're targeting me? But.. but why.. what have I done :(";
                 return e;

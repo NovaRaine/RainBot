@@ -7,7 +7,7 @@ namespace DiscordHex.Services
 {
     public class CommonCommands
     {
-        public EmbedBuilder LoveSomeone(IUser[] users, IReadOnlyCollection<SocketRole> mentionedRoles, string caster)
+        public EmbedBuilder LoveSomeone(IReadOnlyCollection<IUser> users, IReadOnlyCollection<SocketRole> mentionedRoles, string caster)
         {
             var e = new EmbedBuilder();
             
