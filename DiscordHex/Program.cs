@@ -12,7 +12,6 @@ using System.Linq;
 
 namespace DiscordHex
 {
-
     public class Program
     {
         private DataLoader _loader;
@@ -22,7 +21,7 @@ namespace DiscordHex
 
         public async Task MainAsync()
         {
-            Environment.SetEnvironmentVariable("Version", "2.0.2");
+            Environment.SetEnvironmentVariable("Version", "2.0.4");
 
             var services = ConfigureServices();
             

@@ -107,7 +107,8 @@ namespace DiscordHex.Modules
                 }                    
             }
 
-            await ReplyAsync("", false, embedded.Build());
+            await Context.Message.Author.SendMessageAsync("Help incomming!\nHere's a list of my commands :)");
+            await Context.Message.Author.SendMessageAsync("", false, embedded.Build());
         }
     }
 }
