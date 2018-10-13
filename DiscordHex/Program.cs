@@ -25,7 +25,7 @@ namespace DiscordHex
             Environment.SetEnvironmentVariable("Version", "2.0.2");
 
             var services = ConfigureServices();
-
+            
             LoadData();
             
             _client = services.GetRequiredService<DiscordSocketClient>();

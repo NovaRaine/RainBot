@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using DiscordHex.Services;
 using System;
@@ -15,8 +16,9 @@ namespace DiscordHex.Modules
         public FfxivSpellService FfxivSpellService { get; set; }
         public CommonCommands CommonCommands { get; set; }
         public DiscordSocketClient Discord { get; set; }
+        public CommandService CommandService { get; set; }
 
-        internal PublicModule(RandomCatPictureService pictureService, HexingService hexingService, DiscordSocketClient discord)
+        internal PublicModule(RandomCatPictureService pictureService, HexingService hexingService, DiscordSocketClient discord, CommandService commandService)
         {
             RandomCatPictureService = pictureService;
             HexingService = hexingService;
@@ -25,10 +27,12 @@ namespace DiscordHex.Modules
 
         [Command("version")]
         [Alias("ver")]
+        [Summary("Show bot version")]
         public Task PingAsync()
             => ReplyAsync(Environment.GetEnvironmentVariable("Version"));
 
         [Command("tea")]
+        [Summary("Serve a cup of tea to someone you like.")]
         public async Task ServeTea(params string[] message)
         {
             if (Context.Message.MentionedUsers.Count > 0)
@@ -38,6 +42,8 @@ namespace DiscordHex.Modules
         }
 
         [Command("cat")]
+        [Alias("kitty", "radomcat")]
+        [Summary("Get a radom cat in your channel! An important part of the internet.")]
         public async Task CatAsync(params string[] message)
         {
             var text = Context.Message.MentionedUsers.Count > 0
@@ -50,6 +56,8 @@ namespace DiscordHex.Modules
         }
 
         [Command("hex")]
+        [Alias("curse")]
+        [Summary("Cast a hex on your nemesis, or just on whoever.")]
         public async Task CastHex(params string[] message)
         {
             var embedded = HexingService.CastHex(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Discord.CurrentUser.Id);
@@ -57,6 +65,7 @@ namespace DiscordHex.Modules
         }
 
         [Command("esuna")]
+        [Summary("Cast Esuna on someone to remove a negative effect. Possibly..")]
         public async Task CastEsuna(params string[] message)
         {
             var embedded = FfxivSpellService.CastEsuna(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Context.Message.Author.Username);
@@ -64,6 +73,8 @@ namespace DiscordHex.Modules
         }
 
         [Command("love")]
+        [Alias("witchylove", "hate")]
+        [Summary("Show someone how that you love them very much!")]
         public async Task LoveSomeone(params string[] message)
         {
             var embedded = CommonCommands.LoveSomeone(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Context.Message.Author.Username);
@@ -71,9 +82,32 @@ namespace DiscordHex.Modules
         }
 
         [Command("info")]
+        [Summary("Just some random system info")]
         public async Task Info(params string[] message)
         {
             await ReplyAsync(CommonCommands.ProcessInfo());
+        }
+
+        [Command("help")]
+        [Alias("h")]
+        [Summary("Shows this thing. you just used it you dummy.")]
+        public async Task Help()
+        {
+            var embedded = new EmbedBuilder();
+            foreach(var module in CommandService.Modules)
+            {
+                foreach(var command in module.Commands)
+                {
+                    var aliases = command.Aliases.Count > 1 ? string.Join(", ", command.Aliases) : string.Empty;
+                    var text = string.IsNullOrEmpty(command.Summary) ? "No summary." : command.Summary;
+                    if (!string.IsNullOrEmpty(aliases))
+                        text = text + "\n\tAlias: " + aliases;
+
+                    embedded.AddField(command.Name, text);
+                }                    
+            }
+
+            await ReplyAsync("", false, embedded.Build());
         }
     }
 }
