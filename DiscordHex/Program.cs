@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord.Commands;
 using System.Net.Http;
 using DiscordHex.Services;
+using System.Linq;
 
 namespace DiscordHex
 {
@@ -15,7 +16,7 @@ namespace DiscordHex
     public class Program
     {
         private DataLoader _loader;
-
+        private DiscordSocketClient _client;
         public static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
 
@@ -27,19 +28,50 @@ namespace DiscordHex
 
             LoadData();
             
-            var client = services.GetRequiredService<DiscordSocketClient>();
+            _client = services.GetRequiredService<DiscordSocketClient>();
 
-            client.Log += Log;
+            _client.Log += Log;
             services.GetRequiredService<CommandService>().Log += Log;
             
-            await client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("Settings_Token"));
-            await client.StartAsync();
+            await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("Settings_Token"));
+            await _client.StartAsync();
+
+
+            _client.Ready += onClientConnected;
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(onClientDisonnecting);
+
 
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
 
             await Task.Delay(-1);
         }
 
+        private async Task onClientConnected()
+        {
+            await sendMessageOnGeneralChannels("I'm back online! :nomparty:");
+        }
+        private void onClientDisonnecting(object sender, EventArgs e)
+        {
+            try
+            {
+                sendMessageOnGeneralChannels(":zzz: I'm going to sleep :zzz:").RunSynchronously();
+            }
+            catch (Exception)
+            {
+                //apparently the client closed already!
+            }
+        }
+
+
+        private async Task sendMessageOnGeneralChannels(string message)
+        {
+            var generalChannels = _client.GroupChannels.Where(x => x.Name.ToLower().Contains("general"));
+
+            foreach(var channel in generalChannels)
+            {
+                await channel.SendMessageAsync(message);
+            }
+        }
         private IServiceProvider ConfigureServices()
         {
             return new ServiceCollection()
