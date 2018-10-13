@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,6 +42,11 @@ namespace DiscordHex.Services
             }
 
             return e;
+        }
+
+        public string ProcessInfo()
+        {   
+            return $"Running as: {Environment.UserName}@{Environment.MachineName}";
         }
     }
 }

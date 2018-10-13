@@ -69,5 +69,11 @@ namespace DiscordHex.Modules
             var embedded = CommonCommands.LoveSomeone(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Context.Message.Author.Username);
             await ReplyAsync("", false, embedded.Build());
         }
+
+        [Command("info")]
+        public async Task Info(params string[] message)
+        {
+            await ReplyAsync(CommonCommands.ProcessInfo());
+        }
     }
 }
