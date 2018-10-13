@@ -22,7 +22,7 @@ namespace DiscordHex
 
         public async Task MainAsync()
         {
-            Environment.SetEnvironmentVariable("Version", "2.0.0");
+            Environment.SetEnvironmentVariable("Version", "2.0.1");
 
             var services = ConfigureServices();
 
@@ -35,10 +35,10 @@ namespace DiscordHex
             
             await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("Settings_Token"));
             await _client.StartAsync();
-            await _client.SetGameAsync("Running...");
+            await _client.SetGameAsync($"RainBot-v{Environment.GetEnvironmentVariable("Version")}");
             
-            _client.Connected += onClientConnected;
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(onClientDisonnecting);
+            _client.Connected += OnClientConnected;
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnClientDisonnecting);
 
 
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
@@ -46,21 +46,21 @@ namespace DiscordHex
             await Task.Delay(-1);
         }
 
-        private async Task onClientConnected()
+        private async Task OnClientConnected()
         {
             try
             {
-                await sendMessageOnGeneralChannels("I'm back online! :nomparty:");
+                await SendMessageOnGeneralChannels("I'm back online! :nomparty:");
             }
             catch (Exception)
             {
             }
         }
-        private void onClientDisonnecting(object sender, EventArgs e)
+        private void OnClientDisonnecting(object sender, EventArgs e)
         {
             try
             {
-                sendMessageOnGeneralChannels(":zzz: I'm going to sleep :zzz:").RunSynchronously();
+                SendMessageOnGeneralChannels(":zzz: I'm going to sleep :zzz:").RunSynchronously();
             }
             catch (Exception)
             {
@@ -69,7 +69,7 @@ namespace DiscordHex
         }
 
 
-        private async Task sendMessageOnGeneralChannels(string message)
+        private async Task SendMessageOnGeneralChannels(string message)
         {
             var generalChannels = _client.GroupChannels.Where(x => x.Name.ToLower().Contains("general"));
 
