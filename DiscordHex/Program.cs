@@ -35,9 +35,9 @@ namespace DiscordHex
             
             await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("Settings_Token"));
             await _client.StartAsync();
-
-
-            _client.Ready += onClientConnected;
+            await _client.SetGameAsync("Running...");
+            
+            _client.Connected += onClientConnected;
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(onClientDisonnecting);
 
 
@@ -48,7 +48,13 @@ namespace DiscordHex
 
         private async Task onClientConnected()
         {
-            await sendMessageOnGeneralChannels("I'm back online! :nomparty:");
+            try
+            {
+                await sendMessageOnGeneralChannels("I'm back online! :nomparty:");
+            }
+            catch (Exception)
+            {
+            }
         }
         private void onClientDisonnecting(object sender, EventArgs e)
         {
