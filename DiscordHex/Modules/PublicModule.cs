@@ -57,6 +57,7 @@ namespace DiscordHex.Modules
 
         [Command("dog")]
         [Alias("puppy", "doggo", "pupper")]
+        [Summary("Random dogs. Everyone loves random dogs.")]
         public async Task Dog(params string[] message)
         {
             var text = Context.Message.MentionedUsers.Count > 0
@@ -103,11 +104,12 @@ namespace DiscordHex.Modules
 
         [Command("help")]
         [Alias("h")]
-        [Summary("Shows this thing. you just used it you dummy.")]
+        [Summary("Shows the help info. You just used it you dummy.")]
         public async Task Help(params string[] message)
         {
             var embedded = new EmbedBuilder();
-            foreach(var module in CommandService.Modules)
+            embedded.WithTitle("Here's a list of what I can do.");
+            foreach (var module in CommandService.Modules)
             {
                 foreach(var command in module.Commands)
                 {
@@ -120,7 +122,7 @@ namespace DiscordHex.Modules
                 }                    
             }
 
-            await Context.Message.Author.SendMessageAsync("Help incomming!\nHere's a list of my commands :)");
+            await Context.Message.Author.SendMessageAsync("Thank you for calling RainBot Customer Support.\nHere at RainBot Enterprises, we love all our customers. And especially you! <3");
             await Context.Message.Author.SendMessageAsync("", false, embedded.Build());
         }
     }

@@ -44,7 +44,6 @@ namespace DiscordHex.Services
                 e.ImageUrl = string.IsNullOrEmpty(hex.Value) ? "https://cdn.awwni.me/nltc.jpg" : hex.Value;
                 return e;
             }
-            
         }
     }
 }

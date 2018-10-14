@@ -23,7 +23,6 @@ namespace DiscordHex.Services
             {
                 target = users.First().Username;
             }
-            
 
             if (string.IsNullOrEmpty(target))
             {

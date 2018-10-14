@@ -66,8 +66,7 @@ namespace DiscordHex
                 //apparently the client closed already!
             }
         }
-
-
+        
         private async Task SendMessageOnGeneralChannels(string message)
         {
             var generalChannels = _client.GroupChannels.Where(x => x.Name.ToLower().Contains("general"));
@@ -77,6 +76,7 @@ namespace DiscordHex
                 await channel.SendMessageAsync(message);
             }
         }
+
         private IServiceProvider ConfigureServices()
         {
             return new ServiceCollection()
