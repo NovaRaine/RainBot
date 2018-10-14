@@ -4,16 +4,16 @@ using System.Threading.Tasks;
 
 namespace DiscordHex.Services
 {
-    public class RandomCatPictureService
+    public class RandomPictureService
     {
         private readonly HttpClient _http;
 
-        public RandomCatPictureService(HttpClient http)
+        public RandomPictureService(HttpClient http)
             => _http = http;
 
-        public async Task<Stream> GetCatPictureAsync()
+        public async Task<Stream> GetPictureAsync(string url)
         {
-            var resp = await _http.GetAsync("https://cataas.com/cat");
+            var resp = await _http.GetAsync(url);
             return await resp.Content.ReadAsStreamAsync();
         }
     }

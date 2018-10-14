@@ -21,7 +21,7 @@ namespace DiscordHex
 
         public async Task MainAsync()
         {
-            Environment.SetEnvironmentVariable("Version", "2.0.4");
+            Environment.SetEnvironmentVariable("Version", "2.0.5");
 
             var services = ConfigureServices();
             
@@ -84,7 +84,7 @@ namespace DiscordHex
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandlingService>()
                 .AddSingleton<HttpClient>()
-                .AddSingleton<RandomCatPictureService>()
+                .AddSingleton<RandomPictureService>()
                 .AddSingleton<HexingService>()
                 .AddSingleton<FfxivSpellService>()
                 .AddSingleton<CommonCommands>()

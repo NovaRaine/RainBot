@@ -11,16 +11,16 @@ namespace DiscordHex.Modules
 {
     public class PublicModule : ModuleBase<SocketCommandContext>
     {
-        public RandomCatPictureService RandomCatPictureService { get; set; }
+        public RandomPictureService RandomPictureService { get; set; }
         public HexingService HexingService { get; set; }
         public FfxivSpellService FfxivSpellService { get; set; }
         public CommonCommands CommonCommands { get; set; }
         public DiscordSocketClient Discord { get; set; }
         public CommandService CommandService { get; set; }
 
-        internal PublicModule(RandomCatPictureService pictureService, HexingService hexingService, DiscordSocketClient discord, CommandService commandService)
+        internal PublicModule(RandomPictureService pictureService, HexingService hexingService, DiscordSocketClient discord, CommandService commandService)
         {
-            RandomCatPictureService = pictureService;
+            RandomPictureService = pictureService;
             HexingService = hexingService;
             Discord = discord;
         }
@@ -50,9 +50,22 @@ namespace DiscordHex.Modules
                 ? $"{Context.Message.Author.Username} gifts a kitteh to {Context.Message.MentionedUsers.First().Username}! Hurray :D"
                 : $"Awwwwww.. look, a kitty has come to visit";
 
-            var stream = await RandomCatPictureService.GetCatPictureAsync();
+            var stream = await RandomPictureService.GetPictureAsync("https://cataas.com/cat");
             stream.Seek(0, SeekOrigin.Begin);
-            await Context.Channel.SendFileAsync(stream, "cat.png", text);
+            await Context.Channel.SendFileAsync(stream, "CatsAreEvil.png", text);
+        }
+
+        [Command("dog")]
+        [Alias("puppy", "doggo", "pupper")]
+        public async Task Dog(params string[] message)
+        {
+            var text = Context.Message.MentionedUsers.Count > 0
+                ? $"{Context.Message.MentionedUsers.First().Username}! You got a doggie from {Context.Message.Author.Username} :>"
+                : $"Awwwwww.. look, a dawg has come to visit";
+
+            var stream = await RandomPictureService.GetPictureAsync("https://www.randomdoggiegenerator.com/randomdoggie.php");
+            stream.Seek(0, SeekOrigin.Begin);
+            await Context.Channel.SendFileAsync(stream, "DeniLikesDogs.png", text);
         }
 
         [Command("hex")]
@@ -91,7 +104,7 @@ namespace DiscordHex.Modules
         [Command("help")]
         [Alias("h")]
         [Summary("Shows this thing. you just used it you dummy.")]
-        public async Task Help()
+        public async Task Help(params string[] message)
         {
             var embedded = new EmbedBuilder();
             foreach(var module in CommandService.Modules)
