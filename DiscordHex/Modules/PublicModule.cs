@@ -69,6 +69,47 @@ namespace DiscordHex.Modules
             await Context.Channel.SendFileAsync(stream, "DeniLikesDogs.png", text);
         }
 
+        [Command("bunny")]
+        [Alias("bun", "bunbun", "bunneh")]
+        [Summary("For when cats and dogs are just not good enough.")]
+        public async Task Bunny(params string[] message)
+        {
+            var text = Context.Message.MentionedUsers.Count > 0
+                ? $"{Context.Message.MentionedUsers.First().Username}! A bunneh from {Context.Message.Author.Username} :3"
+                : $"Bunbun!! So soft and cuddly!";
+
+            var url = RandomPictureService.GetRandomBunnyGif();
+            if (!string.IsNullOrEmpty(url))
+            {
+                var embedded = new EmbedBuilder();
+                embedded.Description = text;
+                embedded.ImageUrl = url;
+                await ReplyAsync("", false, embedded.Build());
+                return;
+            }
+
+            await ReplyAsync("The bunnies are hiding :/");
+        }
+
+        [Command("chocolate")]
+        [Alias("choco")]
+        [Summary("Eat some chocolate, or share with someone else.")]
+        public async Task GetChocolate(params string[] message)
+        {
+            var embedded = new EmbedBuilder();
+            if (Context.Message.MentionedUsers.Count > 0)
+            {
+                embedded.Description = $"{Context.Message.Author.Username} throws a bunch of chocolate at {Context.Message.MentionedUsers.First().Username}.. Why?";
+                embedded.ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/7/70/Chocolate_%28blue_background%29.jpg";
+            }
+            else
+            {
+                embedded.Description = $"{Context.Message.Author.Username} noms some chocolate. Without sharing..";
+            }
+            
+            await ReplyAsync("", false, embedded.Build());
+        }
+
         [Command("hex")]
         [Alias("curse")]
         [Summary("Cast a hex on your nemesis, or just on whoever.")]
