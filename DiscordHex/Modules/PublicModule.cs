@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordHex.Services;
+using DiscordHex.Utilities;
 using System;
 using System.IO;
 using System.Linq;
@@ -31,14 +32,31 @@ namespace DiscordHex.Modules
         public Task PingAsync()
             => ReplyAsync(Environment.GetEnvironmentVariable("Version"));
 
-        [Command("tea")]
-        [Summary("Serve a cup of tea to someone you like.")]
-        public async Task ServeTea(params string[] message)
+        [Command("serve")]
+        [Summary("Serve something to another person. Whatever. Might be tea, might be revenge.")]
+        public async Task Serve(IUser user, params string[] message)
         {
+            var msg = (string.Join(' ', message));
+            if (string.IsNullOrEmpty(msg))
+                msg = "nothing.";
+
+            await ReplyAsync($"{user.Username}, you have been served {msg}");
+
+        }
+
+        [Command("serve")]
+        [Alias("tea")]
+        public async Task Serve(params string[] message)
+        {
+            var msg = (string.Join(' ', message));
+            if (string.IsNullOrEmpty(msg))
+                msg = $"nothing. {Context.Message.Author.Username} is a greedy one -.-";
+
             if (Context.Message.MentionedUsers.Count > 0)
-                await ReplyAsync($"{Context.Message.Author.Username} has served {Context.Message.MentionedUsers.First().Username} a cup of tea. Jolly good show!");
+                await ReplyAsync($"{Context.Message.MentionedUsers.First().Username}, you have been served {msg}");
             else
-                await ReplyAsync($"{Context.Message.Author.Username} has served tea. Jolly good show!");
+                await ReplyAsync($"{Context.Message.Author.Username} has served {msg}");
+
         }
 
         [Command("cat")]
@@ -76,9 +94,9 @@ namespace DiscordHex.Modules
         {
             var text = Context.Message.MentionedUsers.Count > 0
                 ? $"{Context.Message.MentionedUsers.First().Username}! A bunneh from {Context.Message.Author.Username} :3"
-                : $"Bunbun!! So soft and cuddly!";
+                : $"Bunbun!!";
 
-            var url = RandomPictureService.GetRandomBunnyGif();
+            var url = RandomPictureService.GetRandomGiphyByTag("bunny");
             if (!string.IsNullOrEmpty(url))
             {
                 var embedded = new EmbedBuilder();
@@ -152,10 +170,10 @@ namespace DiscordHex.Modules
             embedded.WithTitle("Here's a list of what I can do.");
             foreach (var module in CommandService.Modules)
             {
-                foreach(var command in module.Commands)
+                foreach(var command in module.Commands.Where(x => !string.IsNullOrEmpty(x.Summary)))
                 {
                     var aliases = command.Aliases.Count > 1 ? string.Join(", ", command.Aliases) : string.Empty;
-                    var text = string.IsNullOrEmpty(command.Summary) ? "No summary." : command.Summary;
+                    var text = command.Summary;
                     if (!string.IsNullOrEmpty(aliases))
                         text = text + "\n\tAlias: " + aliases;
 

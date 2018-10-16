@@ -58,7 +58,7 @@ namespace DiscordHex.Data
 
             Environment.SetEnvironmentVariable("Settings_Prefix", settings["prefix"]);
             Environment.SetEnvironmentVariable("Settings_AllowAll", settings["allowall"]);
-            
+            Environment.SetEnvironmentVariable("Settings_GiphyToken", settings["giphyToken"]);
         }
 
         private void GetDebugSettings(Dictionary<string, string> settings)
