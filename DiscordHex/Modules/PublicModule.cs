@@ -128,6 +128,26 @@ namespace DiscordHex.Modules
             await ReplyAsync("", false, embedded.Build());
         }
 
+        [Command("chop")]
+        [Alias("chopchop")]
+        [Summary("Chop!")]
+        public async Task Chop(params string[] message)
+        {
+            var embedded = new EmbedBuilder();
+            embedded.ImageUrl = "https://cdn.discordapp.com/attachments/461009638922649610/482247931831910411/aa7eb8e.gif";
+
+            if (Context.Message.MentionedUsers.Count > 0)
+            {
+                embedded.Description = $"Chop! Chopchop, {Context.Message.MentionedUsers.First().Username}!";
+            }
+            else
+            {
+                embedded.Description = "Chop! Chopchop!";
+            }
+
+            await ReplyAsync("", false, embedded.Build());
+        }
+
         [Command("hex")]
         [Alias("curse")]
         [Summary("Cast a hex on your nemesis, or just on whoever.")]
