@@ -52,8 +52,13 @@ namespace DiscordHex.Services
                     e.ImageUrl = "https://i.imgur.com/qGcEiyd.jpg";
                     break;
 
+                case TransSounds.HAPPY:
+                    e.ImageUrl = "https://i.imgur.com/e8rzlWk.jpg";
+                    break;
+
                 default:
-                    return e;
+                    e.Description = "I don't know what you mean :(";
+                    break;
             }
 
             return e;
@@ -132,7 +137,8 @@ namespace DiscordHex.Services
                     break;
                     
                 default:
-                    return e;
+                    e.Description = "I don't know what you mean :(";
+                    break;
             }
 
             return e;
@@ -157,7 +163,8 @@ namespace DiscordHex.Services
         ANGRY,
         UNEASY,
         SURPRISED,
-        TERRIFIED
+        TERRIFIED,
+        HAPPY
     }
 
     public enum GaySounds
