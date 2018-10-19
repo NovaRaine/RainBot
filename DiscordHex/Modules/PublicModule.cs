@@ -2,7 +2,6 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordHex.Services;
-using DiscordHex.Utilities;
 using System;
 using System.IO;
 using System.Linq;
