@@ -85,7 +85,7 @@ namespace DiscordHex
                 .AddSingleton<CommandHandlingService>()
                 .AddSingleton<HttpClient>()
                 .AddSingleton<RandomPictureService>()
-                .AddSingleton<HexingService>()
+                .AddSingleton<SpellService>()
                 .AddSingleton<FfxivSpellService>()
                 .AddSingleton<CommonCommands>()
                 .AddSingleton<SoundReactionService>()

@@ -12,16 +12,13 @@ namespace DiscordHex.Modules
     public class PublicModule : ModuleBase<SocketCommandContext>
     {
         public RandomPictureService RandomPictureService { get; set; }
-        public HexingService HexingService { get; set; }
-        public FfxivSpellService FfxivSpellService { get; set; }
         public CommonCommands CommonCommands { get; set; }
         public DiscordSocketClient Discord { get; set; }
         public CommandService CommandService { get; set; }
 
-        internal PublicModule(RandomPictureService pictureService, HexingService hexingService, DiscordSocketClient discord, CommandService commandService)
+        internal PublicModule(RandomPictureService pictureService, DiscordSocketClient discord, CommandService commandService)
         {
             RandomPictureService = pictureService;
-            HexingService = hexingService;
             Discord = discord;
         }
 
@@ -158,23 +155,6 @@ namespace DiscordHex.Modules
                 embedded.Description = "Chop! Chopchop!";
             }
 
-            await ReplyAsync("", false, embedded.Build());
-        }
-
-        [Command("hex")]
-        [Alias("curse")]
-        [Summary("Cast a hex on your nemesis, or just on whoever.")]
-        public async Task CastHex(params string[] message)
-        {
-            var embedded = HexingService.CastHex(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Discord.CurrentUser.Id);
-            await ReplyAsync("", false, embedded.Build());
-        }
-
-        [Command("esuna")]
-        [Summary("Cast Esuna on someone to remove a negative effect. Possibly..")]
-        public async Task CastEsuna(params string[] message)
-        {
-            var embedded = FfxivSpellService.CastEsuna(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Context.Message.Author.Username);
             await ReplyAsync("", false, embedded.Build());
         }
 
