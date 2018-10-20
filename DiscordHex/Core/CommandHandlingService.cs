@@ -43,9 +43,30 @@ namespace DiscordHex.Core
             var context = new SocketCommandContext(_discord, message);
             var result = await _commands.ExecuteAsync(context, argPos, _services);
 
-            if (result.Error.HasValue &&
-                result.Error.Value != CommandError.UnknownCommand) // it's bad practice to send 'unknown command' errors
-                await context.Channel.SendMessageAsync(result.ToString());
+            if (result.Error.HasValue && result.Error.Value != CommandError.UnknownCommand)
+            {
+                var resMsg = "";
+                switch (result.Error)
+                {
+                    case CommandError.Exception:
+                        resMsg = "Oh snap! I just had some internal epic fail.. Sorry :/";
+                        break;
+                    case CommandError.Unsuccessful:
+                        resMsg = "Oops, I messed that up.";
+                        break;
+                    case CommandError.BadArgCount:
+                        resMsg = "You messed up the parameters or the order of them :(";
+                        break;
+                    case CommandError.UnmetPrecondition:
+                        resMsg = "No.. Just no.";
+                        break;
+                    default:
+                        resMsg = "I.. uhm.. What do you want really?";
+                        break;
+                }
+                await context.Channel.SendMessageAsync(resMsg);
+            }
+                
         }
     }
 }

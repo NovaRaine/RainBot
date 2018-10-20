@@ -40,11 +40,9 @@ namespace DiscordHex.Modules
                 msg = "nothing.";
 
             await ReplyAsync($"{user.Username}, you have been served {msg}");
-
         }
 
         [Command("serve")]
-        [Alias("tea")]
         public async Task Serve(params string[] message)
         {
             var msg = (string.Join(' ', message));
@@ -55,7 +53,6 @@ namespace DiscordHex.Modules
                 await ReplyAsync($"{Context.Message.MentionedUsers.First().Username}, you have been served {msg}");
             else
                 await ReplyAsync($"{Context.Message.Author.Username} has served {msg}");
-
         }
 
         [Command("cat")]
@@ -106,6 +103,23 @@ namespace DiscordHex.Modules
             }
 
             await ReplyAsync("The bunnies are hiding :/");
+        }
+
+        [Command("rndgif")]
+        [RequireOwner]
+        public async Task RndGif(params string[] message)
+        {
+
+            var url = RandomPictureService.GetRandomGiphyByTag(message[0]);
+            if (!string.IsNullOrEmpty(url))
+            {
+                var embedded = new EmbedBuilder();
+                embedded.ImageUrl = url;
+                await ReplyAsync("", false, embedded.Build());
+                return;
+            }
+
+            await ReplyAsync("no results :unamused:");
         }
 
         [Command("chocolate")]

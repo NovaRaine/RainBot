@@ -28,7 +28,6 @@ namespace DiscordHex.Modules
 
         [Command("ts")]
         [Alias("transsounds")]
-        [Summary("Show your transness in a react image")]
         [RequireOwner]
         public async Task TransSounds(params string[] type)
         {
