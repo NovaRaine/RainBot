@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using DiscordHex.Data;
 using DiscordHex.Domain;
 using System.Collections.Generic;
@@ -53,6 +54,7 @@ namespace DiscordHex.Services
         private void SendReply()
         {
             var s = new StringBuilder();
+            var e = new EmbedBuilder();
 
             s.AppendLine(CurrenntLocation.Item.Description);
             if (CurrenntLocation.Children.Any())
@@ -70,7 +72,8 @@ namespace DiscordHex.Services
                 EndGame();
             }
 
-            Context.Message.Channel.SendMessageAsync(s.ToString());
+            e.Description = s.ToString();
+            Context.Message.Channel.SendMessageAsync("", false, e.Build());
         }
 
         private IEnumerable<TreeItem<GameLocationEntity>> GetStoryArc()

@@ -16,7 +16,7 @@ namespace DiscordHex.Modules
         [Command("gamestart")]
         public async Task StartGame()
         {
-            if (GameService.State == GameState.NotStarted)
+            if (GameService.State == GameState.NotStarted && Context.Channel.Name.Contains("bot-spam"))
             {
                 GameService.GameOwner = Context.Message.Author.Id;
                 GameService.State = GameState.Started;
@@ -47,6 +47,7 @@ namespace DiscordHex.Modules
                 || Context.Message.Author.Id == 462658205009575946)
             {
                 GameService.EndGame();
+                await ReplyAsync("Game ended");
             }
         }
     }
