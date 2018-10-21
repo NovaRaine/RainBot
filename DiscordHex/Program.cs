@@ -81,14 +81,18 @@ namespace DiscordHex
         {
             return new ServiceCollection()
                 .AddSingleton<DiscordSocketClient>()
-                .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandlingService>()
                 .AddSingleton<HttpClient>()
+
+                .AddSingleton<CommandService>()
+                .AddSingleton<CommonCommands>()
+
                 .AddSingleton<RandomPictureService>()
                 .AddSingleton<SpellService>()
                 .AddSingleton<FfxivSpellService>()
-                .AddSingleton<CommonCommands>()
                 .AddSingleton<SoundReactionService>()
+                .AddSingleton<GameService>()
+
                 .BuildServiceProvider();
         }
 

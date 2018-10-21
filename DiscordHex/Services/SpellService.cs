@@ -23,7 +23,6 @@ namespace DiscordHex.Services
             if ((type == SpellType.DirectDamage || type == SpellType.Hex) && users.Any(x => x.Id == 462658205009575946))
             {
                 extraText = "(It barely has any effect)";
-                return e;
             }
 
             if (mentionedRoles.Count > 0) // no mentioning roles 
