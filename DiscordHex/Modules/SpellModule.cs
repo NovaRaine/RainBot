@@ -1,9 +1,7 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
+using DiscordHex.Domain;
 using DiscordHex.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DiscordHex.Modules

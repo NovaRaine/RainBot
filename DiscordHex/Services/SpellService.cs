@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using DiscordHex.Core;
+using DiscordHex.Domain;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,8 +12,9 @@ namespace DiscordHex.Services
         public EmbedBuilder CastSpell(IReadOnlyCollection<IUser> users, IReadOnlyCollection<SocketRole> mentionedRoles, ulong botId, SpellType type)
         {
             var e = new EmbedBuilder();
+            var extraText = "";
 
-            if (users != null && users.Count > 0 && users.Any(x => x.Id == botId))
+            if (users != null && users.Count > 0 && users.Any(x => x.Id == botId) && type != SpellType.Buff)
             {
                 e.Description = "You're targeting me? But.. but why.. what have I done :(";
                 return e;
@@ -20,7 +22,7 @@ namespace DiscordHex.Services
 
             if ((type == SpellType.DirectDamage || type == SpellType.Hex) && users.Any(x => x.Id == 462658205009575946))
             {
-                e.Description = "Hah! You think you can harm the Dragon Mom? A curse on you and your family. May your crops wither and your wells dry out!";
+                extraText = "(It barely has any effect)";
                 return e;
             }
 
@@ -64,23 +66,9 @@ namespace DiscordHex.Services
                 return e;
             }
 
-            e.Description = $"{targets}! I cast {spell.Name} on you!";
-            e.ImageUrl = string.IsNullOrEmpty(spell.ImageUrl) ? "https://cdn.awwni.me/nltc.jpg" : spell.ImageUrl;
+            e.Description = $"{targets}! I cast {spell.Name} on you! {extraText}";
+            e.ImageUrl = string.IsNullOrEmpty(spell.Img) ? "" : spell.Img;
             return e;
         }
-    }
-
-    public class SpellEntity
-    {
-        public string Name { get; set; }
-        public string ImageUrl { get; set; }
-        public SpellType Type { get; set; }
-    }
-
-    public enum SpellType
-    {
-        Hex = 1,
-        Buff = 2,
-        DirectDamage = 3
     }
 }
