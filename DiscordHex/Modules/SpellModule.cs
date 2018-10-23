@@ -18,7 +18,7 @@ namespace DiscordHex.Modules
         [Summary("Cast a hex on your nemesis, or just on whoever.")]
         public async Task CastHex(params string[] message)
         {
-            var embedded = SpellService.CastSpell(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Discord.CurrentUser.Id, SpellType.Hex);
+            var embedded = SpellService.CastSpell(Context, Discord.CurrentUser.Id, SpellType.Hex);
             await ReplyAsync("", false, embedded.Build());
         }
 
@@ -26,7 +26,7 @@ namespace DiscordHex.Modules
         [Summary("Cast a buff on your target")]
         public async Task CastBuff(params string[] message)
         {
-            var embedded = SpellService.CastSpell(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Discord.CurrentUser.Id, SpellType.Buff);
+            var embedded = SpellService.CastSpell(Context, Discord.CurrentUser.Id, SpellType.Buff);
             await ReplyAsync("", false, embedded.Build());
         }
 
@@ -34,7 +34,7 @@ namespace DiscordHex.Modules
         [Summary("Cast a damage spell on your nemesis, or just on whoever.")]
         public async Task CastDirectDamage(params string[] message)
         {
-            var embedded = SpellService.CastSpell(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Discord.CurrentUser.Id, SpellType.DirectDamage);
+            var embedded = SpellService.CastSpell(Context, Discord.CurrentUser.Id, SpellType.DirectDamage);
             await ReplyAsync("", false, embedded.Build());
         }
 

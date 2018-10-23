@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using DiscordHex.Core;
 using DiscordHex.Domain;
@@ -9,23 +10,23 @@ namespace DiscordHex.Services
 {
     public class SpellService
     {
-        public EmbedBuilder CastSpell(IReadOnlyCollection<IUser> users, IReadOnlyCollection<SocketRole> mentionedRoles, ulong botId, SpellType type)
+        public EmbedBuilder CastSpell(SocketCommandContext context, ulong botId, SpellType type)
         {
             var e = new EmbedBuilder();
             var extraText = "";
 
-            if (users != null && users.Count > 0 && users.Any(x => x.Id == botId) && type != SpellType.Buff)
+            if (context.Message.MentionedUsers != null && context.Message.MentionedUsers.Count > 0 && context.Message.MentionedUsers.Any(x => x.Id == botId) && type != SpellType.Buff)
             {
                 e.Description = "You're targeting me? But.. but why.. what have I done :(";
                 return e;
             }
 
-            if ((type == SpellType.DirectDamage || type == SpellType.Hex) && users.Any(x => x.Id == 462658205009575946))
+            if ((type == SpellType.DirectDamage || type == SpellType.Hex) && context.Message.MentionedUsers.Any(x => x.Id == 462658205009575946))
             {
-                extraText = "(It barely has any effect)";
+                extraText = $"(Sadly, it backfires and hits {context.Message.Author.Username})";
             }
 
-            if (mentionedRoles.Count > 0) // no mentioning roles 
+            if (context.Message.MentionedRoles.Count > 0) // no mentioning roles 
             {
                 e.Description = "I'm not targeting a whole group, and you should know better.. Shame on you :(";
                 return e;
@@ -54,7 +55,7 @@ namespace DiscordHex.Services
                 return e;
             }
 
-            var targets = users.Any() ? string.Join(", ", users.Select(x => x.Username)) : string.Empty;
+            var targets = context.Message.MentionedUsers.Any() ? string.Join(", ", context.Message.MentionedUsers.Select(x => x.Username)) : string.Empty;
 
             if (string.IsNullOrEmpty(targets))
             {

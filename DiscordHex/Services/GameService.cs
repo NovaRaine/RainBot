@@ -42,7 +42,7 @@ namespace DiscordHex.Services
 
         internal void StartGame()
         {
-            Context.Message.Channel.SendMessageAsync("Thanks for playing :)\nYou will get a description, followed by some options.\nSelect options by typing >>opt [option number]\n\n");
+            Context.Message.Author.SendMessageAsync("Thanks for playing :)\nYou will get a description, followed by some options.\nSelect options by typing >>opt [option number]\n\n");
             StoryArc = GetStoryArc();
             if (StoryArc.Any())
             {
@@ -73,7 +73,7 @@ namespace DiscordHex.Services
             }
 
             e.Description = s.ToString();
-            Context.Message.Channel.SendMessageAsync("", false, e.Build());
+            Context.Message.Author.SendMessageAsync("", false, e.Build());
         }
 
         private IEnumerable<TreeItem<GameLocationEntity>> GetStoryArc()
@@ -85,9 +85,7 @@ namespace DiscordHex.Services
 
         public void EndGame()
         {
-            GameOwner = 0;
             State = GameState.NotStarted;
-            CurrenntLocation = null;
         }
     }
 

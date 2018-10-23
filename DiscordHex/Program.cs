@@ -91,7 +91,7 @@ namespace DiscordHex
                 .AddSingleton<SpellService>()
                 .AddSingleton<FfxivSpellService>()
                 .AddSingleton<SoundReactionService>()
-                .AddSingleton<GameService>()
+                .AddSingleton<GameSession>()
 
                 .BuildServiceProvider();
         }

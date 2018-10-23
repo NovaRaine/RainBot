@@ -27,7 +27,11 @@ namespace DiscordHex.Services
                 { "tired","https://i.imgur.com/YKLbyCD.jpg" },
                 { "imperial","https://i.imgur.com/ybOEIzM.jpg" },
                 { "terrified","https://i.imgur.com/S1VO2rp.png" },
-                { "festive","https://i.imgur.com/YtuMuUG.png" }
+                { "festive","https://i.imgur.com/YtuMuUG.png" },
+                { "diabolical","https://i.imgur.com/THJxXB5.jpg" },
+                { "straight","https://i.imgur.com/iC5N1YI.jpg" },
+                { "superhappy", "https://i.imgur.com/dFNgHao.jpg" },
+                { "highspeed","https://i.imgur.com/6dmdPJf.jpg" }
             };
 
             TransSounds = new Dictionary<string, string>
