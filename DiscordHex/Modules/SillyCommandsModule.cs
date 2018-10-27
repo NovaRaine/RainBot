@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using DiscordHex.Core;
+using DiscordHex.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace DiscordHex.Modules
 {
     public class SillyCommandsModule : ModuleBase<SocketCommandContext>
     {
+        public RandomPictureService RandomPictureService { get; set; }
         private List<string> words;
 
         public SillyCommandsModule()
@@ -47,10 +49,9 @@ namespace DiscordHex.Modules
                 ? $"{Context.Message.Author.Username} hisses at {Context.Message.MentionedUsers.First().Username}!"
                 : $"{Context.Message.Author.Username} hisses!";
 
-            if (Context.Message.MentionedUsers.Count > 0)
-                emb.ImageUrl = "https://media1.giphy.com/media/3oz8xBeYloJBY1TxN6/giphy.gif";
-            else
-                emb.ImageUrl = "https://media0.giphy.com/media/cz5pbZ7Ia5TNe/giphy.gif";
+            var url = RandomPictureService.GetRandomGiphyByTag("hiss");
+            if (!string.IsNullOrEmpty(url))
+                emb.ImageUrl = url;
 
             emb.Description = text;
 

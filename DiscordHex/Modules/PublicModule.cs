@@ -121,7 +121,7 @@ namespace DiscordHex.Modules
             var embedded = new EmbedBuilder();
             if (Context.Message.MentionedUsers.Count > 0)
             {
-                embedded.Description = $"{Context.Message.Author.Username} throws a bunch of chocolate at {Context.Message.MentionedUsers.First().Username}.. Why?";
+                embedded.Description = $"{Context.Message.Author.Username} throws a bunch of chocolate at {Context.Message.MentionedUsers.First().Username}";
                 embedded.ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/7/70/Chocolate_%28blue_background%29.jpg";
             }
             else
