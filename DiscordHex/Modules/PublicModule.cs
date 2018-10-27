@@ -2,7 +2,6 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordHex.Services;
-using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,21 +11,15 @@ namespace DiscordHex.Modules
     public class PublicModule : ModuleBase<SocketCommandContext>
     {
         public RandomPictureService RandomPictureService { get; set; }
-        public CommonCommands CommonCommands { get; set; }
         public DiscordSocketClient Discord { get; set; }
         public CommandService CommandService { get; set; }
+        public CommonCommands CommonCommands { get; set; }
 
         internal PublicModule(RandomPictureService pictureService, DiscordSocketClient discord, CommandService commandService)
         {
             RandomPictureService = pictureService;
             Discord = discord;
         }
-
-        [Command("version")]
-        [Alias("ver")]
-        [Summary("Show bot version")]
-        public Task PingAsync()
-            => ReplyAsync(Environment.GetEnvironmentVariable("Version"));
 
         [Command("serve")]
         [Summary("Serve something to another person. Whatever. Might be tea, might be revenge.")]
@@ -66,25 +59,6 @@ namespace DiscordHex.Modules
             await Context.Channel.SendFileAsync(stream, "CatsAreEvil.png", text);
         }
 
-        [Command("hiss")]
-        public async Task Hissss(params string[] message)
-        {
-            var emb = new EmbedBuilder();
-
-            var text = Context.Message.MentionedUsers.Count > 0
-                ? $"{Context.Message.Author.Username} hisses at {Context.Message.MentionedUsers.First().Username}!"
-                : $"{Context.Message.Author.Username} hisses!";
-
-            if (Context.Message.MentionedUsers.Count > 0)
-                emb.ImageUrl = "https://media1.giphy.com/media/3oz8xBeYloJBY1TxN6/giphy.gif";
-            else
-                emb.ImageUrl = "https://media0.giphy.com/media/cz5pbZ7Ia5TNe/giphy.gif";
-
-            emb.Description = text;
-
-            await ReplyAsync("", false, emb.Build());
-        }
-
         [Command("dog")]
         [Alias("puppy", "doggo", "pupper")]
         [Summary("Random dogs. Everyone loves random dogs.")]
@@ -121,21 +95,22 @@ namespace DiscordHex.Modules
             await ReplyAsync("The bunnies are hiding :/");
         }
 
-        [Command("rndgif")]
-        [RequireOwner]
-        public async Task RndGif(params string[] message)
+        [Command("mokepon")]
+        [Alias("pokemon", "pokeyman", "pokkie")]
+        [Summary("Mokepons!")]
+        public async Task Mokepon(params string[] message)
         {
-
-            var url = RandomPictureService.GetRandomGiphyByTag(message[0]);
+            var url = RandomPictureService.GetRandomGiphyByTag("pokemon");
             if (!string.IsNullOrEmpty(url))
             {
                 var embedded = new EmbedBuilder();
+                embedded.Description = "Pokeymun!";
                 embedded.ImageUrl = url;
                 await ReplyAsync("", false, embedded.Build());
                 return;
             }
 
-            await ReplyAsync("no results :unamused:");
+            await ReplyAsync("Something happened.. sorry -.-");
         }
 
         [Command("chocolate")]
@@ -157,26 +132,6 @@ namespace DiscordHex.Modules
             await ReplyAsync("", false, embedded.Build());
         }
 
-        [Command("chop")]
-        [Alias("chopchop")]
-        [Summary("Chop!")]
-        public async Task Chop(params string[] message)
-        {
-            var embedded = new EmbedBuilder();
-            embedded.ImageUrl = "https://cdn.discordapp.com/attachments/461009638922649610/482247931831910411/aa7eb8e.gif";
-
-            if (Context.Message.MentionedUsers.Count > 0)
-            {
-                embedded.Description = $"Chop! Chopchop, {Context.Message.MentionedUsers.First().Username}!";
-            }
-            else
-            {
-                embedded.Description = "Chop! Chopchop!";
-            }
-
-            await ReplyAsync("", false, embedded.Build());
-        }
-
         [Command("love")]
         [Alias("witchylove", "hate")]
         [Summary("Show someone how that you love them very much!")]
@@ -184,13 +139,6 @@ namespace DiscordHex.Modules
         {
             var embedded = CommonCommands.LoveSomeone(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Context.Message.Author.Username);
             await ReplyAsync("", false, embedded.Build());
-        }
-
-        [Command("info")]
-        [Summary("Just some random system info")]
-        public async Task Info(params string[] message)
-        {
-            await ReplyAsync(CommonCommands.ProcessInfo());
         }
 
         [Command("help")]

@@ -21,7 +21,7 @@ namespace DiscordHex
 
         public async Task MainAsync()
         {
-            Environment.SetEnvironmentVariable("Version", "2.1.2");
+            Environment.SetEnvironmentVariable("Version", "2.1.3");
 
             var services = ConfigureServices();
             
