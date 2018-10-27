@@ -1,8 +1,6 @@
 ﻿using Discord.Commands;
 using Discord;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using DiscordHex.Core;
@@ -24,7 +22,6 @@ namespace DiscordHex.Modules
                 "Butty butty bum bum",
                 "You pervert!"
             };
-
         }
 
         [Command("butt")]

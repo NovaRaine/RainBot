@@ -66,6 +66,25 @@ namespace DiscordHex.Modules
             await Context.Channel.SendFileAsync(stream, "CatsAreEvil.png", text);
         }
 
+        [Command("hiss")]
+        public async Task Hissss(params string[] message)
+        {
+            var emb = new EmbedBuilder();
+
+            var text = Context.Message.MentionedUsers.Count > 0
+                ? $"{Context.Message.Author.Username} hisses at {Context.Message.MentionedUsers.First().Username}!"
+                : $"{Context.Message.Author.Username} hisses!";
+
+            if (Context.Message.MentionedUsers.Count > 0)
+                emb.ImageUrl = "https://media1.giphy.com/media/3oz8xBeYloJBY1TxN6/giphy.gif";
+            else
+                emb.ImageUrl = "https://media0.giphy.com/media/cz5pbZ7Ia5TNe/giphy.gif";
+
+            emb.Description = text;
+
+            await ReplyAsync("", false, emb.Build());
+        }
+
         [Command("dog")]
         [Alias("puppy", "doggo", "pupper")]
         [Summary("Random dogs. Everyone loves random dogs.")]
