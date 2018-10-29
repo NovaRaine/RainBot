@@ -17,6 +17,7 @@ namespace DiscordHex.Modules
         [Command("gs")]
         [Alias("gaysounds")]
         [Summary("Show your gayness in a react image.")]
+        [Remarks("gs [type] example: gs sad")]
         public async Task GaySounds(params string [] type)
         {
             if (type.Length == 0)

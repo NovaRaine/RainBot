@@ -12,6 +12,7 @@ namespace DiscordHex.Modules
 
         [Command("gamestart")]
         [Summary("Start an adventure.")]
+        [Remarks("No special usage.")]
         public async Task StartGame()
         {
             TemporaryGameCleanup();
@@ -28,6 +29,7 @@ namespace DiscordHex.Modules
         }
 
         [Command("gameopt"), Alias("opt")]
+        [Remarks("opt [number]")]
         public async Task SelectOption(string opt)
         {
             var service = GetGameService(Context.Message.Author.Id);
@@ -49,6 +51,7 @@ namespace DiscordHex.Modules
 
         [Command("gameend")]
         [Summary("End your game.")]
+        [Remarks("No special usage.")]
         public async Task EndGame()
         {
             var service = GetGameService(Context.Message.Author.Id);

@@ -41,6 +41,8 @@ namespace DiscordHex.Modules
         }
 
         [Command("hiss")]
+        [Summary("Hiss. It's fun at times.")]
+        [Remarks("hiss | hiss @user")]
         public async Task Hissss(params string[] message)
         {
             var emb = new EmbedBuilder();
@@ -61,6 +63,7 @@ namespace DiscordHex.Modules
         [Command("chop")]
         [Alias("chopchop")]
         [Summary("Chop!")]
+        [Remarks("chop | chop @Atumra (HAMSTER). Is bitten. ")]
         public async Task Chop(params string[] message)
         {
             var embedded = new EmbedBuilder();

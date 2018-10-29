@@ -12,7 +12,6 @@ namespace DiscordHex.Modules
     {
         public RandomPictureService RandomPictureService { get; set; }
         public DiscordSocketClient Discord { get; set; }
-        public CommandService CommandService { get; set; }
         public CommonCommands CommonCommands { get; set; }
 
         internal PublicModule(RandomPictureService pictureService, DiscordSocketClient discord, CommandService commandService)
@@ -23,6 +22,7 @@ namespace DiscordHex.Modules
 
         [Command("serve")]
         [Summary("Serve something to another person. Whatever. Might be tea, might be revenge.")]
+        [Remarks("serve [text] | serve @user [text]")]
         public async Task Serve(IUser user, params string[] message)
         {
             var msg = (string.Join(' ', message));
@@ -48,6 +48,7 @@ namespace DiscordHex.Modules
         [Command("cat")]
         [Alias("kitty", "radomcat")]
         [Summary("Get a radom cat in your channel! An important part of the internet.")]
+        [Remarks("cat | cat @user")]
         public async Task CatAsync(params string[] message)
         {
             var text = Context.Message.MentionedUsers.Count > 0
@@ -62,6 +63,7 @@ namespace DiscordHex.Modules
         [Command("dog")]
         [Alias("puppy", "doggo", "pupper")]
         [Summary("Random dogs. Everyone loves random dogs.")]
+        [Remarks("dog | dog @user")]
         public async Task Dog(params string[] message)
         {
             var text = Context.Message.MentionedUsers.Count > 0
@@ -76,6 +78,7 @@ namespace DiscordHex.Modules
         [Command("bunny")]
         [Alias("bun", "bunbun", "bunneh")]
         [Summary("For when cats and dogs are just not good enough.")]
+        [Remarks("bun | bun @user")]
         public async Task Bunny(params string[] message)
         {
             var text = Context.Message.MentionedUsers.Count > 0
@@ -98,6 +101,7 @@ namespace DiscordHex.Modules
         [Command("mokepon")]
         [Alias("pokemon", "pokeyman", "pokkie")]
         [Summary("Mokepons!")]
+        [Remarks("No special usage.")]
         public async Task Mokepon(params string[] message)
         {
             var url = RandomPictureService.GetRandomGiphyByTag("pokemon");
@@ -116,6 +120,7 @@ namespace DiscordHex.Modules
         [Command("chocolate")]
         [Alias("choco")]
         [Summary("Eat some chocolate, or share with someone else.")]
+        [Remarks("choco | choco @user")]
         public async Task GetChocolate(params string[] message)
         {
             var embedded = new EmbedBuilder();
@@ -135,34 +140,11 @@ namespace DiscordHex.Modules
         [Command("love")]
         [Alias("witchylove", "hate")]
         [Summary("Show someone how that you love them very much!")]
+        [Remarks("love | love @user")]
         public async Task LoveSomeone(params string[] message)
         {
             var embedded = CommonCommands.LoveSomeone(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Context.Message.Author.Username);
             await ReplyAsync("", false, embedded.Build());
-        }
-
-        [Command("help")]
-        [Alias("h")]
-        [Summary("Shows the help info. You just used it you dummy.")]
-        public async Task Help(params string[] message)
-        {
-            var embedded = new EmbedBuilder();
-            embedded.WithTitle("Here's a list of what I can do.");
-            foreach (var module in CommandService.Modules)
-            {
-                foreach(var command in module.Commands.Where(x => !string.IsNullOrEmpty(x.Summary)))
-                {
-                    var aliases = command.Aliases.Count > 1 ? string.Join(", ", command.Aliases) : string.Empty;
-                    var text = command.Summary;
-                    if (!string.IsNullOrEmpty(aliases))
-                        text = text + "\n\tAlias: " + aliases;
-
-                    embedded.AddField(command.Name, text);
-                }                    
-            }
-
-            await Context.Message.Author.SendMessageAsync("Thank you for calling RainBot Customer Support.\nHere at RainBot Enterprises, we love all our customers. And especially you! <3");
-            await Context.Message.Author.SendMessageAsync("", false, embedded.Build());
         }
     }
 }
