@@ -53,11 +53,11 @@ namespace DiscordHex.Modules
                 sb.AppendLine($"Usage: {cmd.Remarks}");
 
                 emb.Description = sb.ToString();
-                await ReplyAsync("", false, emb.Build());
+                await Context.Message.Author.SendMessageAsync("", false, emb.Build());
                 return;
             }
 
-            await ReplyAsync("No command with that name found.");
+            await Context.Message.Author.SendMessageAsync("No command with that name found.");
         }
     }
 }
