@@ -1,8 +1,4 @@
-﻿using DiscordHex.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace DiscordHex.Domain
 {
     public class SoundReactEntity

@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using DiscordHex.Services;
 using System.Threading.Tasks;
 
@@ -17,13 +18,20 @@ namespace DiscordHex.Modules
         [Command("gs")]
         [Alias("gaysounds")]
         [Summary("Show your gayness in a react image.")]
-        [Remarks("gs [type] example: gs sad")]
+        [Remarks("gs [search word] example: gs sad | show all with gs list")]
         public async Task GaySounds(params string [] type)
         {
             if (type.Length == 0)
                 return;
 
             var embedded = SoundReactionService.GetGaySounds(type[0]);
+
+            if (embedded.Title == "List")
+            {
+                await Context.Message.Author.SendMessageAsync("", false, embedded.Build());
+                return;
+            }
+
             await ReplyAsync("", false, embedded.Build());
         }
 
@@ -36,6 +44,13 @@ namespace DiscordHex.Modules
                 return;
 
             var embedded = SoundReactionService.GetTransSounds(type[0]);
+
+            if (embedded.Title == "List")
+            {
+                await Context.Message.Author.SendMessageAsync("", false, embedded.Build());
+                return;
+            }
+
             await ReplyAsync("", false, embedded.Build());
         }
     }

@@ -25,14 +25,41 @@ namespace DiscordHex.Services
 
         public EmbedBuilder GetTransSounds(string type)
         {
+            if (type.ToLower().Trim() == "list")
+                return GetList(SoundReactTypeEnum.TRANS);
+
             var sounds = TransSounds.Where(x => x.Name.IndexOf(type, StringComparison.InvariantCultureIgnoreCase) != -1);
             return BuildEmbedded(sounds, type);
         }
 
         public EmbedBuilder GetGaySounds(string type)
         {
+            if (type.ToLower().Trim() == "list")
+                return GetList(SoundReactTypeEnum.GAY);
+
             var sounds = GaySounds.Where(x => x.Name.IndexOf(type, StringComparison.InvariantCultureIgnoreCase) != -1);
             return BuildEmbedded(sounds, type);
+        }
+
+        private EmbedBuilder GetList(SoundReactTypeEnum type)
+        {
+            var emb = new EmbedBuilder();
+            emb.Title = "List";
+
+            switch (type)
+            {
+                case SoundReactTypeEnum.GAY:
+                    emb.Description = string.Join(", ", GaySounds.Select(x => x.Name).ToList());
+                    break;
+                case SoundReactTypeEnum.TRANS:
+                    emb.Description = string.Join(", ", TransSounds.Select(x => x.Name).ToList());
+                    break;
+                default:
+                    emb.Description = "Epic internal fail!";
+                    break;
+            }
+
+            return emb;
         }
 
         private EmbedBuilder BuildEmbedded(IEnumerable<SoundReactEntity> sounds, string type)
