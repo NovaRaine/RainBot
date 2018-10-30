@@ -1,7 +1,7 @@
 ﻿
 namespace DiscordHex.Domain
 {
-    public enum SpellType
+    public enum SpellTypeEnum
     {
         Hex = 1,
         Buff = 2,

@@ -2,6 +2,7 @@
 using DiscordHex.Services;
 using System.Threading.Tasks;
 using System;
+using DiscordHex.Domain;
 
 namespace DiscordHex.Modules
 {
@@ -18,10 +19,10 @@ namespace DiscordHex.Modules
             TemporaryGameCleanup();
             var service = GetGameService(Context.Message.Author.Id, true);
 
-            if (service.State == GameState.NotStarted)
+            if (service.State == GameStateEnum.NotRunning)
             {
                 service.GameOwner = Context.Message.Author.Id;
-                service.State = GameState.Started;
+                service.State = GameStateEnum.Started;
                 service.Context = Context;
 
                 service.StartGame();
@@ -39,7 +40,7 @@ namespace DiscordHex.Modules
                 await ReplyAsync("You have no games running");
             }
             else if (Context.Message.Author.Id == service.GameOwner 
-                && service.State == GameState.Started 
+                && service.State == GameStateEnum.Started 
                 && !string.IsNullOrEmpty(opt))
             {
                 int.TryParse(opt, out var res);
@@ -80,7 +81,7 @@ namespace DiscordHex.Modules
         {
             foreach(var game in GameSession.ActiveGamesSessions)
             {
-                if (game.Value.State == GameState.NotStarted)
+                if (game.Value.State == GameStateEnum.NotRunning)
                     GameSession.ActiveGamesSessions.Remove(game.Value.GameOwner);
             }
         }

@@ -19,7 +19,7 @@ namespace DiscordHex.Modules
         [Remarks("hex | hex @user")]
         public async Task CastHex(params string[] message)
         {
-            var embedded = SpellService.CastSpell(Context, Discord.CurrentUser.Id, SpellType.Hex);
+            var embedded = SpellService.CastSpell(Context, Discord.CurrentUser.Id, SpellTypeEnum.Hex);
             await ReplyAsync("", false, embedded.Build());
         }
 
@@ -28,7 +28,7 @@ namespace DiscordHex.Modules
         [Remarks("buff | buff @user")]
         public async Task CastBuff(params string[] message)
         {
-            var embedded = SpellService.CastSpell(Context, Discord.CurrentUser.Id, SpellType.Buff);
+            var embedded = SpellService.CastSpell(Context, Discord.CurrentUser.Id, SpellTypeEnum.Buff);
             await ReplyAsync("", false, embedded.Build());
         }
 
@@ -37,7 +37,7 @@ namespace DiscordHex.Modules
         [Remarks("dd | dd @user")]
         public async Task CastDirectDamage(params string[] message)
         {
-            var embedded = SpellService.CastSpell(Context, Discord.CurrentUser.Id, SpellType.DirectDamage);
+            var embedded = SpellService.CastSpell(Context, Discord.CurrentUser.Id, SpellTypeEnum.DirectDamage);
             await ReplyAsync("", false, embedded.Build());
         }
 

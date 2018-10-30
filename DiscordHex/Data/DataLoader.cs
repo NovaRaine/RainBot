@@ -20,9 +20,9 @@ namespace DiscordHex.Data
         {
             // Spells
             var spells = _spellRepository.GetSpells();
-            BotSettings.Instance.Hexes = spells.Where(x => x.Type == SpellType.Hex).ToList();
-            BotSettings.Instance.Buffs = spells.Where(x => x.Type == SpellType.Buff).ToList();
-            BotSettings.Instance.DirectDamage = spells.Where(x => x.Type == SpellType.DirectDamage).ToList();
+            BotSettings.Instance.Hexes = spells.Where(x => x.Type == SpellTypeEnum.Hex).ToList();
+            BotSettings.Instance.Buffs = spells.Where(x => x.Type == SpellTypeEnum.Buff).ToList();
+            BotSettings.Instance.DirectDamage = spells.Where(x => x.Type == SpellTypeEnum.DirectDamage).ToList();
 
             // Settings
             GetSettings();

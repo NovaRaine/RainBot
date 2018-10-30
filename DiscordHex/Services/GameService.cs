@@ -11,7 +11,7 @@ namespace DiscordHex.Services
     public class GameService
     {
         public ulong GameOwner { get; set; }
-        public GameState State { get; set; } = GameState.NotStarted;
+        public GameStateEnum State { get; set; } = GameStateEnum.NotRunning;
         public SocketCommandContext Context { get; set; }
         public TreeItem<GameLocationEntity> CurrenntLocation { get; set; }
         
@@ -85,13 +85,9 @@ namespace DiscordHex.Services
 
         public void EndGame()
         {
-            State = GameState.NotStarted;
+            State = GameStateEnum.NotRunning;
         }
     }
 
-    public enum GameState
-    {
-        Started,
-        NotStarted
-    }
+    
 }
