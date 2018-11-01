@@ -1,34 +1,18 @@
 ﻿using System;
-using DiscordHex.Core;
 using System.Linq;
-using DiscordHex.Domain;
 
 namespace DiscordHex.Data
 {
     internal class DataLoader
     {    
-        private readonly SpellRepository _spellRepository;
         private readonly SettingsRepository _settingsRepository;
 
         public DataLoader()
         {
-            _spellRepository = new SpellRepository();
             _settingsRepository = new SettingsRepository();
         }
         
         internal void LoadData()
-        {
-            // Spells
-            var spells = _spellRepository.GetSpells();
-            BotSettings.Instance.Hexes = spells.Where(x => x.Type == SpellTypeEnum.Hex).ToList();
-            BotSettings.Instance.Buffs = spells.Where(x => x.Type == SpellTypeEnum.Buff).ToList();
-            BotSettings.Instance.DirectDamage = spells.Where(x => x.Type == SpellTypeEnum.DirectDamage).ToList();
-
-            // Settings
-            GetSettings();
-        }
-
-        private void GetSettings()
         {
             var settings = _settingsRepository.GetSpettings();
 

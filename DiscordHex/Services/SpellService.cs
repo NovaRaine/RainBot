@@ -1,13 +1,29 @@
 ﻿using Discord;
 using Discord.Commands;
 using DiscordHex.Core;
+using DiscordHex.Data;
 using DiscordHex.Domain;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DiscordHex.Services
 {
     public class SpellService
     {
+        private List<SpellEntity> Hexes { get; set; }
+        private List<SpellEntity> Buffs { get; set; }
+        private List<SpellEntity> DirectDamage { get; set; }
+
+        public SpellService()
+        {
+            var spellRepository = new SpellRepository();
+            var spells = spellRepository.GetSpells();
+
+            Hexes = spells.Where(x => x.Type == SpellTypeEnum.Hex).ToList();
+            Buffs = spells.Where(x => x.Type == SpellTypeEnum.Buff).ToList();
+            DirectDamage = spells.Where(x => x.Type == SpellTypeEnum.DirectDamage).ToList();
+        }
+
         public EmbedBuilder CastSpell(SocketCommandContext context, ulong botId, SpellTypeEnum type)
         {
             var e = new EmbedBuilder();
@@ -36,13 +52,13 @@ namespace DiscordHex.Services
             switch (type)
             {
                 case SpellTypeEnum.Hex:
-                    spell = BotSettings.Instance.Hexes.ElementAt(BotSettings.Instance.RandomNumber.Next(0, BotSettings.Instance.Hexes.Count));
+                    spell = Hexes.ElementAt(BotSettings.Instance.RandomNumber.Next(0, Hexes.Count));
                     break;
                 case SpellTypeEnum.DirectDamage:
-                    spell = BotSettings.Instance.DirectDamage.ElementAt(BotSettings.Instance.RandomNumber.Next(0, BotSettings.Instance.DirectDamage.Count));
+                    spell =DirectDamage.ElementAt(BotSettings.Instance.RandomNumber.Next(0, DirectDamage.Count));
                     break;
                 case SpellTypeEnum.Buff:
-                    spell = BotSettings.Instance.Buffs.ElementAt(BotSettings.Instance.RandomNumber.Next(0, BotSettings.Instance.Buffs.Count));
+                    spell = Buffs.ElementAt(BotSettings.Instance.RandomNumber.Next(0, Buffs.Count));
                     break;
                 default:
                     break;

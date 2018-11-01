@@ -16,7 +16,6 @@ namespace DiscordHex.Services
         public SoundReactionService()
         {
             var repo = new SoundReactRepository();
-
             var sounds = repo.GetSoundReacts();
 
             GaySounds = sounds.Where(x => x.Type == SoundReactTypeEnum.GAY).ToList();
