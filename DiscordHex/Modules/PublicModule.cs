@@ -55,9 +55,17 @@ namespace DiscordHex.Modules
                 ? $"{Context.Message.Author.Username} gifts a kitteh to {Context.Message.MentionedUsers.First().Username}! Hurray :D"
                 : $"Awwwwww.. look, a kitty has come to visit";
 
-            var stream = await RandomPictureService.GetPictureAsync("https://cataas.com/cat");
-            stream.Seek(0, SeekOrigin.Begin);
-            await Context.Channel.SendFileAsync(stream, "CatsAreEvil.png", text);
+            var url = RandomPictureService.GetRandomGiphyByTag("cat");
+            if (!string.IsNullOrEmpty(url))
+            {
+                var embedded = new EmbedBuilder();
+                embedded.Description = text;
+                embedded.ImageUrl = url;
+                await ReplyAsync("", false, embedded.Build());
+                return;
+            }
+
+            await ReplyAsync("The cats are hiding :unamused:");
         }
 
         [Command("dog")]
