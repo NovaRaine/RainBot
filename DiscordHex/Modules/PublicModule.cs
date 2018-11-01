@@ -154,5 +154,18 @@ namespace DiscordHex.Modules
             var embedded = CommonCommands.LoveSomeone(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Context.Message.Author.Username);
             await ReplyAsync("", false, embedded.Build());
         }
+
+        [Command("donate"), Alias("pay", "paypal")]
+        [Summary("Donate to my author, Dragon Mom Nova")]
+        public async Task Donate(params string[] message)
+        {
+            var msg = new EmbedBuilder()
+                .WithTitle("Donate to Nova Rain!")
+                .WithDescription("Hey! I know money is hard to get by.\nIf you feel like donating, just click the link and you'll be sent to PayPal :3")
+                .WithUrl("https://www.paypal.me/novaraine")
+                .Build();
+
+            await ReplyAsync("", false, msg);
+        }
     }
 }

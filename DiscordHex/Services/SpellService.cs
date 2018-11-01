@@ -72,16 +72,25 @@ namespace DiscordHex.Services
 
             var targets = context.Message.MentionedUsers.Any() ? string.Join(", ", context.Message.MentionedUsers.Select(x => x.Username)) : string.Empty;
 
+            var duration = "";
+            if (type == SpellTypeEnum.Buff || type == SpellTypeEnum.Hex)
+                duration = $"\nIt will last for {BotSettings.Instance.RandomNumber.Next(1, 15)} hours.";
+
             if (string.IsNullOrEmpty(targets))
             {
                 if (type == SpellTypeEnum.Buff)
-                    e.Description = $"Nya'll get a buff! {spell.Name} on everyone :3";
+                    e.Description = $"Nya'll get a buff! {spell.Name} on everyone :3{duration}";
                 else
-                    e.Description = $"I cast {spell.Name} on you all! Foolish mortals.";
+                    e.Description = $"I cast {spell.Name} on you all! Foolish mortals.{duration}";
                 return e;
             }
 
-            e.Description = $"{targets}! I cast {spell.Name} on you!";
+            
+
+            e.Description = $"{targets}! I cast {spell.Name} on you!{duration}";
+
+            
+
             e.ImageUrl = string.IsNullOrEmpty(spell.Img) ? "" : spell.Img;
             return e;
         }

@@ -54,7 +54,6 @@ namespace DiscordHex.Services
         private void SendReply()
         {
             var s = new StringBuilder();
-            var e = new EmbedBuilder();
 
             s.AppendLine(CurrenntLocation.Item.Description);
             if (CurrenntLocation.Children.Any())
@@ -72,8 +71,11 @@ namespace DiscordHex.Services
                 EndGame();
             }
 
-            e.Description = s.ToString();
-            Context.Message.Author.SendMessageAsync("", false, e.Build());
+            var msg = new EmbedBuilder()
+                .WithDescription(s.ToString())
+                .Build();
+
+            Context.Message.Author.SendMessageAsync("", false, msg);
         }
 
         private IEnumerable<TreeItem<GameLocationEntity>> GetStoryArc()

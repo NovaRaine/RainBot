@@ -11,33 +11,33 @@ namespace DiscordHex.Modules
         public CommandService CommandService { get; set; }
 
         [Command("help")]
-        [Alias("h")]
+        [Alias("h", "?")]
         [Summary("Shows the help info. You just used it you dummy.")]
         [Remarks("help | help [Command name]")]
         public async Task Help()
         {
-            var emb = new EmbedBuilder();
-            emb.WithTitle("Here's a list of what I can do.");
+            await Context.Message.Author.SendMessageAsync("Thank you for calling RainBot Customer Support.\nHere at RainBot Enterprises, we love all our customers. And especially you! <3\n\nHere's a list of what I can do.");
+            var e = new EmbedBuilder();
 
             foreach (var module in CommandService.Modules)
             {
-                foreach (var command in module.Commands.Where(x => !string.IsNullOrEmpty(x.Summary)))
+                foreach (var command in module.Commands.Where(x => !string.IsNullOrEmpty(x.Summary)).OrderBy(x => x.Name))
                 {
                     var aliases = command.Aliases.Count > 1 ? string.Join(", ", command.Aliases) : string.Empty;
-                    var text = command.Summary;
-                    if (!string.IsNullOrEmpty(aliases))
-                        text = text + "\n\tAlias: " + aliases;
 
-                    emb.AddField(command.Name, command.Summary + text);
+                    var extra = "";
+                    if (!string.IsNullOrEmpty(aliases))
+                        extra = $"\nAlias: {aliases}";
+
+                    e.AddField(command.Name, command.Summary + extra);
                 }
             }
 
-            await Context.Message.Author.SendMessageAsync("Thank you for calling RainBot Customer Support.\nHere at RainBot Enterprises, we love all our customers. And especially you! <3");
-            await Context.Message.Author.SendMessageAsync("", false, emb.Build());
+            await Context.Message.Author.SendMessageAsync("", false, e.Build());
         }
 
         [Command("help")]
-        [Alias("h")]
+        [Alias("h", "?")]
         public async Task Help(string command)
         {
             var res = CommandService.Search(Context, command);

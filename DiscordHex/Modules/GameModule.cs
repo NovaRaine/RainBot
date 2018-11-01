@@ -1,7 +1,6 @@
 ﻿using Discord.Commands;
 using DiscordHex.Services;
 using System.Threading.Tasks;
-using System;
 using DiscordHex.Domain;
 
 namespace DiscordHex.Modules
