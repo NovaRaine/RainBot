@@ -14,9 +14,7 @@ namespace DiscordHex.Services
         public GameStateEnum State { get; set; } = GameStateEnum.NotRunning;
         public SocketCommandContext Context { get; set; }
         public TreeItem<GameLocationEntity> CurrenntLocation { get; set; }
-        
         private IEnumerable<TreeItem<GameLocationEntity>> StoryArc { get; set; }
-
         public GameRepository _gameRepository { get; set; }
 
         public GameService()
@@ -80,7 +78,7 @@ namespace DiscordHex.Services
 
         private IEnumerable<TreeItem<GameLocationEntity>> GetStoryArc()
         {
-            var arc = _gameRepository.GetStoryArc(1);
+            var arc = _gameRepository.GetStoryArc(1); // only one story right now. fix when adding more
 
             return arc;
         }

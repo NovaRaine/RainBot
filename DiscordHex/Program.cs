@@ -8,12 +8,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord.Commands;
 using System.Net.Http;
 using DiscordHex.Services;
-using System.Linq;
 
 namespace DiscordHex
 {
     public class Program
     {
+        private const string ConfigFile = @"c:\RainBot\Config.cfg";
+
         private DataLoader _loader;
         private DiscordSocketClient _client;
         public static void Main(string[] args)
@@ -21,12 +22,14 @@ namespace DiscordHex
 
         public async Task MainAsync()
         {
-            Environment.SetEnvironmentVariable("Version", "2.2.1");
+            Environment.SetEnvironmentVariable("Version", "3.0.0");
 
             var services = ConfigureServices();
-            
-            LoadData();
-            
+
+            _loader = new DataLoader();
+            _loader.ReadConfig(ConfigFile);
+            _loader.LoadData();
+
             _client = services.GetRequiredService<DiscordSocketClient>();
 
             _client.Log += Log;
@@ -36,45 +39,9 @@ namespace DiscordHex
             await _client.StartAsync();
             await _client.SetGameAsync($"RainBot-v{Environment.GetEnvironmentVariable("Version")}");
             
-            _client.Connected += OnClientConnected;
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnClientDisonnecting);
-
-
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
 
             await Task.Delay(-1);
-        }
-
-        private async Task OnClientConnected()
-        {
-            try
-            {
-                await SendMessageOnGeneralChannels("I'm back online! :nomparty:");
-            }
-            catch (Exception)
-            {
-            }
-        }
-        private void OnClientDisonnecting(object sender, EventArgs e)
-        {
-            try
-            {
-                SendMessageOnGeneralChannels(":zzz: I'm going to sleep :zzz:").RunSynchronously();
-            }
-            catch (Exception)
-            {
-                //apparently the client closed already!
-            }
-        }
-        
-        private async Task SendMessageOnGeneralChannels(string message)
-        {
-            var generalChannels = _client.GroupChannels.Where(x => x.Name.ToLower().Contains("general"));
-
-            foreach(var channel in generalChannels)
-            {
-                await channel.SendMessageAsync(message);
-            }
         }
 
         private IServiceProvider ConfigureServices()
@@ -94,12 +61,6 @@ namespace DiscordHex
                 .AddSingleton<GameSession>()
 
                 .BuildServiceProvider();
-        }
-
-        private void LoadData()
-        {
-            _loader = new DataLoader();
-            _loader.LoadData();
         }
 
         private Task Log(LogMessage msg)

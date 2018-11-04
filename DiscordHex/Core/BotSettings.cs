@@ -1,6 +1,5 @@
 ﻿using DiscordHex.Domain;
 using System;
-using System.Collections.Generic;
 
 namespace DiscordHex.Core
 {
@@ -11,7 +10,7 @@ namespace DiscordHex.Core
         #region Members
                 
         internal Random RandomNumber { get; private set; }
-        internal string ConnectionString => "Data Source=c:\\temp\\hexer\\discordHexer.db;Version=3;";
+        internal BotConfigurationEntity Config { get; set; }
         #endregion
 
         static BotSettings()

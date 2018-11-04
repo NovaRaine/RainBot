@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using DiscordHex.Core;
 using DiscordHex.Domain;
+using Npgsql;
 using System.Collections.Generic;
-using System.Data.SQLite;
 using System.Linq;
 
 namespace DiscordHex.Data
@@ -12,10 +12,10 @@ namespace DiscordHex.Data
         public List<SpellEntity> GetSpells()
         {
             IEnumerable<SpellEntity> data = null;
-            using (var conn = new SQLiteConnection(BotSettings.Instance.ConnectionString))
+            using (var conn = new NpgsqlConnection(BotSettings.Instance.Config.ConnectionString))
             {
                 conn.Open();
-                data = conn.Query<SpellEntity>(@"SELECT * FROM spells");
+                data = conn.Query<SpellEntity>(@"SELECT * FROM ""RainBot"".""Spells""");
             }
 
             if (data == null) return null;

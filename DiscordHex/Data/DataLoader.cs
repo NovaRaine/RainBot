@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Newtonsoft.Json;
+using System.IO;
+using DiscordHex.Domain;
+using DiscordHex.Core;
 
 namespace DiscordHex.Data
 {
@@ -25,6 +29,15 @@ namespace DiscordHex.Data
 
             Environment.SetEnvironmentVariable("Settings_Prefix", settings.FirstOrDefault(x => x.Name == "prefix")?.Value);
             Environment.SetEnvironmentVariable("Settings_GiphyToken", settings.FirstOrDefault(x => x.Name == "giphyToken")?.Value);
+        }
+
+        internal void ReadConfig(string configFile)
+        {
+            using (StreamReader file = File.OpenText(configFile))
+            {
+                var config = JsonConvert.DeserializeObject<BotConfigurationEntity>(file.ReadToEnd());
+                BotSettings.Instance.Config = config;
+            }
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using Dapper;
 using DiscordHex.Core;
 using DiscordHex.Domain;
+using Npgsql;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SQLite;
 using System.Linq;
 
 namespace DiscordHex.Data
@@ -14,23 +13,22 @@ namespace DiscordHex.Data
         public IEnumerable<TreeItem<GameLocationEntity>> GetStoryArc(int storyId)
         {
             IEnumerable<GameLocationEntity> data = null;
-            using (var conn = new SQLiteConnection(BotSettings.Instance.ConnectionString))
+            using (var conn = new NpgsqlConnection(BotSettings.Instance.Config.ConnectionString))
             {
                 conn.Open();
-                data = conn.Query<GameLocationEntity>("SELECT * FROM gameLocations WHERE storyId = @storyId", new { storyId});
+                data = conn.Query<GameLocationEntity>(@"SELECT * FROM ""RainBot"".""GameLocations"" WHERE storyId = @storyId", new { storyId });
             }
 
             return BuildStory(data.ToList());
         }
 
-        public IEnumerable<TreeItem<GameLocationEntity>> BuildStory(List<GameLocationEntity> gameEntities)
+        private IEnumerable<TreeItem<GameLocationEntity>> BuildStory(List<GameLocationEntity> gameEntities)
         {
-            var root = gameEntities.GenerateTree(c => c.Id, c => c.Parent);
+            var root = gameEntities.GenerateTree(c => c.Guid, c => c.Parent);
             return root;
         }
-
-        
     }
+
     public class TreeItem<T>
     {
         public T Item { get; set; }

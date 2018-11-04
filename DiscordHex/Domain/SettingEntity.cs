@@ -6,7 +6,7 @@ namespace DiscordHex.Domain
 {
     public class SettingEntity
     {
-        public int Id { get; set; }
+        public int guid { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
     }

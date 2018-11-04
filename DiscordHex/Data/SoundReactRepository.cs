@@ -1,11 +1,9 @@
 ﻿using Dapper;
 using DiscordHex.Core;
 using DiscordHex.Domain;
-using System;
+using Npgsql;
 using System.Collections.Generic;
-using System.Data.SQLite;
 using System.Linq;
-using System.Text;
 
 namespace DiscordHex.Data
 {
@@ -14,10 +12,10 @@ namespace DiscordHex.Data
         public List<SoundReactEntity> GetSoundReacts()
         {
             IEnumerable<SoundReactEntity> data = null;
-            using (var conn = new SQLiteConnection(BotSettings.Instance.ConnectionString))
+            using (var conn = new NpgsqlConnection(BotSettings.Instance.Config.ConnectionString))
             {
                 conn.Open();
-                data = conn.Query<SoundReactEntity>(@"SELECT * FROM soundReacts");
+                data = conn.Query<SoundReactEntity>(@"SELECT * FROM ""RainBot"".""SoundReacts""");
             }
 
             if (data == null) return null;
