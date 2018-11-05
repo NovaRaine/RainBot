@@ -21,7 +21,7 @@ namespace DiscordHex.Data
                          ON du.guid = up.discordUser
                          WHERE du.discordId = @id";
 
-            var effectsSql = $@"SELECT * FROM ""RainBot"".""ActiveEffects"" WHERE discordId = @id AND endTime > LOCALTIMESTAMP";
+            var effectsSql = $@"SELECT * FROM ""RainBot"".""ActiveEffects"" WHERE discordId = @id AND (endTime > LOCALTIMESTAMP AND startTime < LOCALTIMESTAMP)";
 
             using (var conn = new NpgsqlConnection(BotSettings.Instance.Config.ConnectionString))
             {

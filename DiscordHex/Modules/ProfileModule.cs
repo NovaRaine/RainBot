@@ -28,7 +28,7 @@ namespace DiscordHex.Modules
                   $"Hexes thrown: {profile.HexCasted}\n" +
                   $"Hexes received: {profile.HexReceived}\n" +
                   $"Games played: {profile.GamesStarted}\n" +
-                  $"Active effects: {string.Join(", ", profile.ActiveEffects.Select(x => x.SpellName))}";
+                  $"Active effects: {string.Join(", ", profile.ActiveEffects.Select(x => x.SpellName).Distinct())}";
 
             var emb = new EmbedBuilder()
                 .WithTitle($"Stats for {user.Username}")
