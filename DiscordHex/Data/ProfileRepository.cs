@@ -54,32 +54,35 @@ namespace DiscordHex.Data
 
                 reader.Close();
 
-                var efCmd = new NpgsqlCommand(effectsSql, conn);
-                efCmd.Parameters.AddWithValue("@id", profile.DiscordId);
-
-                var effectReader = efCmd.ExecuteReader();
-
-                var effects = new List<SpellEffectEntity>();
-
-                while (effectReader.Read())
+                if (profile != null && !string.IsNullOrEmpty(profile.DiscordId))
                 {
-                    try
-                    {
-                        var effect = new SpellEffectEntity();
-                        effect.Guid = (int)effectReader["guid"];
-                        effect.DiscordId = (string)effectReader["discordId"];
-                        effect.SpellName = (string)effectReader["spellName"];
-                        effect.StartTime = (DateTime)effectReader["startTime"];
-                        effect.EndTime = (DateTime)effectReader["endTime"];
-                        effects.Add(effect);
-                    }
-                    catch (Exception ex)
-                    {
-                        // ignore for now
-                    }
-                }
+                    var efCmd = new NpgsqlCommand(effectsSql, conn);
+                    efCmd.Parameters.AddWithValue("@id", profile.DiscordId);
 
-                profile.ActiveEffects = effects;
+                    var effectReader = efCmd.ExecuteReader();
+
+                    var effects = new List<SpellEffectEntity>();
+
+                    while (effectReader.Read())
+                    {
+                        try
+                        {
+                            var effect = new SpellEffectEntity();
+                            effect.Guid = (int)effectReader["guid"];
+                            effect.DiscordId = (string)effectReader["discordId"];
+                            effect.SpellName = (string)effectReader["spellName"];
+                            effect.StartTime = (DateTime)effectReader["startTime"];
+                            effect.EndTime = (DateTime)effectReader["endTime"];
+                            effects.Add(effect);
+                        }
+                        catch (Exception ex)
+                        {
+                            // ignore for now
+                        }
+                    }
+
+                    profile.ActiveEffects = effects;
+                }
             }
             return profile;
         }
