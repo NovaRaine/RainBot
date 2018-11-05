@@ -80,5 +80,12 @@ namespace DiscordHex.Modules
 
             await ReplyAsync("", false, embedded.Build());
         }
+
+        [Command("eureka")]
+        [Summary("Try it ;)")]
+        public async Task Eureka(params string[] message)
+        {
+            await ReplyAsync("💩 💩 💩 💩");
+        }
     }
 }

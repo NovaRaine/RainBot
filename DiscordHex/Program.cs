@@ -22,7 +22,7 @@ namespace DiscordHex
 
         public async Task MainAsync()
         {
-            Environment.SetEnvironmentVariable("Version", "3.0.0");
+            Environment.SetEnvironmentVariable("Version", "3.1.0");
 
             var services = ConfigureServices();
 
@@ -37,7 +37,7 @@ namespace DiscordHex
             
             await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("Settings_Token"));
             await _client.StartAsync();
-            await _client.SetGameAsync($"RainBot-v{Environment.GetEnvironmentVariable("Version")}");
+            await _client.SetGameAsync($"{Environment.GetEnvironmentVariable("Settings_Prefix")}help");
             
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
 
@@ -59,6 +59,7 @@ namespace DiscordHex
                 .AddSingleton<FfxivSpellService>()
                 .AddSingleton<SoundReactionService>()
                 .AddSingleton<GameSession>()
+                .AddSingleton<ProfileService>()
 
                 .BuildServiceProvider();
         }
