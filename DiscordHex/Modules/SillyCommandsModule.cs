@@ -85,7 +85,7 @@ namespace DiscordHex.Modules
         [Summary("Try it ;)")]
         public async Task Eureka(params string[] message)
         {
-            await ReplyAsync("💩 💩 💩 💩");
+            await ReplyAsync("💩 --'Mionee, I know you hate me and that makes me sad :( Can't we just try to get along?");
         }
     }
 }
