@@ -40,13 +40,6 @@ namespace DiscordHex.Services
                 return e;
             }
 
-            if ((type == SpellTypeEnum.DirectDamage || type == SpellTypeEnum.Hex) && context.Message.MentionedUsers.Any(x => x.Id == 462658205009575946))
-            {
-                e.Description = $"{context.Message.Author.Username} tried to harm Dragon Mom!";
-                e.ImageUrl = "https://media3.giphy.com/media/26Bnc1dYtp3SvCfDi/giphy.gif";
-                return e;
-            }
-
             if (context.Message.MentionedRoles.Count > 0) // no mentioning roles 
             {
                 e.Description = "I'm not targeting a whole group, and you should know better.. Shame on you :(";
