@@ -45,6 +45,24 @@ namespace DiscordHex.Modules
                 await ReplyAsync($"{Context.Message.Author.Username} has served {msg}");
         }
 
+        [Command("rndgif")]
+        [Alias("show", "giphy")]
+        [Summary("Get a giphy by tag")]
+        public async Task RndGif(params string[] message)
+        {
+
+            var url = RandomPictureService.GetRandomGiphyByTag(string.Join(" ", message));
+            if (!string.IsNullOrEmpty(url))
+            {
+                var embedded = new EmbedBuilder();
+                embedded.ImageUrl = url;
+                await ReplyAsync("", false, embedded.Build());
+                return;
+            }
+
+            await ReplyAsync("no results :unamused:");
+        }
+
         [Command("cat")]
         [Alias("kitty", "radomcat")]
         [Summary("Get a radom cat in your channel! An important part of the internet.")]
