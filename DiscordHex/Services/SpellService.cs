@@ -54,7 +54,7 @@ namespace DiscordHex.Services
                     spell = Hexes.ElementAt(BotSettings.Instance.RandomNumber.Next(0, Hexes.Count));
                     break;
                 case SpellTypeEnum.DirectDamage:
-                    spell =DirectDamage.ElementAt(BotSettings.Instance.RandomNumber.Next(0, DirectDamage.Count));
+                    spell = DirectDamage.ElementAt(BotSettings.Instance.RandomNumber.Next(0, DirectDamage.Count));
                     break;
                 case SpellTypeEnum.Buff:
                     spell = Buffs.ElementAt(BotSettings.Instance.RandomNumber.Next(0, Buffs.Count));
