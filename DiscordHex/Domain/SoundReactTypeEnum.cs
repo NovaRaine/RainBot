@@ -5,5 +5,6 @@ namespace DiscordHex.Domain
     {
         GAY = 1,
         TRANS = 2,
+        NAP = 3
     }
 }

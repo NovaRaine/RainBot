@@ -12,6 +12,7 @@ namespace DiscordHex.Services
     {
         private List<SoundReactEntity> GaySounds;
         private List<SoundReactEntity> TransSounds;
+        private List<SoundReactEntity> Naps;
 
         public SoundReactionService()
         {
@@ -20,6 +21,12 @@ namespace DiscordHex.Services
 
             GaySounds = sounds.Where(x => x.Type == SoundReactTypeEnum.GAY).ToList();
             TransSounds = sounds.Where(x => x.Type == SoundReactTypeEnum.TRANS).ToList();
+            Naps = sounds.Where(x => x.Type == SoundReactTypeEnum.NAP).ToList();
+        }
+
+        public EmbedBuilder GetRandomNap()
+        {
+            return BuildEmbedded(Naps, "nap");
         }
 
         public EmbedBuilder GetTransSounds(string type)

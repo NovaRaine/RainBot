@@ -15,6 +15,15 @@ namespace DiscordHex.Modules
             SoundReactionService = soundReactionService;
         }
 
+        [Command("nap")]
+        [Summary("Take a nap. You probably need it.")]
+        [Remarks("nap")]
+        public async Task NapSounds(params string[] message)
+        {
+            var embedded = SoundReactionService.GetRandomNap();
+            await ReplyAsync("", false, embedded.Build());
+        }
+
         [Command("gs")]
         [Alias("gaysounds")]
         [Summary("Show your gayness in a react image.")]
