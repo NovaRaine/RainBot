@@ -185,5 +185,20 @@ namespace DiscordHex.Modules
 
             await ReplyAsync("", false, msg);
         }
+
+        [Command("spunky")]
+        public async Task Spunky()
+        {
+            if (Context.Message.Author.Id != 184013275841691648) return; // nah, you're not spunky
+
+            var msg = new EmbedBuilder()
+                .WithTitle("Spunky")
+                .WithDescription($"Hi everyone!\nI'm Spunky :smile:")
+                .WithThumbnailUrl(Context.Message.Author.GetAvatarUrl())
+                .WithColor(new Color(100, 100, 200))
+                .Build();
+
+            await ReplyAsync("", false, msg);
+        }
     }
 }
