@@ -11,6 +11,7 @@ namespace DiscordHex.Modules
     public class SillyCommandsModule : ModuleBase<SocketCommandContext>
     {
         public RandomPictureService RandomPictureService { get; set; }
+        public CommonCommands CommonCommands { get; set; }
         private List<string> words;
 
         public SillyCommandsModule()
@@ -85,7 +86,8 @@ namespace DiscordHex.Modules
         [Summary("Try it ;)")]
         public async Task Eureka(params string[] message)
         {
-            await ReplyAsync("💩 --'Hey there! I'm eureka. Let's be friends?'");
+            var emb = CommonCommands.Eureka();
+            await ReplyAsync("", false, emb);
         }
     }
 }

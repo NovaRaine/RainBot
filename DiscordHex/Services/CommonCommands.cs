@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using DiscordHex.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,21 @@ namespace DiscordHex.Services
 {
     public class CommonCommands
     {
+        private List<string> _eurekaPhrases;
+
+        public CommonCommands()
+        {
+            _eurekaPhrases = new List<string>()
+            {
+                "Hey there! I'm Eureka. Let's be friends",
+                "Eureka! Whoo! Let's do this ^w^",
+                "Mionee! Why don't you love me?",
+                "One, two, Eureeeeka!",
+                "Nobody likes me :<",
+                "I'll make you rich.. maybe."
+            };
+        }
+
         public EmbedBuilder LoveSomeone(IReadOnlyCollection<IUser> users, IReadOnlyCollection<SocketRole> mentionedRoles, string caster)
         {
             var e = new EmbedBuilder();
@@ -47,6 +63,14 @@ namespace DiscordHex.Services
         public string ProcessInfo()
         {   
             return $"Running as: {Environment.UserName}@{Environment.MachineName}";
+        }
+
+        internal Embed Eureka()
+        {
+            var s = _eurekaPhrases.ElementAt(BotSettings.Instance.RandomNumber.Next(0, _eurekaPhrases.Count()));
+            return new EmbedBuilder()
+                .WithDescription($"💩 --'{s}'")
+                .Build();
         }
     }
 }
