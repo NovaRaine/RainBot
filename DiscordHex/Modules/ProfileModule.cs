@@ -11,7 +11,8 @@ namespace DiscordHex.Modules
         public ProfileService ProfileService { get; set; }
 
         [Command("profile")]
-        [Summary("")]
+        [Summary("Show various stats for a user")]
+        [Remarks("profile | profile @user")]
         public async Task Profile(IUser user = null)
         {
             if (user == null)

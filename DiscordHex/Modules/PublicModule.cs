@@ -48,6 +48,7 @@ namespace DiscordHex.Modules
         [Command("rndgif")]
         [Alias("show", "giphy")]
         [Summary("Get a giphy by tag")]
+        [Remarks("show [tag]")]
         public async Task RndGif(params string[] message)
         {
 
@@ -187,6 +188,7 @@ namespace DiscordHex.Modules
         }
 
         [Command("spunky")]
+        [Summary("Spunky?")]
         public async Task Spunky()
         {
             if (Context.Message.Author.Id != 184013275841691648) return; // nah, you're not spunky

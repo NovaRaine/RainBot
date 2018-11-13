@@ -20,7 +20,6 @@ namespace DiscordHex.Modules
             {
                 "Booty booty rump rump, {0} got a pretty butt bump",
                 "{0} likes butts and cannot lie.",
-                "Did you try buffing?",
                 "Butts.. That's all.",
                 "Butty butty bum bum",
                 "You pervert!"
@@ -64,7 +63,7 @@ namespace DiscordHex.Modules
         [Command("chop")]
         [Alias("chopchop")]
         [Summary("Chop!")]
-        [Remarks("chop | chop @Atumra (HAMSTER). Is bitten. ")]
+        [Remarks("chop | chop @user")]
         public async Task Chop(params string[] message)
         {
             var embedded = new EmbedBuilder();
@@ -83,7 +82,7 @@ namespace DiscordHex.Modules
         }
 
         [Command("eureka")]
-        [Summary("Try it ;)")]
+        [Summary("Everyone's favourite")]
         public async Task Eureka(params string[] message)
         {
             var emb = CommonCommands.Eureka();
