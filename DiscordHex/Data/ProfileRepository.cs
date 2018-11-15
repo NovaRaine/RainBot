@@ -54,43 +54,44 @@ namespace DiscordHex.Data
 
                 reader.Close();
 
-                if (profile != null && !string.IsNullOrEmpty(profile.DiscordId))
+                if (string.IsNullOrEmpty(profile.DiscordId)) return profile;
+
+                var efCmd = new NpgsqlCommand(effectsSql, conn);
+                efCmd.Parameters.AddWithValue("@id", profile.DiscordId);
+
+                var effectReader = efCmd.ExecuteReader();
+
+                var effects = new List<SpellEffectEntity>();
+
+                while (effectReader.Read())
                 {
-                    var efCmd = new NpgsqlCommand(effectsSql, conn);
-                    efCmd.Parameters.AddWithValue("@id", profile.DiscordId);
-
-                    var effectReader = efCmd.ExecuteReader();
-
-                    var effects = new List<SpellEffectEntity>();
-
-                    while (effectReader.Read())
+                    try
                     {
-                        try
+                        var effect = new SpellEffectEntity
                         {
-                            var effect = new SpellEffectEntity();
-                            effect.Guid = (int)effectReader["guid"];
-                            effect.DiscordId = (string)effectReader["discordId"];
-                            effect.SpellName = (string)effectReader["spellName"];
-                            effect.StartTime = (DateTime)effectReader["startTime"];
-                            effect.EndTime = (DateTime)effectReader["endTime"];
-                            effects.Add(effect);
-                        }
-                        catch (Exception ex)
-                        {
-                            // ignore for now
-                        }
+                            Guid = (int) effectReader["guid"],
+                            DiscordId = (string) effectReader["discordId"],
+                            SpellName = (string) effectReader["spellName"],
+                            StartTime = (DateTime) effectReader["startTime"],
+                            EndTime = (DateTime) effectReader["endTime"]
+                        };
+                        effects.Add(effect);
                     }
-
-                    profile.ActiveEffects = effects;
+                    catch (Exception ex)
+                    {
+                        // ignore for now
+                    }
                 }
+
+                profile.ActiveEffects = effects;
+
             }
             return profile;
         }
 
         public  void UpdateProfile(UserProfileEntity profile)
         {
-            var sql = @"UPDATE ""RainBot"".""UserProfiles"" SET buffsCasted = @bc, buffsReceived = @br, damageCasted = @dc, damageReceived = @dr, hexCasted = @hc, hexReceived = @hr, gamesStarted = @gs WHERE discordUser = @du";
-            var res = 0;
+            const string sql = @"UPDATE ""RainBot"".""UserProfiles"" SET buffsCasted = @bc, buffsReceived = @br, damageCasted = @dc, damageReceived = @dr, hexCasted = @hc, hexReceived = @hr, gamesStarted = @gs WHERE discordUser = @du";
 
             using (var conn = new NpgsqlConnection(BotSettings.Instance.Config.ConnectionString))
             {
@@ -105,7 +106,7 @@ namespace DiscordHex.Data
                 cmd.Parameters.AddWithValue("@du", NpgsqlDbType.Integer, profile.DiscordUserGuid);
                 cmd.Parameters.AddWithValue("@gs", NpgsqlDbType.Integer, profile.GamesStarted);
 
-                res = cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
             }
         }
 
@@ -123,9 +124,8 @@ namespace DiscordHex.Data
             return res > 0;
         }
 
-        public bool AddSpellEffect(List<string> userIds, string spellName, int duration)
+        public void AddSpellEffect(List<string> userIds, string spellName, int duration)
         {
-            var res = 0;
             using (var conn = new NpgsqlConnection(BotSettings.Instance.Config.ConnectionString))
             {
                 conn.Open();
@@ -134,8 +134,6 @@ namespace DiscordHex.Data
                     conn.Query<int>($@"INSERT INTO ""RainBot"".""ActiveEffects"" (discordid, spellname, starttime, endtime) VALUES (@id, @spellname, LOCALTIMESTAMP, LOCALTIMESTAMP +interval '{duration} hour')", new { id, spellName });
                 }
             }
-
-            return res > 0;
         }
     }
 }

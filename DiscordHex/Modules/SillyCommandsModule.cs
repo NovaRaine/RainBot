@@ -12,11 +12,11 @@ namespace DiscordHex.Modules
     {
         public RandomPictureService RandomPictureService { get; set; }
         public CommonCommands CommonCommands { get; set; }
-        private List<string> words;
+        private readonly List<string> _words;
 
         public SillyCommandsModule()
         {
-            words = new List<string>
+            _words = new List<string>
             {
                 "Booty booty rump rump, {0} got a pretty butt bump",
                 "{0} likes butts and cannot lie.",
@@ -31,7 +31,7 @@ namespace DiscordHex.Modules
         public async Task Butt(params string[] message)
         {
             var emb = new EmbedBuilder();
-            var text = words.ElementAt(BotSettings.Instance.RandomNumber.Next(0, words.Count));
+            var text = _words.ElementAt(BotSettings.Instance.RandomNumber.Next(0, _words.Count));
 
             text = string.Format(text, Context.Message.Author.Username);
 
@@ -69,14 +69,9 @@ namespace DiscordHex.Modules
             var embedded = new EmbedBuilder();
             embedded.ImageUrl = "https://cdn.discordapp.com/attachments/461009638922649610/482247931831910411/aa7eb8e.gif";
 
-            if (Context.Message.MentionedUsers.Count > 0)
-            {
-                embedded.Description = $"Chop! Chopchop, {Context.Message.MentionedUsers.First().Username}!";
-            }
-            else
-            {
-                embedded.Description = "Chop! Chopchop!";
-            }
+            embedded.Description = Context.Message.MentionedUsers.Count > 0
+                ? $"Chop! Chopchop, {Context.Message.MentionedUsers.First().Username}!"
+                : "Chop! Chopchop!";
 
             await ReplyAsync("", false, embedded.Build());
         }

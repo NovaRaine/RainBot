@@ -9,7 +9,7 @@ namespace DiscordHex.Services
 {
     public class CommonCommands
     {
-        private List<string> _eurekaPhrases;
+        private readonly List<string> _eurekaPhrases;
 
         public CommonCommands()
         {

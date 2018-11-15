@@ -13,9 +13,9 @@ namespace DiscordHex.Services
         public ulong GameOwner { get; set; }
         public GameStateEnum State { get; set; } = GameStateEnum.NotRunning;
         public SocketCommandContext Context { get; set; }
-        public TreeItem<GameLocationEntity> CurrenntLocation { get; set; }
+        public TreeItem<GameLocationEntity> CurrentLocation { get; set; }
         private IEnumerable<TreeItem<GameLocationEntity>> StoryArc { get; set; }
-        public GameRepository _gameRepository { get; set; }
+        private readonly GameRepository _gameRepository;
 
         public GameService()
         {
@@ -24,11 +24,11 @@ namespace DiscordHex.Services
 
         internal void SelectOption(int opt)
         {
-            if (CurrenntLocation.Children.Any())
+            if (CurrentLocation.Children.Any())
             {
                 try
                 {
-                    CurrenntLocation = CurrenntLocation.Children.ToList()[opt-1];
+                    CurrentLocation = CurrentLocation.Children.ToList()[opt-1];
                     SendReply();
                 }
                 catch
@@ -38,27 +38,25 @@ namespace DiscordHex.Services
             }
         }
 
-        internal void StartGame()
+        internal async void StartGame()
         {
-            Context.Message.Author.SendMessageAsync("Thanks for playing :)\nYou will get a description, followed by some options.\nSelect options by typing >>opt [option number]\n\n");
+            await Context.Message.Author.SendMessageAsync("Thanks for playing :)\nYou will get a description, followed by some options.\nSelect options by typing >>opt [option number]\n\n");
             StoryArc = GetStoryArc();
-            if (StoryArc.Any())
-            {
-                CurrenntLocation = StoryArc.FirstOrDefault();
-            }
+            CurrentLocation = StoryArc.FirstOrDefault();
+
             SendReply();
         }
 
-        private void SendReply()
+        private async void SendReply()
         {
             var s = new StringBuilder();
 
-            s.AppendLine(CurrenntLocation.Item.Description);
-            if (CurrenntLocation.Children.Any())
+            s.AppendLine(CurrentLocation.Item.Description);
+            if (CurrentLocation.Children.Any())
             {
                 s.AppendLine("\nOptions:");
                 var i = 1;
-                foreach (var opt in CurrenntLocation.Children)
+                foreach (var opt in CurrentLocation.Children)
                 {
                     s.AppendLine($"{i} - {opt.Item.OptionTitle}");
                     i++;
@@ -73,7 +71,7 @@ namespace DiscordHex.Services
                 .WithDescription(s.ToString())
                 .Build();
 
-            Context.Message.Author.SendMessageAsync("", false, msg);
+            await Context.Message.Author.SendMessageAsync("", false, msg);
         }
 
         private IEnumerable<TreeItem<GameLocationEntity>> GetStoryArc()

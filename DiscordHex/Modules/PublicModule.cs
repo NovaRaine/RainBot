@@ -14,7 +14,7 @@ namespace DiscordHex.Modules
         public DiscordSocketClient Discord { get; set; }
         public CommonCommands CommonCommands { get; set; }
 
-        internal PublicModule(RandomPictureService pictureService, DiscordSocketClient discord, CommandService commandService)
+        internal PublicModule(RandomPictureService pictureService, DiscordSocketClient discord)
         {
             RandomPictureService = pictureService;
             Discord = discord;

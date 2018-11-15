@@ -24,7 +24,7 @@ namespace DiscordHex.Modules
                 ? "Failed to find user profile."
                 : $"Buffs given: {profile.BuffsCasted}\n" +
                   $"Buffs received: {profile.BuffsReceived}\n" +
-                  $"Damage spells casted: {profile.DamageCasted}\n" +
+                  $"Damage spells cast: {profile.DamageCasted}\n" +
                   $"Damage spells received: {profile.DamageReceived}\n" +
                   $"Hexes thrown: {profile.HexCasted}\n" +
                   $"Hexes received: {profile.HexReceived}\n" +

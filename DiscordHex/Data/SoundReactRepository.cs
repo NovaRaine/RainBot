@@ -18,8 +18,7 @@ namespace DiscordHex.Data
                 data = conn.Query<SoundReactEntity>(@"SELECT * FROM ""RainBot"".""SoundReacts""");
             }
 
-            if (data == null) return null;
-            return data.ToList();
+            return data?.ToList();
         }
     }
 }

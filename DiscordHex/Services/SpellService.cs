@@ -13,7 +13,7 @@ namespace DiscordHex.Services
         private List<SpellEntity> Hexes { get; set; }
         private List<SpellEntity> Buffs { get; set; }
         private List<SpellEntity> DirectDamage { get; set; }
-        private ProfileService _profileService;
+        private readonly ProfileService _profileService;
 
         public SpellService()
         {
@@ -46,7 +46,7 @@ namespace DiscordHex.Services
                 return e;
             }
 
-            SpellEntity spell = null;
+            SpellEntity spell;
             
             switch (type)
             {
@@ -60,13 +60,8 @@ namespace DiscordHex.Services
                     spell = Buffs.ElementAt(BotSettings.Instance.RandomNumber.Next(0, Buffs.Count));
                     break;
                 default:
-                    break;
-            }
-            
-            if (spell == null)
-            {
-                e.Description = "I seem to have forgotten how to cast spells.. wow :/";
-                return e;
+                    e.Description = "I seem to have forgotten how to cast spells.. wow :/";
+                    return e;
             }
 
             var targets = context.Message.MentionedUsers.Any() ? string.Join(", ", context.Message.MentionedUsers.Select(x => x.Username)) : string.Empty;
@@ -78,14 +73,13 @@ namespace DiscordHex.Services
 
             if (string.IsNullOrEmpty(targets))
             {
-                if (type == SpellTypeEnum.Buff)
-                    e.Description = $"Nya'll get a buff! {spell.Name} on everyone :3{duration}";
-                else
-                    e.Description = $"I cast {spell.Name} on you all! Foolish mortals.{duration}";
+                e.Description = type == SpellTypeEnum.Buff
+                    ? $"Nya'll get a buff! {spell.Name} on everyone :3{duration}"
+                    : $"I cast {spell.Name} on nya'll! Foolish mortals.{duration}";
                 return e;
             }
 
-            e.Description = $"{targets}! I cast {spell.Name} on you!{duration}";
+            e.Description = $"{targets}! I cast {spell.Name} on you!{duration} Nyaaa~";
             _profileService.AddSpellEffect(context.Message.MentionedUsers, spell.Name, hours);
 
             e.ImageUrl = string.IsNullOrEmpty(spell.Img) ? "" : spell.Img;

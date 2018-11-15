@@ -10,23 +10,23 @@ namespace DiscordHex.Services
 {
     public class SoundReactionService
     {
-        private List<SoundReactEntity> GaySounds;
-        private List<SoundReactEntity> TransSounds;
-        private List<SoundReactEntity> Naps;
+        private readonly List<SoundReactEntity> _gaySounds;
+        private readonly List<SoundReactEntity> _transSounds;
+        private readonly List<SoundReactEntity> _naps;
 
         public SoundReactionService()
         {
             var repo = new SoundReactRepository();
             var sounds = repo.GetSoundReacts();
 
-            GaySounds = sounds.Where(x => x.Type == SoundReactTypeEnum.GAY).ToList();
-            TransSounds = sounds.Where(x => x.Type == SoundReactTypeEnum.TRANS).ToList();
-            Naps = sounds.Where(x => x.Type == SoundReactTypeEnum.NAP).ToList();
+            _gaySounds = sounds.Where(x => x.Type == SoundReactTypeEnum.GAY).ToList();
+            _transSounds = sounds.Where(x => x.Type == SoundReactTypeEnum.TRANS).ToList();
+            _naps = sounds.Where(x => x.Type == SoundReactTypeEnum.NAP).ToList();
         }
 
         public EmbedBuilder GetRandomNap()
         {
-            return BuildEmbedded(Naps, "nap");
+            return BuildEmbedded(_naps, "nap");
         }
 
         public EmbedBuilder GetTransSounds(string type)
@@ -34,7 +34,7 @@ namespace DiscordHex.Services
             if (type.ToLower().Trim() == "list")
                 return GetList(SoundReactTypeEnum.TRANS);
 
-            var sounds = TransSounds.Where(x => x.Name.IndexOf(type, StringComparison.InvariantCultureIgnoreCase) != -1);
+            var sounds = _transSounds.Where(x => x.Name.IndexOf(type, StringComparison.InvariantCultureIgnoreCase) != -1);
             return BuildEmbedded(sounds, type);
         }
 
@@ -43,22 +43,21 @@ namespace DiscordHex.Services
             if (type.ToLower().Trim() == "list")
                 return GetList(SoundReactTypeEnum.GAY);
 
-            var sounds = GaySounds.Where(x => x.Name.IndexOf(type, StringComparison.InvariantCultureIgnoreCase) != -1);
+            var sounds = _gaySounds.Where(x => x.Name.IndexOf(type, StringComparison.InvariantCultureIgnoreCase) != -1);
             return BuildEmbedded(sounds, type);
         }
 
         private EmbedBuilder GetList(SoundReactTypeEnum type)
         {
-            var emb = new EmbedBuilder();
-            emb.Title = "List";
+            var emb = new EmbedBuilder {Title = "List"};
 
             switch (type)
             {
                 case SoundReactTypeEnum.GAY:
-                    emb.Description = string.Join(", ", GaySounds.Select(x => x.Name).ToList());
+                    emb.Description = string.Join(", ", _gaySounds.Select(x => x.Name).ToList());
                     break;
                 case SoundReactTypeEnum.TRANS:
-                    emb.Description = string.Join(", ", TransSounds.Select(x => x.Name).ToList());
+                    emb.Description = string.Join(", ", _transSounds.Select(x => x.Name).ToList());
                     break;
                 default:
                     emb.Description = "Epic internal fail!";
@@ -71,15 +70,17 @@ namespace DiscordHex.Services
         private EmbedBuilder BuildEmbedded(IEnumerable<SoundReactEntity> sounds, string type)
         {
             var e = new EmbedBuilder();
-            if (sounds.Any())
+            var sound = sounds.ElementAt(BotSettings.Instance.RandomNumber.Next(0, sounds.Count()));
+
+            if (sound != null)
             {
-                var sound = sounds.ElementAt(BotSettings.Instance.RandomNumber.Next(0, sounds.Count()));
                 e.ImageUrl = sound.Url;
             }
             else
             {
                 e.Description = $"Could not find a react of type: '{type}'.";
             }
+
             return e;
         }
     }

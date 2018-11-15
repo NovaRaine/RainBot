@@ -12,7 +12,7 @@ namespace DiscordHex.Data
     {
         public IEnumerable<TreeItem<GameLocationEntity>> GetStoryArc(int storyId)
         {
-            IEnumerable<GameLocationEntity> data = null;
+            IEnumerable<GameLocationEntity> data;
             using (var conn = new NpgsqlConnection(BotSettings.Instance.Config.ConnectionString))
             {
                 conn.Open();
@@ -37,20 +37,17 @@ namespace DiscordHex.Data
 
     internal static class GenericHelpers
     {
-        public static IEnumerable<TreeItem<T>> GenerateTree<T, K>(
+        public static IEnumerable<TreeItem<T>> GenerateTree<T, TK>(
             this IEnumerable<T> collection,
-            Func<T, K> id_selector,
-            Func<T, K> parent_id_selector,
-            K root_id = default(K))
+            Func<T, TK> idSelector,
+            Func<T, TK> parentIdSelector,
+            TK rootId = default(TK))
         {
-            foreach (var c in collection.Where(c => parent_id_selector(c).Equals(root_id)))
+            return collection.Where(c => parentIdSelector(c).Equals(rootId)).Select(c => new TreeItem<T>
             {
-                yield return new TreeItem<T>
-                {
-                    Item = c,
-                    Children = collection.GenerateTree(id_selector, parent_id_selector, id_selector(c))
-                };
-            }
+                Item = c,
+                Children = collection.GenerateTree(idSelector, parentIdSelector, idSelector(c))
+            });
         }
     }
 }

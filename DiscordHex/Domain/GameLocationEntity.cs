@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-
+﻿
 namespace DiscordHex.Domain
 {
     public class GameLocationEntity

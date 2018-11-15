@@ -18,8 +18,7 @@ namespace DiscordHex.Data
                 data = conn.Query<SettingEntity>(@"SELECT * FROM ""RainBot"".""Settings""");
             }
 
-            if (data == null) return null;
-            return data.ToList();
+            return data?.ToList();
         }
     }
 }

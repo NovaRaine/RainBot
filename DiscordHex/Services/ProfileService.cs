@@ -1,7 +1,5 @@
 ﻿using DiscordHex.Data;
 using DiscordHex.Domain;
-using System.Threading.Tasks;
-using System;
 using Discord.WebSocket;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,11 +27,6 @@ namespace DiscordHex.Services
         }
 
         internal void IncreaseCount(ulong id, SpellTypeEnum type, bool caster)
-        {
-            Task.Run(() => UpdateProfile(id, type, caster));
-        }
-
-        private void UpdateProfile(ulong id, SpellTypeEnum type, bool caster)
         {
             var profile = ProfileRepository.GetUserProfile(id.ToString());
 

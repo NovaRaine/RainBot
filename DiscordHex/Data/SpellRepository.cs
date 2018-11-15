@@ -18,8 +18,7 @@ namespace DiscordHex.Data
                 data = conn.Query<SpellEntity>(@"SELECT * FROM ""RainBot"".""Spells""");
             }
 
-            if (data == null) return null;
-            return data.ToList();
+            return data?.ToList();
         }
     }
 }

@@ -34,8 +34,9 @@ namespace DiscordHex.Core
             if (!(rawMessage is SocketUserMessage message)) return;
             if (message.Source != MessageSource.User) return;
 
-            // This value holds the offset where the prefix ends
             var prefix = Environment.GetEnvironmentVariable("Settings_Prefix");
+            if (prefix == null) return;
+
             var argPos = prefix.Length;
             
             if (!message.HasStringPrefix(prefix, ref argPos)) return;
@@ -45,7 +46,7 @@ namespace DiscordHex.Core
 
             if (result.Error.HasValue && result.Error.Value != CommandError.UnknownCommand)
             {
-                var resMsg = "";
+                string resMsg;
                 switch (result.Error)
                 {
                     case CommandError.Exception:
@@ -58,7 +59,7 @@ namespace DiscordHex.Core
                         resMsg = "You messed up the parameters or the order of them :(";
                         break;
                     case CommandError.UnmetPrecondition:
-                        resMsg = "No.. Just no.";
+                        resMsg = "Denied! Nyaaa~";
                         break;
                     default:
                         resMsg = "I.. uhm.. What do you want really?";
