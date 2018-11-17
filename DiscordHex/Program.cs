@@ -2,46 +2,69 @@
 using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
-using DiscordHex.Data;
 using DiscordHex.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Discord.Commands;
 using System.Net.Http;
 using DiscordHex.Services;
+using log4net.Config;
+using log4net;
+using System.Reflection;
+using System.IO;
 
 namespace DiscordHex
 {
     public class Program
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+
         private const string ConfigFile = @"c:\RainBot\Config.cfg";
 
-        private DataLoader _loader;
+        private ConfigLoader _loader;
         private DiscordSocketClient _client;
         public static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
 
         public async Task MainAsync()
         {
-            Environment.SetEnvironmentVariable("Version", "3.1.0");
+            SetupLogging();
+
+            _loader = new ConfigLoader();
+            _loader.Load(ConfigFile);
+
+            Environment.SetEnvironmentVariable("Version", "3.11 For Workstations");
 
             var services = ConfigureServices();
-
-            _loader = new DataLoader();
-            _loader.ReadConfig(ConfigFile);
-            _loader.LoadData();
 
             _client = services.GetRequiredService<DiscordSocketClient>();
 
             _client.Log += Log;
             services.GetRequiredService<CommandService>().Log += Log;
-            
-            await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("Settings_Token"));
+
+#if DEBUG
+            await _client.LoginAsync(TokenType.Bot, BotSettings.Instance.Config.DiscordTokenDebug);
+#endif
+#if !DEBUG
+            await _client.LoginAsync(TokenType.Bot, BotSettings.Instance.Config.DiscordToken);
+#endif
+
             await _client.StartAsync();
-            await _client.SetGameAsync($"{Environment.GetEnvironmentVariable("Settings_Prefix")}help");
+            await _client.SetGameAsync($"{BotSettings.Instance.Config.Prefix}help");
             
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
 
             await Task.Delay(-1);
+        }
+
+        private void SetupLogging()
+        {
+            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+#if DEBUG
+            XmlConfigurator.Configure(logRepository, new FileInfo("log4net.debug.config"));
+#endif
+#if !DEBUG
+            XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+#endif
         }
 
         private IServiceProvider ConfigureServices()
@@ -66,7 +89,7 @@ namespace DiscordHex
 
         private Task Log(LogMessage msg)
         {
-            Console.WriteLine(msg.ToString());
+            log.Info(msg.Message);
             return Task.CompletedTask;
         }
     }

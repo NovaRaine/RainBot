@@ -82,7 +82,6 @@ namespace DiscordHex.Services
             e.Description = $"{targets}! I cast {spell.Name} on you!{duration} Nyaaa~";
             _profileService.AddSpellEffect(context.Message.MentionedUsers, spell.Name, hours);
 
-            e.ImageUrl = string.IsNullOrEmpty(spell.Img) ? "" : spell.Img;
             return e;
         }
     }
