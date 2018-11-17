@@ -32,7 +32,7 @@ namespace DiscordHex
             _loader = new ConfigLoader();
             _loader.Load(ConfigFile);
 
-            Environment.SetEnvironmentVariable("Version", "3.11 For Workstations");
+            Environment.SetEnvironmentVariable("Version", "3.11 For Workgroups");
 
             var services = ConfigureServices();
 
