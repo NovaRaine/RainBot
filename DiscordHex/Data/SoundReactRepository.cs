@@ -1,7 +1,6 @@
-﻿using Dapper;
-using DiscordHex.Core;
+﻿using DiscordHex.Core;
 using DiscordHex.Domain;
-using Npgsql;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,14 +10,32 @@ namespace DiscordHex.Data
     {
         public List<SoundReactEntity> GetSoundReacts()
         {
-            IEnumerable<SoundReactEntity> data = null;
-            using (var conn = new NpgsqlConnection(BotSettings.Instance.Config.ConnectionString))
+            using (var db = new SoundReactContext())
             {
-                conn.Open();
-                data = conn.Query<SoundReactEntity>(@"SELECT * FROM ""RainBot"".""SoundReacts""");
+                return db.SoundReact.ToList();
             }
+        }
+    }
 
-            return data?.ToList();
+    public class SoundReactContext : DbContext
+    {
+        public virtual DbSet<SoundReactEntity> SoundReact { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql(BotSettings.Instance.Config.ConnectionString);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<SoundReactEntity>(entity =>
+            {
+                entity.ToTable("SoundReacts", "RainBot");
+                entity.Property(e => e.Guid).HasColumnName("guid");
+                entity.Property(e => e.Url).HasColumnName("url");
+                entity.Property(e => e.Name).HasColumnName("name");
+                entity.Property(e => e.Type).HasColumnName("type");
+            });
         }
     }
 }

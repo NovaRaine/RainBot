@@ -18,18 +18,18 @@ namespace DiscordHex.Modules
             if (user == null)
                 user = Context.Message.Author;
 
-            var profile = ProfileService.GetUserProfile(user.Id);
+            var wrapper = ProfileService.GetUserProfile(user.Id);
             
-            var text = profile == null
+            var text = wrapper.Profile == null
                 ? "Failed to find user profile."
-                : $"Buffs given: {profile.BuffsCasted}\n" +
-                  $"Buffs received: {profile.BuffsReceived}\n" +
-                  $"Damage spells cast: {profile.DamageCasted}\n" +
-                  $"Damage spells received: {profile.DamageReceived}\n" +
-                  $"Hexes thrown: {profile.HexCasted}\n" +
-                  $"Hexes received: {profile.HexReceived}\n" +
-                  $"Games played: {profile.GamesStarted}\n" +
-                  $"Active effects: {string.Join(", ", profile.ActiveEffects.Select(x => x.SpellName).Distinct())}";
+                : $"Buffs given: {wrapper.Profile.BuffsCasted}\n" +
+                  $"Buffs received: {wrapper.Profile.BuffsReceived}\n" +
+                  $"Damage spells cast: {wrapper.Profile.DamageCasted}\n" +
+                  $"Damage spells received: {wrapper.Profile.DamageReceived}\n" +
+                  $"Hexes thrown: {wrapper.Profile.HexCasted}\n" +
+                  $"Hexes received: {wrapper.Profile.HexReceived}\n" +
+                  $"Games played: {wrapper.Profile.GamesStarted}\n" +
+                  $"Active effects: {string.Join(", ", wrapper.Effects.Select(x => x.SpellName).Distinct())}";
 
             var emb = new EmbedBuilder()
                 .WithTitle($"Stats for {user.Username}")

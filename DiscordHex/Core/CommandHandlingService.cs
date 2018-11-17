@@ -34,7 +34,7 @@ namespace DiscordHex.Core
             if (!(rawMessage is SocketUserMessage message)) return;
             if (message.Source != MessageSource.User) return;
 
-            var prefix = Environment.GetEnvironmentVariable("Settings_Prefix");
+            var prefix = BotSettings.Instance.Config.Prefix;
             if (prefix == null) return;
 
             var argPos = prefix.Length;

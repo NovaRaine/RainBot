@@ -15,42 +15,37 @@ namespace DiscordHex.Services
             ProfileRepository = new ProfileRepository();
         }
 
-        public UserProfileEntity GetUserProfile(ulong id)
+        public UserProfileWrapper GetUserProfile(ulong id)
         {
-            var profile = ProfileRepository.GetUserProfile(id.ToString());
-            if (string.IsNullOrEmpty(profile.DiscordId))
-            {
-                ProfileRepository.SaveNewUserProfile(id.ToString());
-                profile = ProfileRepository.GetUserProfile(id.ToString());
-            }
-            return profile;
+            var wrapper = ProfileRepository.GetUserProfile(id);
+            return wrapper;
         }
 
         internal void IncreaseCount(ulong id, SpellTypeEnum type, bool caster)
         {
-            var profile = ProfileRepository.GetUserProfile(id.ToString());
+            var wrapper = ProfileRepository.GetUserProfile(id);
 
             switch (type)
             {
                 case SpellTypeEnum.Buff:
-                    if (caster) profile.BuffsCasted++; else profile.BuffsReceived++;
+                    if (caster) wrapper.Profile.BuffsCasted++; else wrapper.Profile.BuffsReceived++;
                     break;
                 case SpellTypeEnum.DirectDamage:
-                    if (caster) profile.DamageCasted++; else profile.DamageReceived++;
+                    if (caster) wrapper.Profile.DamageCasted++; else wrapper.Profile.DamageReceived++;
                     break;
                 case SpellTypeEnum.Hex:
-                    if (caster) profile.HexCasted++; else profile.HexReceived++;
+                    if (caster) wrapper.Profile.HexCasted++; else wrapper.Profile.HexReceived++;
                     break;
                 default:
                     break;
             }
 
-            ProfileRepository.UpdateProfile(profile);
+            ProfileRepository.UpdateProfile(wrapper.Profile);
         }
 
         public void AddSpellEffect(IReadOnlyCollection<SocketUser> mentionedUsers, string name, int hours)
         {
-            ProfileRepository.AddSpellEffect(mentionedUsers.Select(x => x.Id.ToString()).ToList(), name, hours);
+            ProfileRepository.AddSpellEffect(mentionedUsers.Select(x => x.Id).ToList(), name, hours);
         }
     }
 }
