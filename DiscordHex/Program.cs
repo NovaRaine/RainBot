@@ -11,6 +11,7 @@ using log4net.Config;
 using log4net;
 using System.Reflection;
 using System.IO;
+using DiscordHex.Data;
 
 namespace DiscordHex
 {
@@ -41,13 +42,7 @@ namespace DiscordHex
             _client.Log += Log;
             services.GetRequiredService<CommandService>().Log += Log;
 
-#if DEBUG
-            await _client.LoginAsync(TokenType.Bot, BotSettings.Instance.Config.DiscordTokenDebug);
-#endif
-#if !DEBUG
             await _client.LoginAsync(TokenType.Bot, BotSettings.Instance.Config.DiscordToken);
-#endif
-
             await _client.StartAsync();
             await _client.SetGameAsync($"{BotSettings.Instance.Config.Prefix}help");
             
@@ -76,6 +71,7 @@ namespace DiscordHex
 
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommonCommands>()
+                .AddSingleton<BotContext>()
 
                 .AddSingleton<RandomPictureService>()
                 .AddSingleton<SpellService>()
