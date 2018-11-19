@@ -1,6 +1,4 @@
-﻿using DiscordHex.Core;
-using DiscordHex.Domain;
-using Microsoft.EntityFrameworkCore;
+﻿using DiscordHex.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +11,7 @@ namespace DiscordHex.Data
         {
             var profile = new UserProfileWrapper();
             
-            using (var db = new UserProfileContext())
+            using (var db = new BotContext())
             {
                 profile.Profile = db.UserProfiles.Where(x => x.DiscordId == id).FirstOrDefault();
             }
@@ -21,7 +19,7 @@ namespace DiscordHex.Data
             if (profile.Profile == null)
             {
                 SaveNewUserProfile(id);
-                using (var db = new UserProfileContext())
+                using (var db = new BotContext())
                 {
                     profile.Profile = db.UserProfiles.Where(x => x.DiscordId == id).FirstOrDefault();
                 }
@@ -29,7 +27,7 @@ namespace DiscordHex.Data
 
             if (profile.Profile != null)
             {
-                using (var db = new ActiveEffectsContext())
+                using (var db = new BotContext())
                 {
                     profile.Effects = db.ActiveEffects.Where(x => x.DiscordId == id).ToList();
                 }
@@ -41,7 +39,7 @@ namespace DiscordHex.Data
 
         public  void UpdateProfile(UserProfileEntity profile)
         {
-            using (var db = new UserProfileContext())
+            using (var db = new BotContext())
             {
                 db.Update(profile);
                 db.SaveChanges();
@@ -50,7 +48,7 @@ namespace DiscordHex.Data
 
         public bool SaveNewUserProfile(ulong id)
         {
-            using (var db = new UserProfileContext())
+            using (var db = new BotContext())
             {
                 var profile = new UserProfileEntity()
                 {
@@ -63,7 +61,7 @@ namespace DiscordHex.Data
 
         public void AddSpellEffect(List<ulong> userIds, string spellName, int duration)
         {
-            using (var db = new ActiveEffectsContext())
+            using (var db = new BotContext())
             {
                 foreach (var id in userIds)
                 {
@@ -78,56 +76,6 @@ namespace DiscordHex.Data
                 }
                 db.SaveChanges();
             }
-        }
-    }
-
-    public class UserProfileContext : DbContext
-    {
-        public virtual DbSet<UserProfileEntity> UserProfiles { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql(BotSettings.Instance.Config.ConnectionString);
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<UserProfileEntity>(entity =>
-            {
-                entity.ToTable("UserProfiles", "RainBot");
-                entity.Property(e => e.Guid).HasColumnName("guid");
-                entity.Property(e => e.DiscordId).HasColumnName("discordid");
-                entity.Property(e => e.BuffsCasted).HasColumnName("buffscasted");
-                entity.Property(e => e.BuffsReceived).HasColumnName("buffsreceived");
-                entity.Property(e => e.DamageCasted).HasColumnName("damagecasted");
-                entity.Property(e => e.DamageReceived).HasColumnName("damagereceived");
-                entity.Property(e => e.HexCasted).HasColumnName("hexcasted");
-                entity.Property(e => e.HexReceived).HasColumnName("hexreceived");
-                entity.Property(e => e.GamesStarted).HasColumnName("gamesstarted");
-            });
-        }
-    }
-
-    public class ActiveEffectsContext : DbContext
-    {
-        public virtual DbSet<ActiveEffectEntity> ActiveEffects { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql(BotSettings.Instance.Config.ConnectionString);
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<ActiveEffectEntity>(entity =>
-            {
-                entity.ToTable("ActiveEffects", "RainBot");
-                entity.Property(e => e.Guid).HasColumnName("guid");
-                entity.Property(e => e.DiscordId).HasColumnName("discordid");
-                entity.Property(e => e.SpellName).HasColumnName("spellname");
-                entity.Property(e => e.StartTime).HasColumnName("starttime");
-                entity.Property(e => e.EndTime).HasColumnName("endtime");
-            });
         }
     }
 }
