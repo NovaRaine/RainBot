@@ -1,6 +1,4 @@
-﻿using DiscordHex.Core;
-using DiscordHex.Domain;
-using Microsoft.EntityFrameworkCore;
+﻿using DiscordHex.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,43 +7,23 @@ namespace DiscordHex.Data
 {
     public class GameRepository
     {
+        private BotContext _dbContext;
+
+        public GameRepository(BotContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         public IEnumerable<TreeItem<GameLocationEntity>> GetStoryArc(int storyId)
         {
-            using (var db = new GameContext())
-            {
-                var data = db.GaleLocation.Where(x => x.StoryId == storyId).ToList();
-                return BuildStory(data.ToList());
-            }
+            var data = _dbContext.GaleLocation.Where(x => x.StoryId == storyId).ToList();
+            return BuildStory(data.ToList());
         }
 
         private IEnumerable<TreeItem<GameLocationEntity>> BuildStory(List<GameLocationEntity> gameEntities)
         {
             var root = gameEntities.GenerateTree(c => c.Guid, c => c.Parent);
             return root;
-        }
-    }
-
-    public class GameContext : DbContext
-    {
-        public virtual DbSet<GameLocationEntity> GaleLocation { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql(BotSettings.Instance.Config.ConnectionString);
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<GameLocationEntity>(entity =>
-            {
-                entity.ToTable("GameLocations", "RainBot");
-                entity.Property(e => e.Guid).HasColumnName("guid");
-                entity.Property(e => e.OptionTitle).HasColumnName("optiontitle");
-                entity.Property(e => e.Description).HasColumnName("description");
-                entity.Property(e => e.Parent).HasColumnName("parent");
-                entity.Property(e => e.StoryId).HasColumnName("storyid");
-                entity.Property(e => e.ChapterId).HasColumnName("chapterid");
-            });
         }
     }
 

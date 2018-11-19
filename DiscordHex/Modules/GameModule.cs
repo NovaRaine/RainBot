@@ -1,6 +1,7 @@
 ﻿using Discord.Commands;
 using DiscordHex.Services;
 using System.Threading.Tasks;
+using DiscordHex.Data;
 using DiscordHex.Domain;
 
 namespace DiscordHex.Modules
@@ -16,7 +17,7 @@ namespace DiscordHex.Modules
         public async Task StartGame()
         {
             TemporaryGameCleanup();
-            var service = GetGameService(Context.Message.Author.Id, true);
+            var service = GetGameService(true);
 
             if (service.State == GameStateEnum.NotRunning)
             {
@@ -32,7 +33,7 @@ namespace DiscordHex.Modules
         [Remarks("opt [number]")]
         public async Task SelectOption(string opt)
         {
-            var service = GetGameService(Context.Message.Author.Id);
+            var service = GetGameService();
 
             if (service == null)
             {
@@ -54,7 +55,7 @@ namespace DiscordHex.Modules
         [Remarks("No special usage.")]
         public async Task EndGame()
         {
-            var service = GetGameService(Context.Message.Author.Id);
+            var service = GetGameService();
             if (service != null)
             {
                 GameSession.ActiveGamesSessions.Remove(Context.Message.Author.Id);
@@ -62,13 +63,12 @@ namespace DiscordHex.Modules
             }
         }
 
-        private GameService GetGameService(ulong userId, bool createNew = false)
+        private GameService GetGameService(bool createNew = false)
         {
-            GameService service;
-            GameSession.ActiveGamesSessions.TryGetValue(Context.Message.Author.Id, out service);
+            GameSession.ActiveGamesSessions.TryGetValue(Context.Message.Author.Id, out var service);
             if (service == null && createNew)
             {
-                service = new GameService();
+                service = new GameService(new BotContext());
                 GameSession.ActiveGamesSessions.Add(Context.Message.Author.Id, service);
             }
             return service;

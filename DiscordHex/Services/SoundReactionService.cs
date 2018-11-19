@@ -14,9 +14,9 @@ namespace DiscordHex.Services
         private readonly List<SoundReactEntity> _transSounds;
         private readonly List<SoundReactEntity> _naps;
 
-        public SoundReactionService()
+        public SoundReactionService(BotContext dbContext)
         {
-            var repo = new SoundReactRepository();
+            var repo = new SoundReactRepository(dbContext);
             var sounds = repo.GetSoundReacts();
 
             _gaySounds = sounds.Where(x => x.Type == SoundReactTypeEnum.GAY).ToList();
