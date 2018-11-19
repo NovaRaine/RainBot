@@ -6,12 +6,14 @@ namespace DiscordHex.Data
 {
     public class SpellRepository
     {
+        private BotContext _dbContext;
+        public SpellRepository(BotContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
         public List<SpellEntity> GetSpells()
         {
-            using (var db = new BotContext())
-            {
-                return db.Spells.ToList();
-            }
+            return _dbContext.Spells.ToList();
         }
     }
 }

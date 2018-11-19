@@ -17,9 +17,9 @@ namespace DiscordHex.Services
         private IEnumerable<TreeItem<GameLocationEntity>> StoryArc { get; set; }
         private readonly GameRepository _gameRepository;
 
-        public GameService()
+        public GameService(BotContext dbContext)
         {
-            _gameRepository = new GameRepository();
+            _gameRepository = new GameRepository(dbContext);
         }
 
         internal void SelectOption(int opt)

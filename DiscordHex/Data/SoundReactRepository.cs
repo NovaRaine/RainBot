@@ -6,12 +6,15 @@ namespace DiscordHex.Data
 {
     public class SoundReactRepository
     {
+        private BotContext _dbContext;
+
+        public SoundReactRepository(BotContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
         public List<SoundReactEntity> GetSoundReacts()
         {
-            using (var db = new BotContext())
-            {
-                return db.SoundReact.ToList();
-            }
+            return _dbContext.SoundReact.ToList();
         }
     }
 }

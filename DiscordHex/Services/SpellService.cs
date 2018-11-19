@@ -15,10 +15,10 @@ namespace DiscordHex.Services
         private List<SpellEntity> DirectDamage { get; set; }
         private readonly ProfileService _profileService;
 
-        public SpellService()
+        public SpellService(BotContext dbContext)
         {
-            _profileService = new ProfileService();
-            var spellRepository = new SpellRepository();
+            _profileService = new ProfileService(dbContext);
+            var spellRepository = new SpellRepository(dbContext);
             var spells = spellRepository.GetSpells();
 
             Hexes = spells.Where(x => x.Type == SpellTypeEnum.Hex).ToList();

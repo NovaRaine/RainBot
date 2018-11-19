@@ -7,11 +7,11 @@ namespace DiscordHex.Data
 {
     public class BotContext : DbContext
     {
-        public DbSet<GameLocationEntity> GaleLocation { get; set; }
-        public DbSet<SoundReactEntity> SoundReact { get; set; }
         public DbSet<SpellEntity> Spells { get; set; }
-        public virtual DbSet<UserProfileEntity> UserProfiles { get; set; }
-        public virtual DbSet<ActiveEffectEntity> ActiveEffects { get; set; }
+        public DbSet<SoundReactEntity> SoundReact { get; set; }
+        public DbSet<UserProfileEntity> UserProfiles { get; set; }
+        public DbSet<GameLocationEntity> GaleLocation { get; set; }
+        public DbSet<ActiveEffectEntity> ActiveEffects { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -24,7 +24,7 @@ namespace DiscordHex.Data
             builder.Entity<SoundReactEntity>(ConfigureSoundReacts);
             builder.Entity<SpellEntity>(ConfigureSpells);
             builder.Entity<UserProfileEntity>(ConfigureUserProfiles);
-            
+            builder.Entity<ActiveEffectEntity>(ConfigureActiveEffects);
         }
 
         private void ConfigureGameLocation(EntityTypeBuilder<GameLocationEntity> builder)

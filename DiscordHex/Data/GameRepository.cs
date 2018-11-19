@@ -7,13 +7,17 @@ namespace DiscordHex.Data
 {
     public class GameRepository
     {
+        private BotContext _dbContext;
+
+        public GameRepository(BotContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         public IEnumerable<TreeItem<GameLocationEntity>> GetStoryArc(int storyId)
         {
-            using (var db = new BotContext())
-            {
-                var data = db.GaleLocation.Where(x => x.StoryId == storyId).ToList();
-                return BuildStory(data.ToList());
-            }
+            var data = _dbContext.GaleLocation.Where(x => x.StoryId == storyId).ToList();
+            return BuildStory(data.ToList());
         }
 
         private IEnumerable<TreeItem<GameLocationEntity>> BuildStory(List<GameLocationEntity> gameEntities)

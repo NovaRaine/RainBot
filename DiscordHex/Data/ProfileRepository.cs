@@ -7,21 +7,25 @@ namespace DiscordHex.Data
 {
     public class ProfileRepository
     {
+        private BotContext _dbContext;
+
+        public ProfileRepository(BotContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         public UserProfileWrapper GetUserProfile(ulong id)
         {
             var profile = new UserProfileWrapper();
             
-            using (var db = new BotContext())
-            {
-                profile.Profile = db.UserProfiles.Where(x => x.DiscordId == id).FirstOrDefault();
-            }
+            profile.Profile = _dbContext.UserProfiles.FirstOrDefault(x => x.DiscordId == id);
 
             if (profile.Profile == null)
             {
                 SaveNewUserProfile(id);
                 using (var db = new BotContext())
                 {
-                    profile.Profile = db.UserProfiles.Where(x => x.DiscordId == id).FirstOrDefault();
+                    profile.Profile = db.UserProfiles.FirstOrDefault(x => x.DiscordId == id);
                 }
             }
 
@@ -34,48 +38,40 @@ namespace DiscordHex.Data
             }
 
             return profile;
-            
         }
 
         public  void UpdateProfile(UserProfileEntity profile)
         {
-            using (var db = new BotContext())
-            {
-                db.Update(profile);
-                db.SaveChanges();
-            }
+            _dbContext.Update(profile);
+            _dbContext.SaveChanges();
         }
 
         public bool SaveNewUserProfile(ulong id)
         {
-            using (var db = new BotContext())
+            var profile = new UserProfileEntity()
             {
-                var profile = new UserProfileEntity()
-                {
-                    DiscordId = id,
-                };
-                db.Add(profile);
-                return db.SaveChanges() > 0;
-            }
+                DiscordId = id,
+            };
+
+            _dbContext.Add(profile);
+
+            return _dbContext.SaveChanges() > 0;
         }
 
         public void AddSpellEffect(List<ulong> userIds, string spellName, int duration)
         {
-            using (var db = new BotContext())
+            foreach (var id in userIds)
             {
-                foreach (var id in userIds)
+                var effect = new ActiveEffectEntity()
                 {
-                    var effect = new ActiveEffectEntity()
-                    {
-                        DiscordId = id,
-                        SpellName = spellName,
-                        StartTime = DateTime.Now,
-                        EndTime = DateTime.Now.AddHours(duration)
-                    };
-                    db.Add(effect);
-                }
-                db.SaveChanges();
+                    DiscordId = id,
+                    SpellName = spellName,
+                    StartTime = DateTime.Now,
+                    EndTime = DateTime.Now.AddHours(duration)
+                };
+                _dbContext.Add(effect);
             }
+            _dbContext.SaveChanges();
         }
     }
 }

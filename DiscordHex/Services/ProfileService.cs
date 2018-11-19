@@ -10,9 +10,9 @@ namespace DiscordHex.Services
     {
         private ProfileRepository ProfileRepository { get; set; }
 
-        public ProfileService()
+        public ProfileService(BotContext dbContext)
         {
-            ProfileRepository = new ProfileRepository();
+            ProfileRepository = new ProfileRepository(dbContext);
         }
 
         public UserProfileWrapper GetUserProfile(ulong id)
