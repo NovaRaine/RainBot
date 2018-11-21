@@ -36,7 +36,17 @@ namespace DiscordHex
             _client.Log += Log;
             services.GetRequiredService<CommandService>().Log += Log;
 
-            await _client.LoginAsync(TokenType.Bot, BotConfig.GetValue("DiscordToken"));
+<<<<<<< HEAD
+#if DEBUG
+            await _client.LoginAsync(TokenType.Bot, BotConfig.GetValue("DiscordTokenDebug"));
+#endif
+#if !DEBUG
+            await _client.LoginAsync(TokenType.Bot, ConfigLoader.GetValue("DiscordToken"));
+#endif
+
+=======
+            await _client.LoginAsync(TokenType.Bot, BotSettings.Instance.Config.DiscordToken);
+>>>>>>> 1573b11dfdae8075810a592580a5fec8306ba180
             await _client.StartAsync();
             await _client.SetGameAsync($"{BotConfig.GetValue("Prefix")}help");
             
