@@ -70,7 +70,7 @@ namespace DiscordHex.Services
         private EmbedBuilder BuildEmbedded(IEnumerable<SoundReactEntity> sounds, string type)
         {
             var e = new EmbedBuilder();
-            var sound = sounds.ElementAt(BotSettings.Instance.RandomNumber.Next(0, sounds.Count()));
+            var sound = sounds.ElementAt(Singleton.I.RandomNumber.Next(0, sounds.Count()));
 
             if (sound != null)
             {

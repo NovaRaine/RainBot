@@ -17,20 +17,14 @@ namespace DiscordHex
     public class Program
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(Program));
-
-        private const string ConfigFile = @"c:\RainBot\Config.cfg";
-
-        private ConfigLoader _loader;
         private DiscordSocketClient _client;
+
         public static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
 
         public async Task MainAsync()
         {
             SetupLogging();
-
-            _loader = new ConfigLoader();
-            _loader.Load(ConfigFile);
 
             Environment.SetEnvironmentVariable("Version", "3.11 For Workstations");
 
@@ -42,14 +36,14 @@ namespace DiscordHex
             services.GetRequiredService<CommandService>().Log += Log;
 
 #if DEBUG
-            await _client.LoginAsync(TokenType.Bot, BotSettings.Instance.Config.DiscordTokenDebug);
+            await _client.LoginAsync(TokenType.Bot, BotConfig.GetValue("DiscordTokenDebug"));
 #endif
 #if !DEBUG
-            await _client.LoginAsync(TokenType.Bot, BotSettings.Instance.Config.DiscordToken);
+            await _client.LoginAsync(TokenType.Bot, ConfigLoader.GetValue("DiscordToken"));
 #endif
 
             await _client.StartAsync();
-            await _client.SetGameAsync($"{BotSettings.Instance.Config.Prefix}help");
+            await _client.SetGameAsync($"{BotConfig.GetValue("Prefix")}help");
             
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
 

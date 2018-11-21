@@ -51,13 +51,13 @@ namespace DiscordHex.Services
             switch (type)
             {
                 case SpellTypeEnum.Hex:
-                    spell = Hexes.ElementAt(BotSettings.Instance.RandomNumber.Next(0, Hexes.Count));
+                    spell = Hexes.ElementAt(Singleton.I.RandomNumber.Next(0, Hexes.Count));
                     break;
                 case SpellTypeEnum.DirectDamage:
-                    spell = DirectDamage.ElementAt(BotSettings.Instance.RandomNumber.Next(0, DirectDamage.Count));
+                    spell = DirectDamage.ElementAt(Singleton.I.RandomNumber.Next(0, DirectDamage.Count));
                     break;
                 case SpellTypeEnum.Buff:
-                    spell = Buffs.ElementAt(BotSettings.Instance.RandomNumber.Next(0, Buffs.Count));
+                    spell = Buffs.ElementAt(Singleton.I.RandomNumber.Next(0, Buffs.Count));
                     break;
                 default:
                     e.Description = "I seem to have forgotten how to cast spells.. wow :/";
@@ -66,7 +66,7 @@ namespace DiscordHex.Services
 
             var targets = context.Message.MentionedUsers.Any() ? string.Join(", ", context.Message.MentionedUsers.Select(x => x.Username)) : string.Empty;
 
-            var hours = BotSettings.Instance.RandomNumber.Next(1, 15);
+            var hours = Singleton.I.RandomNumber.Next(1, 15);
             var duration = "";
             if (type == SpellTypeEnum.Buff || type == SpellTypeEnum.Hex)
                 duration = $"\nIt will last for {hours} hours.";

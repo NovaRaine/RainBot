@@ -31,7 +31,7 @@ namespace DiscordHex.Modules
         public async Task Butt(params string[] message)
         {
             var emb = new EmbedBuilder();
-            var text = _words.ElementAt(BotSettings.Instance.RandomNumber.Next(0, _words.Count));
+            var text = _words.ElementAt(Singleton.I.RandomNumber.Next(0, _words.Count));
 
             text = string.Format(text, Context.Message.Author.Username);
 

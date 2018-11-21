@@ -15,7 +15,7 @@ namespace DiscordHex.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(BotSettings.Instance.Config.ConnectionString);
+            optionsBuilder.UseNpgsql(BotConfig.GetValue("ConnectionString"));
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

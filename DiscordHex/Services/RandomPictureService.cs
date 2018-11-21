@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net;
 using Newtonsoft.Json.Linq;
-using System;
 using DiscordHex.Core;
 
 namespace DiscordHex.Services
@@ -23,7 +22,7 @@ namespace DiscordHex.Services
 
         public string GetRandomGiphyByTag(string tag)
         {
-            var apiKey = BotSettings.Instance.Config.GiphyToken;
+            var apiKey = BotConfig.GetValue("GiphyToken");
             if (string.IsNullOrEmpty(apiKey))
                 return string.Empty;
 

@@ -67,7 +67,7 @@ namespace DiscordHex.Services
 
         internal Embed Eureka()
         {
-            var s = _eurekaPhrases.ElementAt(BotSettings.Instance.RandomNumber.Next(0, _eurekaPhrases.Count()));
+            var s = _eurekaPhrases.ElementAt(Singleton.I.RandomNumber.Next(0, _eurekaPhrases.Count()));
             return new EmbedBuilder()
                 .WithDescription($"💩 --'{s}'")
                 .Build();

@@ -34,8 +34,8 @@ namespace DiscordHex.Core
             if (!(rawMessage is SocketUserMessage message)) return;
             if (message.Source != MessageSource.User) return;
 
-            var prefix = BotSettings.Instance.Config.Prefix;
-            if (prefix == null) return;
+            var prefix = BotConfig.GetValue("Prefix");
+            if (string.IsNullOrEmpty(prefix)) return;
 
             var argPos = prefix.Length;
             
@@ -67,7 +67,6 @@ namespace DiscordHex.Core
                 }
                 await context.Channel.SendMessageAsync(resMsg);
             }
-                
         }
     }
 }
