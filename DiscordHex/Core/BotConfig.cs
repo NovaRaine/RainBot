@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Newtonsoft.Json;
 using System.IO;
-using Serilog;
 
 namespace DiscordHex.Core
 {

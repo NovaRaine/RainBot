@@ -8,7 +8,6 @@ using Discord.Commands;
 using System.Net.Http;
 using DiscordHex.Services;
 using DiscordHex.Data;
-using Serilog;
 
 namespace DiscordHex
 {

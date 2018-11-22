@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using DiscordHex.Core;
-using Serilog;
 
 namespace DiscordHex.Services
 {
