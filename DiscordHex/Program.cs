@@ -7,17 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord.Commands;
 using System.Net.Http;
 using DiscordHex.Services;
-using log4net.Config;
-using log4net;
-using System.Reflection;
-using System.IO;
 using DiscordHex.Data;
+using Serilog;
 
 namespace DiscordHex
 {
     public class Program
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(Program));
         private DiscordSocketClient _client;
 
         public static void Main(string[] args)
@@ -33,8 +29,8 @@ namespace DiscordHex
 
             _client = services.GetRequiredService<DiscordSocketClient>();
 
-            _client.Log += Log;
-            services.GetRequiredService<CommandService>().Log += Log;
+            _client.Log += LogMessage;
+            services.GetRequiredService<CommandService>().Log += LogMessage;
 
             await _client.LoginAsync(TokenType.Bot, BotConfig.GetValue("DiscordToken"));
             await _client.StartAsync();
@@ -47,13 +43,7 @@ namespace DiscordHex
 
         private void SetupLogging()
         {
-            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-#if DEBUG
-            XmlConfigurator.Configure(logRepository, new FileInfo("log4net.debug.config"));
-#endif
-#if !DEBUG
-            XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
-#endif
+            Log.Logger = LoggingProvider.GetLogger();
         }
 
         private IServiceProvider ConfigureServices()
@@ -77,9 +67,32 @@ namespace DiscordHex
                 .BuildServiceProvider();
         }
 
-        private Task Log(LogMessage msg)
+        private Task LogMessage(LogMessage msg)
         {
-            log.Info(msg.Message);
+            switch (msg.Severity)
+            {
+                case LogSeverity.Critical:
+                    Log.Fatal(msg.ToString());
+                    break;
+                case LogSeverity.Error:
+                    Log.Error(msg.ToString());
+                    break;
+                case LogSeverity.Warning:
+                    Log.Warning(msg.ToString());
+                    break;
+                case LogSeverity.Info:
+                    Log.Information(msg.ToString());
+                    break;
+                case LogSeverity.Verbose:
+                    Log.Verbose(msg.ToString());
+                    break;
+                case LogSeverity.Debug:
+                    Log.Debug(msg.ToString());
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
             return Task.CompletedTask;
         }
     }

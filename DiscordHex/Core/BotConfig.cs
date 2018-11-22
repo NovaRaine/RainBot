@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Newtonsoft.Json;
 using System.IO;
+using Serilog;
 
 namespace DiscordHex.Core
 {
@@ -22,7 +23,8 @@ namespace DiscordHex.Core
         {
             if (!File.Exists(ConfigFile))
             {
-                throw new IOException($"Can't find config file: {ConfigFile}");
+                Log.Fatal($"Can't find config file: '{ConfigFile}'");
+                throw new IOException($"Can't find config file: '{ConfigFile}'");
             }
 
             using (var sr = File.OpenText(ConfigFile))

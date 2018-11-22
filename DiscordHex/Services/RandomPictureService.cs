@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using DiscordHex.Core;
+using Serilog;
 
 namespace DiscordHex.Services
 {
@@ -24,7 +26,11 @@ namespace DiscordHex.Services
         {
             var apiKey = BotConfig.GetValue("GiphyToken");
             if (string.IsNullOrEmpty(apiKey))
+            {
+                Log.Warning("Missing Giphy API key.");
                 return string.Empty;
+            }
+                
 
             var client = new WebClient();
 
@@ -35,8 +41,9 @@ namespace DiscordHex.Services
                 var json = JObject.Parse(response);
                 return json.SelectToken("data").SelectToken("images").SelectToken("original").SelectToken("url").ToString();
             }
-            catch
+            catch (Exception ex)
             {
+                Log.Error($"Error connecting to Giphy. {ex.Message}");
                 return string.Empty;
             }
         }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Serilog;
 
 namespace DiscordHex.Core
 {
@@ -50,9 +51,11 @@ namespace DiscordHex.Core
                 switch (result.Error)
                 {
                     case CommandError.Exception:
+                        Log.Error($"Command error: Reason: {result.ErrorReason} - message: {message} - Author: {message.Author}");
                         resMsg = "Oh snap! I just had some internal epic fail.. Sorry :/";
                         break;
                     case CommandError.Unsuccessful:
+                        Log.Warning($"Command error: Reason: {result.ErrorReason} - message: {message} - Author: {message.Author}");
                         resMsg = "Oops, I messed that up.";
                         break;
                     case CommandError.BadArgCount:
@@ -62,6 +65,7 @@ namespace DiscordHex.Core
                         resMsg = "Denied! Nyaaa~";
                         break;
                     default:
+                        Log.Error($"Command error: Reason: {result.ErrorReason} - message: {message} - Author: {message.Author}");
                         resMsg = "I.. uhm.. What do you want really?";
                         break;
                 }
