@@ -33,7 +33,7 @@ namespace DiscordHex.Data
             {
                 using (var db = new BotContext())
                 {
-                    profile.Effects = db.ActiveEffects.Where(x => x.DiscordId == id).ToList();
+                    profile.Effects = db.ActiveEffects.Where(x => x.DiscordId == id && (x.StartTime < DateTime.Now && x.EndTime > DateTime.Now )).ToList();
                 }
             }
 
