@@ -70,7 +70,11 @@ namespace DiscordHex.Services
         private EmbedBuilder BuildEmbedded(IEnumerable<SoundReactEntity> sounds, string type)
         {
             var e = new EmbedBuilder();
-            var sound = sounds.ElementAt(Singleton.I.RandomNumber.Next(0, sounds.Count()));
+            SoundReactEntity sound = null;
+            if (sounds.Any())
+            {
+                sound = sounds.ElementAt(Singleton.I.RandomNumber.Next(0, sounds.Count()));
+            }
 
             if (sound != null)
             {
@@ -78,7 +82,7 @@ namespace DiscordHex.Services
             }
             else
             {
-                e.Description = $"Could not find a react of type: '{type}'.";
+                e.Description = $"Could not find a react matching '{type}'.";
             }
 
             return e;
