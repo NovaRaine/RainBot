@@ -13,11 +13,11 @@ namespace DiscordHex.Services
         private List<SpellEntity> Hexes { get; set; }
         private List<SpellEntity> Buffs { get; set; }
         private List<SpellEntity> DirectDamage { get; set; }
-        private readonly ProfileService _profileService;
+        //private readonly ProfileService _profileService;
 
         public SpellService(BotContext dbContext)
         {
-            _profileService = new ProfileService(dbContext);
+            //_profileService = new ProfileService(dbContext);
             var spellRepository = new SpellRepository(dbContext);
             var spells = spellRepository.GetSpells();
 
@@ -28,9 +28,12 @@ namespace DiscordHex.Services
 
         public EmbedBuilder CastSpell(SocketCommandContext context, ulong botId, SpellTypeEnum type)
         {
+            /*
             _profileService.IncreaseCount(context.Message.Author.Id, type, true);
             if (context.Message.MentionedUsers.Count > 0)
                 _profileService.IncreaseCount(context.Message.MentionedUsers.First().Id, type, false);
+
+            */
 
             var e = new EmbedBuilder();
 
@@ -80,7 +83,7 @@ namespace DiscordHex.Services
             }
 
             e.Description = $"{targets}! I cast {spell.Name} on you!{duration} Nyaaa~";
-            _profileService.AddSpellEffect(context.Message.MentionedUsers, spell.Name, hours);
+            //_profileService.AddSpellEffect(context.Message.MentionedUsers, spell.Name, hours);
 
             return e;
         }
