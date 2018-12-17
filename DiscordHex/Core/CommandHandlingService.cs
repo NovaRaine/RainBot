@@ -34,6 +34,8 @@ namespace DiscordHex.Core
             if (!(rawMessage is SocketUserMessage message)) return;
             if (message.Source != MessageSource.User) return;
 
+            CheckSpecialCases(message);
+
             var prefix = BotConfig.GetValue("Prefix");
             if (string.IsNullOrEmpty(prefix)) return;
 
@@ -69,6 +71,18 @@ namespace DiscordHex.Core
                         break;
                 }
                 await context.Channel.SendMessageAsync(resMsg);
+            }
+        }
+
+        private void CheckSpecialCases(SocketUserMessage message)
+        {
+            if (message.Author.Id == 462658205009575946)
+            {
+                var context = new SocketCommandContext(_discord, message);
+                if (message.Content.ToLower() == "bad bot")
+                    context.Channel.SendMessageAsync("Sorry mommy :(");
+                else if (message.Content.ToLower() == "good bot")
+                    context.Channel.SendMessageAsync("Thanks mommy! <3");
             }
         }
     }
