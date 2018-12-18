@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using DiscordHex.Services;
 
 namespace DiscordHex.Core
 {
@@ -13,11 +14,13 @@ namespace DiscordHex.Core
         private readonly CommandService _commands;
         private readonly DiscordSocketClient _discord;
         private readonly IServiceProvider _services;
+        private readonly OwnerService _ownerService;
 
         public CommandHandlingService(IServiceProvider services)
         {
             _commands = services.GetRequiredService<CommandService>();
             _discord = services.GetRequiredService<DiscordSocketClient>();
+            _ownerService = services.GetRequiredService<OwnerService>();
             _services = services;
 
             _discord.MessageReceived += MessageReceivedAsync;
@@ -78,11 +81,7 @@ namespace DiscordHex.Core
         {
             if (message.Author.Id == 462658205009575946)
             {
-                var context = new SocketCommandContext(_discord, message);
-                if (message.Content.ToLower() == "bad bot")
-                    context.Channel.SendMessageAsync("Sorry mommy :(");
-                else if (message.Content.ToLower() == "good bot")
-                    context.Channel.SendMessageAsync("Thanks mommy! <3");
+                _ownerService.HandleOwnerMessages(new SocketCommandContext(_discord, message));
             }
         }
     }

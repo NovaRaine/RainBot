@@ -22,7 +22,7 @@ namespace DiscordHex
         {
             SetupLogging();
 
-            Environment.SetEnvironmentVariable("Version", "3.2.1");
+            Environment.SetEnvironmentVariable("Version", "3.2.2");
 
             var services = ConfigureServices();
 
@@ -62,6 +62,7 @@ namespace DiscordHex
                 .AddSingleton<SoundReactionService>()
                 .AddSingleton<GameSession>()
                 .AddSingleton<ProfileService>()
+                .AddSingleton<OwnerService>()
 
                 .BuildServiceProvider();
         }
