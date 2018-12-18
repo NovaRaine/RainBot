@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Appccelerate.StateMachine;
 using Discord.Commands;
 using DiscordHex.Core;
+using DiscordHex.Domain;
 
 namespace DiscordHex.Services
 {
@@ -10,13 +13,16 @@ namespace DiscordHex.Services
     {
         private readonly List<string> _praise;
         private readonly List<string> _scold;
+        private PassiveStateMachine<States, Events> _fsm;
+        private SocketCommandContext _context { get; set; }
 
         public OwnerService()
         {
+            SetupStateMachine();
             _praise = new List<string>
             {
                 "Thanks mommy! :heart:",
-                "Good mommy!",
+                "good mommy!",
                 ":smiley:"
             };
 
@@ -27,21 +33,83 @@ namespace DiscordHex.Services
                 "Sorry, I'll try to behave!"
             };
         }
+
+        private void SetupStateMachine()
+        {
+            _fsm = new PassiveStateMachine<States, Events>();
+            _fsm.In(States.Start).On(Events.good).Goto(States.Positive);
+            _fsm.In(States.Start).On(Events.bad).Goto(States.Negative);
+
+            _fsm.In(States.Positive).On(Events.morning).Goto(States.Start).Execute(() => GreetOwner(EventInput.Morning));
+            _fsm.In(States.Positive).On(Events.evening).Goto(States.Start).Execute(() => GreetOwner(EventInput.Evening));
+
+            _fsm.In(States.Positive).On(Events.bot).Goto(States.Start).Execute(() => BotFeedback(EventInput.Positive));
+            _fsm.In(States.Negative).On(Events.bot).Goto(States.Start).Execute(() => BotFeedback(EventInput.Negative));
+
+            _fsm.In(States.Start).On(Events.pat).Goto(States.Start).Execute(PatUser);
+
+            _fsm.Initialize(States.Start);
+            _fsm.Start();
+        }
+
+        private void PatUser()
+        {
+            _context.Channel.SendMessageAsync("Of course! With pleasure :smiley:");
+
+            if (_context.Message.MentionedUsers.Any())
+                _context.Channel.SendMessageAsync($"-gently pats {_context.Message.MentionedUsers.First().Username} on the head-");
+            else
+                _context.Channel.SendMessageAsync("-gently pats Nova on the head-");
+        }
+
+        private void BotFeedback(EventInput type)
+        {
+            switch (type)
+            {
+                case EventInput.Negative:
+                    _context.Channel.SendMessageAsync(_scold.ElementAt(Singleton.I.RandomNumber.Next(0, _scold.Count)));
+                    break;
+                case EventInput.Positive:
+                    _context.Channel.SendMessageAsync(_praise.ElementAt(Singleton.I.RandomNumber.Next(0, _praise.Count)));
+                    break;
+            }
+        }
+
+        private void GreetOwner(EventInput type)
+        {
+            switch (type)
+            {
+                case EventInput.Morning:
+                    _context.Channel.SendMessageAsync("good morning mommy :smiley:\nLet's have fun today!");
+                    break;
+                case EventInput.Evening:
+                    _context.Channel.SendMessageAsync("good evening mommy :smiley:\nBedtime soon?");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+        }
+
         public async Task HandleOwnerMessages(SocketCommandContext context)
         {
+            _context = context;
+
             var message = context.Message;
-            switch (message.Content.ToLower())
+
+            if (message.Content.ToLower().Contains("rainbot"))
             {
-                case "bad bot":
-                    await context.Channel.SendMessageAsync(_scold.ElementAt(Singleton.I.RandomNumber.Next(0, _scold.Count)));
-                    break;
-                case "good bot":
-                    await context.Channel.SendMessageAsync(_praise.ElementAt(Singleton.I.RandomNumber.Next(0, _praise.Count)));
-                    break;
-                case "good morning rainbot":
-                case "morning rainbot":
-                    await context.Channel.SendMessageAsync("Good morning mommy :smiley:\nLet's have fun today!");
-                    break;
+                ParseComment(message.Content);
+            }
+        }
+
+        public void ParseComment(string message)
+        {
+            foreach (var word in message.Split(" "))
+            {
+                if (Enum.TryParse(word, out Events eventType))
+                {
+                    _fsm.Fire(eventType);
+                }
             }
         }
     }

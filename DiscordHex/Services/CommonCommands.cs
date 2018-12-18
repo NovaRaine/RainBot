@@ -50,7 +50,7 @@ namespace DiscordHex.Services
                     e.Description = $"{users.First().Username} is the cutest smol bean! Everyone loves you <3";
                     break;
 
-                // Default = everyone else
+                // Start = everyone else
                 default:
                     e.ImageUrl = "https://cdn.weeb.sh/images/HkzArUmvZ.gif";
                     e.Description = $"{users.First().Username}!! {caster} loves you <3";

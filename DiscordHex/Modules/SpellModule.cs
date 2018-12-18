@@ -42,7 +42,7 @@ namespace DiscordHex.Modules
         }
 
         [Command("esuna")]
-        [Summary("Cast Esuna on someone to remove a negative effect. Possibly..")]
+        [Summary("Cast Esuna on someone to remove a Negative effect. Possibly..")]
         [Remarks("dd | dd @user")]
         public async Task CastEsuna(params string[] message)
         {
