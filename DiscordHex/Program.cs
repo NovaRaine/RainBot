@@ -55,7 +55,7 @@ namespace DiscordHex
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommonCommands>()
                 .AddSingleton<BotContext>()
-
+                
                 .AddSingleton<RandomPictureService>()
                 .AddSingleton<SpellService>()
                 .AddSingleton<FfxivSpellService>()
@@ -63,6 +63,7 @@ namespace DiscordHex
                 .AddSingleton<GameSession>()
                 .AddSingleton<ProfileService>()
                 .AddSingleton<OwnerService>()
+                .AddSingleton<HelpService>()
 
                 .BuildServiceProvider();
         }

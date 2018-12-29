@@ -6,7 +6,9 @@ namespace DiscordHex.Domain
         Start,
         Positive,
         Negative,
-        Question
+        Who,
+        What,
+        Abilities
     }
 
     public enum Events
@@ -15,16 +17,24 @@ namespace DiscordHex.Domain
         bad,
         morning,
         evening,
-        bot,
-        pat,
+        night,
+        define,
+        who,
+        what,
+        you,
         @do,
-        love
+        tell,
+        something,
+        yourself,
+        joke,
+        bot
     }
 
     public enum EventInput
     {
         Morning,
         Evening,
+        Night,
         Positive,
         Negative,
         Love

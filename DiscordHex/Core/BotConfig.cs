@@ -10,6 +10,11 @@ namespace DiscordHex.Core
         private static readonly JsonSerializer JsonSerializer = new JsonSerializer();
         private const string ConfigFile = @"c:\RainBot\Config.cfg";
 
+        public static bool IsDragonMom(ulong id)
+        {
+            return id == 462658205009575946;
+        }
+
         public static string GetValue(string value)
         {
             if (_configuration.IsEmpty) LoadConfig();

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Appccelerate.StateMachine;
+using Discord;
 using Discord.Commands;
 using DiscordHex.Core;
 using DiscordHex.Domain;
@@ -17,9 +17,13 @@ namespace DiscordHex.Services
         private PassiveStateMachine<States, Events> _fsm;
         private SocketCommandContext _context { get; set; }
 
-        public OwnerService()
+        public HelpService HelpService { get; set; }
+
+        public OwnerService(HelpService helpService)
         {
+            HelpService = helpService;
             SetupStateMachine();
+
             _praise = new List<string>
             {
                 "Thanks mommy! :heart:",
@@ -40,19 +44,41 @@ namespace DiscordHex.Services
             _fsm = new PassiveStateMachine<States, Events>();
             _fsm.In(States.Start).On(Events.good).Goto(States.Positive);
             _fsm.In(States.Start).On(Events.bad).Goto(States.Negative);
-            _fsm.In(States.Start).On(Events.@do).Goto(States.Question);
+            _fsm.In(States.Start).On(Events.who).Goto(States.Who);
+            _fsm.In(States.Start).On(Events.what).Goto(States.What);
 
-            _fsm.In(States.Positive).On(Events.morning).Goto(States.Start).Execute(() => GreetOwner(EventInput.Morning));
-            _fsm.In(States.Positive).On(Events.evening).Goto(States.Start).Execute(() => GreetOwner(EventInput.Evening));
+            _fsm.In(States.Who).On(Events.you).Goto(States.Start).Execute(() => AboutRainbot());
+
+            _fsm.In(States.What).On(Events.you).Goto(States.Abilities);
+            _fsm.In(States.Abilities).On(Events.@do).Goto(States.Start).Execute(() => ShowHelp());
+
+            _fsm.In(States.Positive).On(Events.morning).Goto(States.Start).Execute(() => GreetUser(EventInput.Morning));
+            _fsm.In(States.Positive).On(Events.evening).Goto(States.Start).Execute(() => GreetUser(EventInput.Evening));
+            _fsm.In(States.Positive).On(Events.night).Goto(States.Start).Execute(() => GreetUser(EventInput.Night));
+
             _fsm.In(States.Positive).On(Events.bot).Goto(States.Start).Execute(() => BotFeedback(EventInput.Positive));
             _fsm.In(States.Negative).On(Events.bot).Goto(States.Start).Execute(() => BotFeedback(EventInput.Negative));
 
-            _fsm.In(States.Question).On(Events.love).Goto(States.Start).Execute(() => Question(EventInput.Love));
-
-            _fsm.In(States.Start).On(Events.pat).Goto(States.Start).Execute(PatUser);
-
             _fsm.Initialize(States.Start);
             _fsm.Start();
+        }
+
+        private void ShowHelp()
+        {
+            _context.Channel.SendMessageAsync("I sent you a DM :smiley:");
+            _context.Channel.SendMessageAsync("", false, HelpService.GetHelp());
+        }
+
+        private void AboutRainbot()
+        {
+            var e = new EmbedBuilder()
+                .WithColor(Color.Purple)
+                .WithDescription(BotConfig.GetValue("About"))
+                .WithTitle("About me, as told by my mom")
+                .Build();
+
+
+            _context.Channel.SendMessageAsync("", false, e);
         }
 
         private void Question(EventInput type)
@@ -88,19 +114,34 @@ namespace DiscordHex.Services
             }
         }
 
-        private void GreetOwner(EventInput type)
+        private void GreetUser(EventInput type)
         {
             switch (type)
             {
                 case EventInput.Morning:
-                    _context.Channel.SendMessageAsync("good morning mommy :smiley:\nLet's have fun today!");
+                    _context.Channel.SendMessageAsync($"Good morning {GetUser()} :smiley:\nLet's have fun today!");
                     break;
                 case EventInput.Evening:
-                    _context.Channel.SendMessageAsync("good evening mommy :smiley:\nBedtime soon?");
+                    _context.Channel.SendMessageAsync($"Good evening {GetUser()} :smiley:\nBedtime soon?");
+                    break;
+                case EventInput.Night:
+                    _context.Channel.SendMessageAsync($"Good night {GetUser()}\n-good night hugs-");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
+        }
+
+        private string GetUser()
+        {
+            if (BotConfig.IsDragonMom(_context.Message.Author.Id)) {
+                return "Mommy";
+            }
+            else
+            {
+                return _context.Message.Author.Username;
+            }
+                
         }
 
         public async Task HandleOwnerMessages(SocketCommandContext context)
@@ -111,7 +152,7 @@ namespace DiscordHex.Services
 
             if (message.Content.ToLower().Contains("rainbot"))
             {
-                ParseComment(RemoveSpecialCharacters(message.Content));
+                ParseComment(RemoveSpecialCharacters(message.Content.ToLower()));
             }
         }
 
