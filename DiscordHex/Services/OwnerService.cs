@@ -18,22 +18,25 @@ namespace DiscordHex.Services
         private SocketCommandContext _context { get; set; }
 
         public HelpService HelpService { get; set; }
+        public RainFactService FactService { get; set; }
 
-        public OwnerService(HelpService helpService)
+        public OwnerService(HelpService helpService, RainFactService rainFactService)
         {
             HelpService = helpService;
+            FactService = rainFactService;
+
             SetupStateMachine();
 
             _praise = new List<string>
             {
-                "Thanks mommy! :heart:",
-                "good mommy!",
+                "Thanks! :heart:",
+                "good human!",
                 ":smiley:"
             };
 
             _scold = new List<string>
             {
-                "Sorry mommy :cry:",
+                "Sorry :cry:",
                 ":cry:",
                 "Sorry, I'll try to behave!"
             };
@@ -46,6 +49,10 @@ namespace DiscordHex.Services
             _fsm.In(States.Start).On(Events.bad).Goto(States.Negative);
             _fsm.In(States.Start).On(Events.who).Goto(States.Who);
             _fsm.In(States.Start).On(Events.what).Goto(States.What);
+            _fsm.In(States.Start).On(Events.tell).Goto(States.Info);
+
+            _fsm.In(States.Info).On(Events.yourself).Goto(States.Start).Execute(() => RainFact());
+            _fsm.In(States.Info).On(Events.you).Goto(States.Start).Execute(() => RainFact());
 
             _fsm.In(States.Who).On(Events.you).Goto(States.Start).Execute(() => AboutRainbot());
 
@@ -63,6 +70,11 @@ namespace DiscordHex.Services
             _fsm.Start();
         }
 
+        private void RainFact()
+        {
+            _context.Channel.SendMessageAsync(FactService.GetFact());
+        }
+
         private void ShowHelp()
         {
             _context.Channel.SendMessageAsync("I sent you a DM :smiley:");
@@ -74,7 +86,7 @@ namespace DiscordHex.Services
             var e = new EmbedBuilder()
                 .WithColor(Color.Purple)
                 .WithDescription(BotConfig.GetValue("About"))
-                .WithTitle("About me, as told by my mom")
+                .WithTitle("About me, RainBot. A bot")
                 .Build();
 
 
@@ -98,7 +110,7 @@ namespace DiscordHex.Services
             if (_context.Message.MentionedUsers.Any())
                 _context.Channel.SendMessageAsync($"-gently pats {_context.Message.MentionedUsers.First().Username} on the head-");
             else
-                _context.Channel.SendMessageAsync("-gently pats Nova on the head-");
+                _context.Channel.SendMessageAsync($"-gently pats you on the head-");
         }
 
         private void BotFeedback(EventInput type)

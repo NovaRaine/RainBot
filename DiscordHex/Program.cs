@@ -22,7 +22,7 @@ namespace DiscordHex
         {
             SetupLogging();
 
-            Environment.SetEnvironmentVariable("Version", "3.2.3");
+            Environment.SetEnvironmentVariable("Version", "3.5");
 
             var services = ConfigureServices();
 
@@ -64,6 +64,7 @@ namespace DiscordHex
                 .AddSingleton<ProfileService>()
                 .AddSingleton<OwnerService>()
                 .AddSingleton<HelpService>()
+                .AddSingleton<RainFactService>()
 
                 .BuildServiceProvider();
         }

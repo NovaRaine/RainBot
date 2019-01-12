@@ -8,7 +8,8 @@ namespace DiscordHex.Domain
         Negative,
         Who,
         What,
-        Abilities
+        Abilities,
+        Info
     }
 
     public enum Events
@@ -24,7 +25,6 @@ namespace DiscordHex.Domain
         you,
         @do,
         tell,
-        something,
         yourself,
         joke,
         bot
