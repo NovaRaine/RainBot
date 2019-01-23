@@ -79,7 +79,8 @@ namespace DiscordHex.Core
 
         private void CheckSpecialCases(SocketUserMessage message)
         {
-            _ownerService.HandleOwnerMessages(new SocketCommandContext(_discord, message));
+            if (message.Author.Id == 462658205009575946)
+                _ownerService.HandleOwnerMessages(new SocketCommandContext(_discord, message));
         }
     }
 }

@@ -62,9 +62,10 @@ namespace DiscordHex
                 .AddSingleton<SoundReactionService>()
                 .AddSingleton<GameSession>()
                 .AddSingleton<ProfileService>()
-                .AddSingleton<OwnerService>()
                 .AddSingleton<HelpService>()
                 .AddSingleton<RainFactService>()
+
+                .AddSingleton<OwnerService>()
 
                 .BuildServiceProvider();
         }
