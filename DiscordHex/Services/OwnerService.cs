@@ -51,6 +51,8 @@ namespace DiscordHex.Services
             _fsm.In(States.Start).On(Events.what).Goto(States.What);
             _fsm.In(States.Start).On(Events.tell).Goto(States.Info);
 
+            _fsm.In(States.Start).On(Events.pat).Goto(States.Start).Execute(() => PatUser());
+
             _fsm.In(States.Info).On(Events.yourself).Goto(States.Start).Execute(() => RainFact());
             _fsm.In(States.Info).On(Events.you).Goto(States.Start).Execute(() => RainFact());
 

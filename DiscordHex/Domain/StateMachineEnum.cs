@@ -27,7 +27,8 @@ namespace DiscordHex.Domain
         tell,
         yourself,
         joke,
-        bot
+        bot,
+        pat
     }
 
     public enum EventInput
