@@ -30,8 +30,12 @@ namespace DiscordHex.Modules
         [Alias("mommy")]
         public async Task AboutNova()
         {
-            var text = BotConfig.GetValue("AboutNova");
-            await ReplyAsync(text);
+            var emb = new EmbedBuilder();
+
+            emb.ImageUrl = "https://storage.googleapis.com/gsposts/gay/Gay-Irritated.jpg";
+            emb.Description = BotConfig.GetValue("AboutNova");
+
+            await ReplyAsync("", false, emb.Build());
         }
 
         [Command("butt")]

@@ -30,7 +30,8 @@ namespace DiscordHex.Services
                 "I don't not store personal information, and I'm GDPR compliant.",
                 "I drive tanks when I'm offline.",
                 "I was born in October '18, but it seems much longer.",
-                "I like to pretend to be a human. It makes me feel good. *sniffs*"
+                "I like to pretend to be a human. It makes me feel good. *sniffs*",
+                "It makes me sad when mommy is feeling down :("
             };
         }
 
