@@ -55,8 +55,10 @@ namespace DiscordHex.Services
 
             _fsm.In(States.Info).On(Events.yourself).Goto(States.Start).Execute(() => RainFact());
             _fsm.In(States.Info).On(Events.you).Goto(States.Start).Execute(() => RainFact());
+            _fsm.In(States.Info).On(Events.nova).Goto(States.Start).Execute(() => AboutAuthor());
 
             _fsm.In(States.Who).On(Events.you).Goto(States.Start).Execute(() => AboutRainbot());
+            _fsm.In(States.Who).On(Events.nova).Goto(States.Start).Execute(() => AboutAuthor());
 
             _fsm.In(States.What).On(Events.you).Goto(States.Abilities);
             _fsm.In(States.Abilities).On(Events.@do).Goto(States.Start).Execute(() => ShowHelp());
@@ -70,6 +72,13 @@ namespace DiscordHex.Services
 
             _fsm.Initialize(States.Start);
             _fsm.Start();
+        }
+
+        private void AboutAuthor()
+        {
+            var text = BotConfig.GetValue("AboutNova");
+            _context.Channel.SendMessageAsync(text);
+
         }
 
         private void RainFact()

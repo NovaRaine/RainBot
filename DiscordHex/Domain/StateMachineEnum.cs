@@ -23,6 +23,7 @@ namespace DiscordHex.Domain
         who,
         what,
         you,
+        nova,
         @do,
         tell,
         yourself,
