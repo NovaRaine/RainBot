@@ -26,6 +26,14 @@ namespace DiscordHex.Modules
             };
         }
 
+        [Command("nova")]
+        [Alias("mommy")]
+        public async Task AboutNova()
+        {
+            var text = BotConfig.GetValue("AboutNova");
+            await ReplyAsync(text);
+        }
+
         [Command("butt")]
         [Summary("Bum bum")]
         public async Task Butt(params string[] message)
