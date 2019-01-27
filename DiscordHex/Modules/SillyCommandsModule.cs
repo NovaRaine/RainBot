@@ -26,6 +26,12 @@ namespace DiscordHex.Modules
             };
         }
 
+        [Command("nou")]
+        public async Task NoU()
+        {
+            await ReplyAsync("Three days and nights it had taken them. Through uncharted and unseen jungle.\nTen had set out, but now only six remained. Two more would be lost before they returned home. \n\nAll to reach this.The temple that shouldn't exist. The inscription over the entrance simply read:\n'no u'");
+        }
+
         [Command("nova")]
         [Alias("mommy")]
         public async Task AboutNova()
