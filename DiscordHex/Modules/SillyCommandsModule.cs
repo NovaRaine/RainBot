@@ -38,7 +38,7 @@ namespace DiscordHex.Modules
         {
             var emb = new EmbedBuilder();
 
-            emb.ImageUrl = "https://storage.googleapis.com/gsposts/gay/Gay-Irritated.jpg";
+            emb.ImageUrl = "https://storage.googleapis.com/gsposts/Div/Bunnydragon.jpg";
             emb.Description = BotConfig.GetValue("AboutNova");
 
             await ReplyAsync("", false, emb.Build());
