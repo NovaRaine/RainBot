@@ -12,6 +12,7 @@ namespace DiscordHex.Modules
     {
         public RandomPictureService RandomPictureService { get; set; }
         public CommonCommands CommonCommands { get; set; }
+        public MoodService MoodService { get; set; }
         private readonly List<string> _words;
 
         public SillyCommandsModule()
@@ -100,6 +101,14 @@ namespace DiscordHex.Modules
         {
             var emb = CommonCommands.Eureka();
             await ReplyAsync("", false, emb);
+            MoodService.SendMoodReply(Context);
+        }
+
+        [Command("test")]
+        public async Task Test()
+        {
+            await ReplyAsync("test");
+            MoodService.SendMoodReply(Context);
         }
     }
 }

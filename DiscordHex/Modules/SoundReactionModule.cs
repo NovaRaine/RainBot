@@ -9,6 +9,7 @@ namespace DiscordHex.Modules
     public class SoundReactionModule : ModuleBase<SocketCommandContext>
     {
         public SoundReactionService SoundReactionService { get; set; }
+        public MoodService MoodService { get; set; }
 
         public SoundReactionModule(SoundReactionService soundReactionService)
         {
@@ -22,6 +23,7 @@ namespace DiscordHex.Modules
         {
             var embedded = SoundReactionService.GetRandomNap();
             await ReplyAsync("", false, embedded.Build());
+            MoodService.SendMoodReply(Context);
         }
 
         [Command("gs")]
@@ -48,7 +50,6 @@ namespace DiscordHex.Modules
         [Alias("transsounds")]
         [Summary("Show how much trans you are in a react image.")]
         [Remarks("ts [search word] example: ts sad | show all with ts list")]
-        [RequireOwner]
         public async Task TransSounds(params string[] type)
         {
             if (type.Length == 0)

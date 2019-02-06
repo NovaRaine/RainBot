@@ -13,6 +13,7 @@ namespace DiscordHex.Modules
         public RandomPictureService RandomPictureService { get; set; }
         public DiscordSocketClient Discord { get; set; }
         public CommonCommands CommonCommands { get; set; }
+        public MoodService MoodService { get; set; }
 
         internal PublicModule(RandomPictureService pictureService, DiscordSocketClient discord)
         {
@@ -30,6 +31,7 @@ namespace DiscordHex.Modules
                 msg = "nothing.";
 
             await ReplyAsync($"{user.Username}, you have been served {msg}");
+            MoodService.SendMoodReply(Context);
         }
 
         [Command("serve")]
@@ -43,6 +45,8 @@ namespace DiscordHex.Modules
                 await ReplyAsync($"{Context.Message.MentionedUsers.First().Username}, you have been served {msg}");
             else
                 await ReplyAsync($"{Context.Message.Author.Username} has served {msg}");
+
+            MoodService.SendMoodReply(Context);
         }
 
         [Command("rndgif")]
@@ -58,6 +62,7 @@ namespace DiscordHex.Modules
                 var embedded = new EmbedBuilder();
                 embedded.ImageUrl = url;
                 await ReplyAsync("", false, embedded.Build());
+                MoodService.SendMoodReply(Context);
                 return;
             }
 
@@ -85,6 +90,7 @@ namespace DiscordHex.Modules
             }
 
             await ReplyAsync("The cats are hiding :unamused:");
+            MoodService.SendMoodReply(Context);
         }
 
         [Command("dog")]
@@ -100,6 +106,7 @@ namespace DiscordHex.Modules
             var stream = await RandomPictureService.GetPictureAsync("https://www.randomdoggiegenerator.com/randomdoggie.php");
             stream.Seek(0, SeekOrigin.Begin);
             await Context.Channel.SendFileAsync(stream, "DeniLikesDogs.png", text);
+            MoodService.SendMoodReply(Context);
         }
 
         [Command("bunny")]
@@ -119,6 +126,7 @@ namespace DiscordHex.Modules
                 embedded.Description = text;
                 embedded.ImageUrl = url;
                 await ReplyAsync("", false, embedded.Build());
+                MoodService.SendMoodReply(Context);
                 return;
             }
 

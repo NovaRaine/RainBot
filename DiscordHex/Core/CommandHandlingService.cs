@@ -6,6 +6,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordHex.Services;
+using System.Linq;
 
 namespace DiscordHex.Core
 {
@@ -79,8 +80,19 @@ namespace DiscordHex.Core
 
         private void CheckSpecialCases(SocketUserMessage message)
         {
-            if (message.Author.Id == 462658205009575946)
-                _ownerService.HandleOwnerMessages(new SocketCommandContext(_discord, message));
+            if ((message.Content.ToLower().Contains("+hug") 
+                || message.Content.ToLower().Contains("+cuddle") 
+                || message.Content.ToLower().Contains(">>love"))
+                && (
+                message.MentionedUsers.Any(x => x.Id == 497491199918080002) // live
+                || message.MentionedUsers.Any(x => x.Id == 498185985096679434)) // debug
+                )
+            {
+                message.Channel.SendMessageAsync("<3");
+                return;
+            }
+
+            _ownerService.HandleOwnerMessages(new SocketCommandContext(_discord, message));
         }
     }
 }

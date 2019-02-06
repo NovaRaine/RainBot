@@ -181,14 +181,16 @@ namespace DiscordHex.Services
 
         public void ParseComment(string message)
         {
-            if (_context.Message.Author.Id == 462658205009575946)
-                foreach (var word in message.Split(" "))
+            foreach (var word in message.Split(" "))
+            {
+                if (Enum.TryParse(word, out Events eventType))
                 {
-                    if (Enum.TryParse(word, out Events eventType))
-                    {
-                        _fsm.Fire(eventType);
-                    }
+                    _fsm.Fire(eventType);
                 }
+            }
+            if (_fsm.IsRunning)
+                _fsm.Stop();
+            SetupStateMachine();
         }
 
         private static string RemoveSpecialCharacters(string str)
