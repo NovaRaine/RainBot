@@ -89,7 +89,7 @@ namespace DiscordHex.Services
         private void ShowHelp()
         {
             _context.Channel.SendMessageAsync("I sent you a DM :smiley:");
-            _context.Channel.SendMessageAsync("", false, HelpService.GetHelp());
+            _context.Message.Author.SendMessageAsync("", false, HelpService.GetHelp());
         }
 
         private void AboutRainbot()

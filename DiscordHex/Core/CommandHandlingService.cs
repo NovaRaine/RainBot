@@ -83,6 +83,7 @@ namespace DiscordHex.Core
             if ((message.Content.ToLower().Contains("+hug") 
                 || message.Content.ToLower().Contains("+cuddle")
                 || message.Content.ToLower().Contains("+pat")
+                || message.Content.ToLower().Contains("+kiss")
                 || message.Content.ToLower().Contains(">>love"))
                 && (
                 message.MentionedUsers.Any(x => x.Id == 497491199918080002) // live
