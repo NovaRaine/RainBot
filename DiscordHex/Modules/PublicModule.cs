@@ -178,6 +178,10 @@ namespace DiscordHex.Modules
         [Remarks("love | love @user")]
         public async Task LoveSomeone(params string[] message)
         {
+            if (Context.Message.MentionedUsers.Any(x => x.Id == 497491199918080002)
+                || Context.Message.MentionedUsers.Any(x => x.Id == 498185985096679434))
+                return; // bot targeted - handled elsewhere
+
             var embedded = CommonCommands.LoveSomeone(Context.Message.MentionedUsers, Context.Message.MentionedRoles, Context.Message.Author.Username);
             await ReplyAsync("", false, embedded.Build());
         }

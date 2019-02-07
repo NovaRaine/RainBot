@@ -81,14 +81,15 @@ namespace DiscordHex.Core
         private void CheckSpecialCases(SocketUserMessage message)
         {
             if ((message.Content.ToLower().Contains("+hug") 
-                || message.Content.ToLower().Contains("+cuddle") 
+                || message.Content.ToLower().Contains("+cuddle")
+                || message.Content.ToLower().Contains("+pat")
                 || message.Content.ToLower().Contains(">>love"))
                 && (
                 message.MentionedUsers.Any(x => x.Id == 497491199918080002) // live
                 || message.MentionedUsers.Any(x => x.Id == 498185985096679434)) // debug
                 )
             {
-                message.Channel.SendMessageAsync("<3");
+                message.Channel.SendMessageAsync("Thank you <3");
                 return;
             }
 
