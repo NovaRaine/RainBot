@@ -37,7 +37,7 @@ namespace DiscordHex.Services
         {
             var p = Singleton.I.RandomNumber.Next(0, 100);
 
-            if (p < 5)
+            if (p < 7)
                 context.Message.Channel.SendMessageAsync(_replies.ElementAt(Singleton.I.RandomNumber.Next(0, _replies.Count)));
         }
     }

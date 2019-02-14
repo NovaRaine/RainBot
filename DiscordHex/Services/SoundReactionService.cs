@@ -13,6 +13,7 @@ namespace DiscordHex.Services
         private readonly List<SoundReactEntity> _gaySounds;
         private readonly List<SoundReactEntity> _transSounds;
         private readonly List<SoundReactEntity> _naps;
+        private readonly List<SoundReactEntity> _miwa;
 
         public SoundReactionService(BotContext dbContext)
         {
@@ -22,11 +23,29 @@ namespace DiscordHex.Services
             _gaySounds = sounds.Where(x => x.Type == SoundReactTypeEnum.GAY).ToList();
             _transSounds = sounds.Where(x => x.Type == SoundReactTypeEnum.TRANS).ToList();
             _naps = sounds.Where(x => x.Type == SoundReactTypeEnum.NAP).ToList();
+            _miwa = new List<SoundReactEntity>
+            {
+                new SoundReactEntity { Url = "https://storage.googleapis.com/gsposts/naps/Nap6.png"},
+                new SoundReactEntity { Url = "https://storage.googleapis.com/gsposts/naps/nap1.gif"},
+                new SoundReactEntity { Url = "https://storage.googleapis.com/gsposts/naps/nap12.jpg"},
+                new SoundReactEntity { Url = "https://storage.googleapis.com/gsposts/naps/nap16.jpg"},
+                new SoundReactEntity { Url = "https://storage.googleapis.com/gsposts/naps/nap2.gif"},
+                new SoundReactEntity { Url = "https://storage.googleapis.com/gsposts/naps/nap5.gif"},
+                new SoundReactEntity { Url = "https://storage.googleapis.com/gsposts/naps/nap7.gif"}
+            };
+
         }
 
-        public EmbedBuilder GetRandomNap()
+        public EmbedBuilder GetNap(ulong id)
         {
-            return BuildEmbedded(_naps, "nap");
+            switch (id)
+            {
+                case 349189242624147456:
+                    return BuildEmbedded(_miwa, "nap");
+
+                default:
+                    return BuildEmbedded(_naps, "nap");
+            }
         }
 
         public EmbedBuilder GetTransSounds(string type)

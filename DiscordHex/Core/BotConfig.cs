@@ -8,7 +8,12 @@ namespace DiscordHex.Core
     {
         private static ConcurrentDictionary<string, string> _configuration = new ConcurrentDictionary<string, string>();
         private static readonly JsonSerializer JsonSerializer = new JsonSerializer();
+#if DEBUG
         private const string ConfigFile = @"c:\RainBot\Config.cfg";
+#endif
+#if !DEBUG
+        private const string ConfigFile = @"/etc/RainBot/config.cfg";
+#endif
 
         public static bool IsDragonMom(ulong id)
         {

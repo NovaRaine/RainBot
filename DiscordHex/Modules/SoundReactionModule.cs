@@ -21,7 +21,9 @@ namespace DiscordHex.Modules
         [Remarks("nap")]
         public async Task NapSounds(params string[] message)
         {
-            var embedded = SoundReactionService.GetRandomNap();
+            var embedded = new EmbedBuilder();
+            embedded = SoundReactionService.GetNap(Context.Message.Author.Id);
+
             await ReplyAsync("", false, embedded.Build());
             MoodService.SendMoodReply(Context);
         }

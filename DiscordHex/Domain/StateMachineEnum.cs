@@ -14,6 +14,7 @@ namespace DiscordHex.Domain
 
     public enum Events
     {
+        are,
         good,
         bad,
         morning,
@@ -38,7 +39,6 @@ namespace DiscordHex.Domain
         Evening,
         Night,
         Positive,
-        Negative,
-        Love
+        Negative
     }
 }

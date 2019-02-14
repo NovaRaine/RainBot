@@ -8,6 +8,7 @@ using Discord.Commands;
 using System.Net.Http;
 using DiscordHex.Services;
 using DiscordHex.Data;
+using DiscordHex.ChatBot;
 
 namespace DiscordHex
 {
@@ -22,7 +23,7 @@ namespace DiscordHex
         {
             SetupLogging();
 
-            Environment.SetEnvironmentVariable("Version", "3.6");
+            Environment.SetEnvironmentVariable("Version", "3.7_L");
 
             var services = ConfigureServices();
 
@@ -65,7 +66,8 @@ namespace DiscordHex
                 .AddSingleton<HelpService>()
                 .AddSingleton<RainFactService>()
 
-                .AddSingleton<OwnerService>()
+                .AddSingleton<ChatServices>()
+                .AddSingleton<ChatHandler>()
                 .AddSingleton<MoodService>()
 
                 .BuildServiceProvider();

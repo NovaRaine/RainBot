@@ -7,6 +7,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using DiscordHex.Services;
 using System.Linq;
+using DiscordHex.ChatBot;
 
 namespace DiscordHex.Core
 {
@@ -15,13 +16,13 @@ namespace DiscordHex.Core
         private readonly CommandService _commands;
         private readonly DiscordSocketClient _discord;
         private readonly IServiceProvider _services;
-        private readonly OwnerService _ownerService;
+        private readonly ChatHandler _chatHandler;
 
         public CommandHandlingService(IServiceProvider services)
         {
             _commands = services.GetRequiredService<CommandService>();
             _discord = services.GetRequiredService<DiscordSocketClient>();
-            _ownerService = services.GetRequiredService<OwnerService>();
+            _chatHandler = services.GetRequiredService<ChatHandler>();
             _services = services;
 
             _discord.MessageReceived += MessageReceivedAsync;
@@ -94,7 +95,7 @@ namespace DiscordHex.Core
                 return;
             }
 
-            _ownerService.HandleOwnerMessages(new SocketCommandContext(_discord, message));
+            _chatHandler.HandleChatMessage((new SocketCommandContext(_discord, message)));
         }
     }
 }
