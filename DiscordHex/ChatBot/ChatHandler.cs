@@ -1,4 +1,5 @@
 ﻿using Discord.Commands;
+using DiscordHex.Core;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
@@ -22,7 +23,7 @@ namespace DiscordHex.ChatBot
 
         private void LoadTemplates()
         {
-            using (var sr = File.OpenText("c:\\rainbot\\templates.ai"))
+            using (var sr = File.OpenText(BotConfig.GetValue("TemplatePath")))
             {
                 using (var reader = new JsonTextReader(sr))
                 {
