@@ -1,14 +1,18 @@
 ﻿using Discord.Commands;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Xml;
+using System.IO;
+using System.Linq;
 
 namespace DiscordHex.ChatBot
 {
     public class ChatHandler
     {
         private ChatServices _chatServices { get; set; }
-        private List<Template> _templates { get; set; }
+        private List<Template> _templates = new List<Template>();
+        private static readonly JsonSerializer JsonSerializer = new JsonSerializer();
 
         public ChatHandler(ChatServices chatServices)
         {
@@ -18,14 +22,13 @@ namespace DiscordHex.ChatBot
 
         private void LoadTemplates()
         {
-            XmlDocument templates = new XmlDocument();
-            templates.Load("c:\rainbot\templates.ai");
-            ProcessTemplate(templates);
-        }
-
-        private void ProcessTemplate(XmlDocument templates)
-        {
-            throw new NotImplementedException();
+            using (var sr = File.OpenText("c:\\rainbot\\templates.ai"))
+            {
+                using (var reader = new JsonTextReader(sr))
+                {
+                    _templates = JsonSerializer.Deserialize<List<Template>>(reader);
+                }
+            }
         }
 
         #region Parsing comments
@@ -37,13 +40,15 @@ namespace DiscordHex.ChatBot
 
             if (message.Content.ToLower().Contains("rainbot"))
             {
-                //ParseComment(RemoveSpecialCharacters(message.Content.ToLower()));
+                var template = _templates.FirstOrDefault(x => x.Pattern == RemoveSpecialCharacters(message.Content.ToLower()));
+                if (template != null)
+                    _chatServices.Execute(template);
             }
         }
 
         private static string RemoveSpecialCharacters(string str)
         {
-            return str.Replace("?", "").Replace("!", "").Replace(".", "").Replace(",", "");
+            return str.Replace("?", "").Replace("!", "").Replace(".", "").Replace(",", "").Replace("rainbot", "").Trim();
         }
 
         #endregion

@@ -6,6 +6,17 @@ namespace DiscordHex.ChatBot
 {
     public enum TemplateExecutionEnum
     {
-        GREETING
+        GREETING,
+        ABOUTME,
+        ABOUTNOVA,
+        HELP,
+        BOTFACT,
+        PAT,
+        BAD,
+        GOOD,
+        SHOW,
+        LOVEME,
+        LOVEOTHER,
+        BOTLIKES
     }
 }

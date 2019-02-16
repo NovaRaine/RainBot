@@ -1,4 +1,7 @@
 ﻿
+using System.Collections.Generic;
+using System.Xml.Serialization;
+
 namespace DiscordHex.ChatBot
 {
     public class Template
