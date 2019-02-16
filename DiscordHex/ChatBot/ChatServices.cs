@@ -39,6 +39,82 @@ namespace DiscordHex.ChatBot
             };
         }
 
+        internal void Execute(Template template)
+        {
+            switch (template.Execute)
+            {
+                case TemplateExecutionEnum.GREETING:
+                    GreetUser(template.Response);
+                    break;
+
+                case TemplateExecutionEnum.ABOUTME:
+                    AboutRainbot();
+                    break;
+
+                case TemplateExecutionEnum.ABOUTNOVA:
+                    AboutAuthor();
+                    break;
+
+                case TemplateExecutionEnum.BOTFACT:
+                    RainFact();
+                    break;
+
+                case TemplateExecutionEnum.HELP:
+                    ShowHelp();
+                    break;
+
+                case TemplateExecutionEnum.PAT:
+                    PatUser();
+                    break;
+
+                case TemplateExecutionEnum.BAD:
+                    BotFeedback(EventInput.Negative);
+                    break;
+
+                case TemplateExecutionEnum.GOOD:
+                    BotFeedback(EventInput.Positive);
+                    break;
+
+                case TemplateExecutionEnum.SHOW:
+                    break; // needs wildcard impl
+
+                case TemplateExecutionEnum.LOVEME:
+                    LoveTheBot();
+                    break;
+
+                case TemplateExecutionEnum.LOVEOTHER:
+                    break;
+
+                case TemplateExecutionEnum.BOTLIKES:
+                    DoBotLike();
+                    break;
+
+                default:
+                    //ignore, no response
+                    break;
+            }
+        }
+
+        private void LoveTheBot()
+        {
+            if (Context.Message.Author.Id == 462658205009575946)
+                Context.Channel.SendMessageAsync("Love you too mom :smiley:");
+            else if (Context.Message.Author.Id == 462658205009575946)
+                Context.Channel.SendMessageAsync(":heart:");
+            else
+                Context.Channel.SendMessageAsync("Oh.. awkward.. :flushed:");
+        }
+
+        private void DoBotLike()
+        {
+            if (Context.Message.Author.Id == 462658205009575946)
+                Context.Channel.SendMessageAsync("Yes! Best mommy :)");
+            else if (Context.Message.Author.Id == 462658205009575946)
+                Context.Channel.SendMessageAsync("You'll always be on my 'AcceptedHumanEntities' list Mio :heart:");
+            else
+                Context.Channel.SendMessageAsync("Uhm.. well, it's complicated really..");
+        }
+
         private string GetUser()
         {
             if (BotConfig.IsDragonMom(Context.Message.Author.Id))
@@ -52,22 +128,11 @@ namespace DiscordHex.ChatBot
 
         }
 
-        public void GreetUser(EventInput type)
+        public void GreetUser(string response)
         {
-            switch (type)
-            {
-                case EventInput.Morning:
-                    Context.Channel.SendMessageAsync($"Good morning {GetUser()} :smiley:\nLet's have fun today!");
-                    break;
-                case EventInput.Evening:
-                    Context.Channel.SendMessageAsync($"Good evening {GetUser()} :smiley:\nBedtime soon?");
-                    break;
-                case EventInput.Night:
-                    Context.Channel.SendMessageAsync($"Good night {GetUser()}\n-good night hugs-");
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
+            var resp = string.Format(response, GetUser());
+
+            Context.Channel.SendMessageAsync(resp);
         }
 
         public void BotFeedback(EventInput type)

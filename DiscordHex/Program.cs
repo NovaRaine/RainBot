@@ -23,7 +23,7 @@ namespace DiscordHex
         {
             SetupLogging();
 
-            Environment.SetEnvironmentVariable("Version", "3.7_L");
+            Environment.SetEnvironmentVariable("Version", "4.0_L");
 
             var services = ConfigureServices();
 
