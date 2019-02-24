@@ -35,10 +35,10 @@ namespace DiscordHex.Services
 
         public void SendMoodReply(SocketCommandContext context)
         {
-            var p = Singleton.I.RandomNumber.Next(0, 100);
+            //var p = Singleton.I.RandomNumber.Next(0, 100);
 
-            if (p < 7)
-                context.Message.Channel.SendMessageAsync(_replies.ElementAt(Singleton.I.RandomNumber.Next(0, _replies.Count)));
+            //if (p < 7)
+            //    context.Message.Channel.SendMessageAsync(_replies.ElementAt(Singleton.I.RandomNumber.Next(0, _replies.Count)));
         }
     }
 }

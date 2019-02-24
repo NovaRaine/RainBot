@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordHex.Services;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -58,10 +59,7 @@ namespace DiscordHex.Modules
             var msg = string.Join(" ", message);
             var url = "";
 
-            if (msg.ToLower().Contains("nova")
-                || msg.ToLower().Contains("rain")
-                || msg.ToLower().Contains("nova rain")
-                || msg.ToLower().Contains("dragon mom"))
+            if (isNova(msg))
             {
                 url = "https://storage.googleapis.com/gsposts/Div/Nova.gif";
             }
@@ -80,6 +78,15 @@ namespace DiscordHex.Modules
             }
 
             await ReplyAsync("no results :unamused:");
+        }
+
+        private bool isNova(string msg)
+        {
+            return msg.ToLower() == "nova"
+                || msg.ToLower() == "rain"
+                || msg.ToLower() == "nova rain"
+                || msg.ToLower() == "dragon mom"
+                || msg.ToLower() == "supernova";
         }
 
         [Command("cat")]
