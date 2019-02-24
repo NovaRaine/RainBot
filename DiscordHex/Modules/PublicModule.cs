@@ -55,8 +55,21 @@ namespace DiscordHex.Modules
         [Remarks("show [tag]")]
         public async Task RndGif(params string[] message)
         {
+            var msg = string.Join(" ", message);
+            var url = "";
 
-            var url = RandomPictureService.GetRandomGiphyByTag(string.Join(" ", message));
+            if (msg.ToLower().Contains("nova")
+                || msg.ToLower().Contains("rain")
+                || msg.ToLower().Contains("nova rain")
+                || msg.ToLower().Contains("dragon mom"))
+            {
+                url = "https://storage.googleapis.com/gsposts/Div/Nova.gif";
+            }
+            else
+            {
+                url = RandomPictureService.GetRandomGiphyByTag(msg);
+            }
+
             if (!string.IsNullOrEmpty(url))
             {
                 var embedded = new EmbedBuilder();
