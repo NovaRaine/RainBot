@@ -6,16 +6,16 @@ namespace RainBot.Data
 {
     public class SpellRepository
     {
-        private BotContext _dbContext;
+        private SpellsContext _context;
 
-        public SpellRepository(BotContext dbContext)
+        public SpellRepository(SpellsContext context)
         {
-            _dbContext = dbContext;
+            _context = context;
         }
 
         public List<SpellEntity> GetSpells()
         {
-            return _dbContext.Spells.ToList();
+            return _context.Spells.ToList();
         }
     }
 }

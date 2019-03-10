@@ -6,16 +6,16 @@ namespace RainBot.Data
 {
     public class SoundReactRepository
     {
-        private BotContext _dbContext;
+        private SoundReactContext _context;
 
-        public SoundReactRepository(BotContext dbContext)
+        public SoundReactRepository(SoundReactContext dbContext)
         {
-            _dbContext = dbContext;
+            _context = dbContext;
         }
 
         public List<SoundReactEntity> GetSoundReacts()
         {
-            return _dbContext.SoundReact.ToList();
+            return _context.SoundReact.ToList();
         }
     }
 }

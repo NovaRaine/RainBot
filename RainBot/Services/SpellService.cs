@@ -2,7 +2,6 @@
 using System.Linq;
 using Discord;
 using Discord.Commands;
-using DiscordHex.Domain;
 using RainBot.Core;
 using RainBot.Data;
 using RainBot.Domain;
@@ -14,12 +13,10 @@ namespace RainBot.Services
         private List<SpellEntity> Hexes { get; set; }
         private List<SpellEntity> Buffs { get; set; }
         private List<SpellEntity> DirectDamage { get; set; }
-        //private readonly ProfileService _profileService;
 
-        public SpellService(BotContext dbContext)
+        public SpellService(SpellsContext context)
         {
-            //_profileService = new ProfileService(dbContext);
-            var spellRepository = new SpellRepository(dbContext);
+            var spellRepository = new SpellRepository(context);
             var spells = spellRepository.GetSpells();
 
             Hexes = spells.Where(x => x.Type == SpellTypeEnum.Hex).ToList();
@@ -29,13 +26,6 @@ namespace RainBot.Services
 
         public EmbedBuilder CastSpell(SocketCommandContext context, ulong botId, SpellTypeEnum type)
         {
-            /*
-            _profileService.IncreaseCount(context.Message.Author.Id, type, true);
-            if (context.Message.MentionedUsers.Count > 0)
-                _profileService.IncreaseCount(context.Message.MentionedUsers.First().Id, type, false);
-
-            */
-
             var e = new EmbedBuilder();
 
             if (context.Message.MentionedUsers != null && context.Message.MentionedUsers.Count > 0 && context.Message.MentionedUsers.Any(x => x.Id == botId) && type != SpellTypeEnum.Buff)
@@ -87,7 +77,6 @@ namespace RainBot.Services
             }
 
             e.Description = $"{targets}! I cast {spell.Name} on you!{duration} Nyaaa~";
-            //_profileService.AddSpellEffect(context.Message.MentionedUsers, spell.Name, hours);
 
             return e;
         }
