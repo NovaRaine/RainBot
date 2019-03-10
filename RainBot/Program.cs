@@ -62,7 +62,6 @@ namespace RainBot
                 .AddSingleton<FfxivSpellService>()
                 .AddSingleton<SoundReactionService>()
                 .AddSingleton<GameSession>()
-                .AddSingleton<ProfileService>()
                 .AddSingleton<HelpService>()
                 .AddSingleton<RainFactService>()
 

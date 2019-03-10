@@ -9,7 +9,6 @@ namespace RainBot.Data
     {
         public DbSet<SpellEntity> Spells { get; set; }
         public DbSet<SoundReactEntity> SoundReact { get; set; }
-        public DbSet<UserProfileEntity> UserProfiles { get; set; }
         public DbSet<GameLocationEntity> GaleLocation { get; set; }
         public DbSet<ActiveEffectEntity> ActiveEffects { get; set; }
 
@@ -23,7 +22,6 @@ namespace RainBot.Data
             builder.Entity<GameLocationEntity>(ConfigureGameLocation);
             builder.Entity<SoundReactEntity>(ConfigureSoundReacts);
             builder.Entity<SpellEntity>(ConfigureSpells);
-            builder.Entity<UserProfileEntity>(ConfigureUserProfiles);
             builder.Entity<ActiveEffectEntity>(ConfigureActiveEffects);
         }
 
@@ -53,20 +51,6 @@ namespace RainBot.Data
             builder.Property(e => e.Guid).HasColumnName("guid");
             builder.Property(e => e.Name).HasColumnName("name");
             builder.Property(e => e.Type).HasColumnName("type");
-        }
-
-        private void ConfigureUserProfiles(EntityTypeBuilder<UserProfileEntity> builder)
-        {
-            builder.ToTable("UserProfiles", "RainBot");
-            builder.Property(e => e.Guid).HasColumnName("guid");
-            builder.Property(e => e.DiscordId).HasColumnName("discordid");
-            builder.Property(e => e.BuffsCasted).HasColumnName("buffscasted");
-            builder.Property(e => e.BuffsReceived).HasColumnName("buffsreceived");
-            builder.Property(e => e.DamageCasted).HasColumnName("damagecasted");
-            builder.Property(e => e.DamageReceived).HasColumnName("damagereceived");
-            builder.Property(e => e.HexCasted).HasColumnName("hexcasted");
-            builder.Property(e => e.HexReceived).HasColumnName("hexreceived");
-            builder.Property(e => e.GamesStarted).HasColumnName("gamesstarted");
         }
 
         private void ConfigureActiveEffects(EntityTypeBuilder<ActiveEffectEntity> builder)
