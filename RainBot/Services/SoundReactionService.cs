@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Discord;
-using DiscordHex.Domain;
 using RainBot.Core;
 using RainBot.Data;
 using RainBot.Domain;
@@ -16,9 +15,9 @@ namespace RainBot.Services
         private readonly List<SoundReactEntity> _naps;
         private readonly List<SoundReactEntity> _miwa;
 
-        public SoundReactionService(BotContext dbContext)
+        public SoundReactionService(SoundReactContext context)
         {
-            var repo = new SoundReactRepository(dbContext);
+            var repo = new SoundReactRepository(context);
             var sounds = repo.GetSoundReacts();
 
             _gaySounds = sounds.Where(x => x.Type == SoundReactTypeEnum.GAY).ToList();

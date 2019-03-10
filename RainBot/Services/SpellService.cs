@@ -14,9 +14,9 @@ namespace RainBot.Services
         private List<SpellEntity> Buffs { get; set; }
         private List<SpellEntity> DirectDamage { get; set; }
 
-        public SpellService(BotContext dbContext)
+        public SpellService(SpellsContext context)
         {
-            var spellRepository = new SpellRepository(dbContext);
+            var spellRepository = new SpellRepository(context);
             var spells = spellRepository.GetSpells();
 
             Hexes = spells.Where(x => x.Type == SpellTypeEnum.Hex).ToList();

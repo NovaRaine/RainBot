@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RainBot.ChatBot;
 using RainBot.Core;
@@ -23,7 +24,7 @@ namespace RainBot
         {
             SetupLogging();
 
-            Environment.SetEnvironmentVariable("Version", "4.0_L");
+            Environment.SetEnvironmentVariable("Version", "4.1_L");
 
             var services = ConfigureServices();
 
@@ -55,19 +56,20 @@ namespace RainBot
 
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommonCommands>()
-                .AddSingleton<BotContext>()
 
                 .AddSingleton<RandomPictureService>()
                 .AddSingleton<SpellService>()
                 .AddSingleton<FfxivSpellService>()
                 .AddSingleton<SoundReactionService>()
-                .AddSingleton<GameSession>()
                 .AddSingleton<HelpService>()
                 .AddSingleton<RainFactService>()
 
                 .AddSingleton<ChatServices>()
                 .AddSingleton<ChatHandler>()
                 .AddSingleton<MoodService>()
+
+                .AddDbContext<SoundReactContext>(opt => opt.UseNpgsql(BotConfig.GetValue("ConnectionString")))
+                .AddDbContext<SpellsContext>(opt => opt.UseNpgsql(BotConfig.GetValue("ConnectionString")))
 
                 .BuildServiceProvider();
         }
