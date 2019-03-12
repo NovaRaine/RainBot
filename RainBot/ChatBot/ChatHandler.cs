@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using Discord.Commands;
+using Discord.WebSocket;
 using Newtonsoft.Json;
 using RainBot.Core;
 
@@ -40,10 +41,25 @@ namespace RainBot.ChatBot
 
             if (message.Content.ToLower().Contains("rainbot"))
             {
-                var template = _templates.FirstOrDefault(x => x.Pattern == RemoveSpecialCharacters(message.Content.ToLower()));
-                if (template != null)
+                var template = GetTemplate(message);
+                if (template != null && !string.IsNullOrEmpty(template.Pattern))
                     _chatServices.Execute(template);
             }
+        }
+
+        private Template GetTemplate(SocketUserMessage message)
+        {
+            var msg = RemoveSpecialCharacters(message.Content.ToLower());
+            // Exact match
+            var template =  _templates.FirstOrDefault(x => x.Pattern == msg);
+
+            // Partial match, including wildcards
+            if (template == null || string.IsNullOrEmpty(template.Pattern))
+            {
+
+            }
+
+            return template;
         }
 
         private static string RemoveSpecialCharacters(string str)
