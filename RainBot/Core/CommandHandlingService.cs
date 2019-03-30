@@ -29,7 +29,7 @@ namespace RainBot.Core
 
         public async Task InitializeAsync()
         {
-            await _commands.AddModulesAsync(Assembly.GetEntryAssembly());
+            await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
         }
 
         public async Task MessageReceivedAsync(SocketMessage rawMessage)
