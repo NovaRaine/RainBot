@@ -20,7 +20,7 @@ namespace RainBot.Data
 
         private void ConfigureSpells(EntityTypeBuilder<SpellEntity> builder)
         {
-            builder.ToTable("Spells", "RainBot");
+            builder.ToTable("Spells");
         }
     }
 }

@@ -20,7 +20,7 @@ namespace RainBot.Data
 
         private void ConfigureSoundReacts(EntityTypeBuilder<SoundReactEntity> builder)
         {
-            builder.ToTable("SoundReacts", "RainBot");
+            builder.ToTable("SoundReacts");
         }
     }
 }
