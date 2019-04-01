@@ -68,8 +68,7 @@ namespace RainBot
                 .AddSingleton<ChatHandler>()
                 .AddSingleton<MoodService>()
 
-                .AddDbContext<SoundReactContext>(opt => opt.UseSqlServer(BotConfig.GetValue("ConnectionString")))
-                .AddDbContext<SpellsContext>(opt => opt.UseSqlServer(BotConfig.GetValue("ConnectionString")))
+                .AddDbContext<RainBotContext>(opt => opt.UseSqlServer(BotConfig.GetValue("ConnectionString")))
 
                 .BuildServiceProvider();
         }

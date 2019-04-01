@@ -15,7 +15,7 @@ namespace RainBot.Services
         private readonly List<SoundReactEntity> _naps;
         private readonly List<SoundReactEntity> _miwa;
 
-        public SoundReactionService(SoundReactContext context)
+        public SoundReactionService(RainBotContext context)
         {
             var repo = new SoundReactRepository(context);
             var sounds = repo.GetSoundReacts();
