@@ -45,7 +45,9 @@ namespace RainBot.Core
 
             var argPos = prefix.Length;
 
-            if (!message.HasStringPrefix(prefix, ref argPos)) return;
+            if (!message.HasMentionPrefix(_discord.CurrentUser, ref argPos)
+                && !message.HasStringPrefix(prefix, ref argPos))
+                return;
 
             var context = new SocketCommandContext(_discord, message);
             var result = await _commands.ExecuteAsync(context, argPos, _services);

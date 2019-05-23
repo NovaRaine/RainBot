@@ -14,7 +14,7 @@ namespace RainBot.Services
         private List<SpellEntity> Buffs { get; set; }
         private List<SpellEntity> DirectDamage { get; set; }
 
-        public SpellService(SpellsContext context)
+        public SpellService(RainBotContext context)
         {
             var spellRepository = new SpellRepository(context);
             var spells = spellRepository.GetSpells();

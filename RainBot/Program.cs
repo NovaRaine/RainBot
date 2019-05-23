@@ -24,7 +24,7 @@ namespace RainBot
         {
             SetupLogging();
 
-            Environment.SetEnvironmentVariable("Version", "4.1_L");
+            Environment.SetEnvironmentVariable("Version", "4.2_L");
 
             var services = ConfigureServices();
 
@@ -68,8 +68,7 @@ namespace RainBot
                 .AddSingleton<ChatHandler>()
                 .AddSingleton<MoodService>()
 
-                .AddDbContext<SoundReactContext>(opt => opt.UseSqlServer(BotConfig.GetValue("ConnectionString")))
-                .AddDbContext<SpellsContext>(opt => opt.UseSqlServer(BotConfig.GetValue("ConnectionString")))
+                .AddDbContext<RainBotContext>(opt => opt.UseSqlServer(BotConfig.GetValue("ConnectionString")))
 
                 .BuildServiceProvider();
         }

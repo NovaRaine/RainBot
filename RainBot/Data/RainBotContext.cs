@@ -1,14 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RainBot.Domain;
 
 namespace RainBot.Data
 {
-    public class SoundReactContext : DbContext
+    public class RainBotContext : DbContext
     {
+        public DbSet<SpellEntity> Spells { get; set; }
         public DbSet<SoundReactEntity> SoundReact { get; set; }
 
-        public SoundReactContext(DbContextOptions<SoundReactContext> options) : base(options)
+        public RainBotContext(DbContextOptions<RainBotContext> options) : base(options)
         {
 
         }
@@ -16,11 +20,17 @@ namespace RainBot.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<SoundReactEntity>(ConfigureSoundReacts);
+            builder.Entity<SpellEntity>(ConfigureSpells);
         }
 
         private void ConfigureSoundReacts(EntityTypeBuilder<SoundReactEntity> builder)
         {
             builder.ToTable("SoundReacts");
+        }
+
+        private void ConfigureSpells(EntityTypeBuilder<SpellEntity> builder)
+        {
+            builder.ToTable("Spells");
         }
     }
 }

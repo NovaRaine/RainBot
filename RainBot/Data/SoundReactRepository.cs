@@ -6,9 +6,9 @@ namespace RainBot.Data
 {
     public class SoundReactRepository
     {
-        private SoundReactContext _context;
+        private readonly RainBotContext _context;
 
-        public SoundReactRepository(SoundReactContext dbContext)
+        public SoundReactRepository(RainBotContext dbContext)
         {
             _context = dbContext;
         }

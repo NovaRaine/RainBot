@@ -6,9 +6,9 @@ namespace RainBot.Data
 {
     public class SpellRepository
     {
-        private SpellsContext _context;
+        private readonly RainBotContext _context;
 
-        public SpellRepository(SpellsContext context)
+        public SpellRepository(RainBotContext context)
         {
             _context = context;
         }
