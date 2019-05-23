@@ -219,7 +219,6 @@ namespace RainBot.Modules
         }
 
         [Command("spunky")]
-        [Summary("Spunky?")]
         public async Task Spunky()
         {
             if (Context.Message.Author.Id != 184013275841691648) return; // nah, you're not spunky
