@@ -24,7 +24,7 @@ namespace RainBot
         {
             SetupLogging();
 
-            Environment.SetEnvironmentVariable("Version", "4.1_L");
+            Environment.SetEnvironmentVariable("Version", "4.2_L");
 
             var services = ConfigureServices();
 
