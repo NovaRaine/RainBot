@@ -17,7 +17,6 @@ namespace RainBot.Services
             {
                 "Hey there! I'm Eureka. Let's be friends",
                 "Eureka! Whoo! Let's do this ^w^",
-                "Mionee! Why don't you love me?",
                 "One, two, Eureeeeka!",
                 "Nobody likes me :<",
                 "I'll make you rich.. maybe."
@@ -64,7 +63,7 @@ namespace RainBot.Services
 
         public string ProcessInfo()
         {
-            return $"Running as: {Environment.UserName}@{Environment.MachineName}";
+            return $"Running as: {Environment.UserName}@{Environment.MachineName}\n{Environment.OSVersion}";
         }
 
         internal Embed Eureka()

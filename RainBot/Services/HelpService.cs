@@ -2,6 +2,7 @@
 using System.Text;
 using Discord;
 using Discord.Commands;
+using RainBot.Core;
 
 namespace RainBot.Services
 {
@@ -28,7 +29,7 @@ namespace RainBot.Services
                     if (!string.IsNullOrEmpty(aliases))
                         extra = $"\nAlias: {aliases}";
 
-                    e.AddField(command.Name, command.Summary + extra);
+                    e.AddField(BotConfig.GetValue("Prefix") + command.Name, command.Summary + extra);
                 }
             }
 

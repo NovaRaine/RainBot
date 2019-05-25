@@ -1,19 +1,17 @@
-﻿using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
+﻿using System.Threading.Tasks;
 using Discord.WebSocket;
+using Discord.Commands;
 using RainBot.Services;
+using System.Linq;
+using Discord;
 
 namespace RainBot.Modules
 {
     public class PublicModule : ModuleBase<SocketCommandContext>
     {
         public RandomPictureService RandomPictureService { get; set; }
-        public DiscordSocketClient Discord { get; set; }
         public CommonCommands CommonCommands { get; set; }
-        public MoodService MoodService { get; set; }
+        public DiscordSocketClient Discord { get; set; }
 
         internal PublicModule(RandomPictureService pictureService, DiscordSocketClient discord)
         {
@@ -31,7 +29,6 @@ namespace RainBot.Modules
                 msg = "nothing.";
 
             await ReplyAsync($"{user.Username}, you have been served {msg}");
-            MoodService.SendMoodReply(Context);
         }
 
         [Command("serve")]
@@ -46,7 +43,6 @@ namespace RainBot.Modules
             else
                 await ReplyAsync($"{Context.Message.Author.Username} has served {msg}");
 
-            MoodService.SendMoodReply(Context);
         }
 
         [Command("rndgif")]
@@ -72,7 +68,6 @@ namespace RainBot.Modules
                 var embedded = new EmbedBuilder();
                 embedded.ImageUrl = url;
                 await ReplyAsync("", false, embedded.Build());
-                MoodService.SendMoodReply(Context);
                 return;
             }
 
@@ -92,24 +87,21 @@ namespace RainBot.Modules
         [Alias("kitty", "radomcat")]
         [Summary("Get a radom cat in your channel! An important part of the internet.")]
         [Remarks("cat | cat @user")]
-        public async Task CatAsync(params string[] message)
+        public async Task Cat(params string[] message)
         {
             var text = Context.Message.MentionedUsers.Count > 0
                 ? $"{Context.Message.Author.Username} gifts a kitteh to {Context.Message.MentionedUsers.First().Username}! Hurray :D"
                 : $"Awwwwww.. look, a kitty has come to visit";
 
-            var url = RandomPictureService.GetRandomGiphyByTag("cat");
-            if (!string.IsNullOrEmpty(url))
+            var embed = GetRandomGiphyByTag(text, "cat");
+
+            if (embed != null)
             {
-                var embedded = new EmbedBuilder();
-                embedded.Description = text;
-                embedded.ImageUrl = url;
-                await ReplyAsync("", false, embedded.Build());
+                await ReplyAsync("", false, embed);
                 return;
             }
 
             await ReplyAsync("The cats are hiding :unamused:");
-            MoodService.SendMoodReply(Context);
         }
 
         [Command("dog")]
@@ -122,10 +114,15 @@ namespace RainBot.Modules
                 ? $"{Context.Message.MentionedUsers.First().Username}! You got a doggie from {Context.Message.Author.Username} :>"
                 : $"Awwwwww.. look, a dawg has come to visit";
 
-            var stream = await RandomPictureService.GetPictureAsync("https://www.randomdoggiegenerator.com/randomdoggie.php");
-            stream.Seek(0, SeekOrigin.Begin);
-            await Context.Channel.SendFileAsync(stream, "DeniLikesDogs.png", text);
-            MoodService.SendMoodReply(Context);
+            var embed = GetRandomGiphyByTag(text, "dog");
+
+            if (embed != null)
+            {
+                await ReplyAsync("", false, embed);
+                return;
+            }
+
+            await ReplyAsync("The dogs are hiding :/");
         }
 
         [Command("bunny")]
@@ -138,18 +135,29 @@ namespace RainBot.Modules
                 ? $"{Context.Message.MentionedUsers.First().Username}! A bunneh from {Context.Message.Author.Username} :3"
                 : $"Bunbun!!";
 
-            var url = RandomPictureService.GetRandomGiphyByTag("bunny");
-            if (!string.IsNullOrEmpty(url))
-            {
-                var embedded = new EmbedBuilder();
-                embedded.Description = text;
-                embedded.ImageUrl = url;
-                await ReplyAsync("", false, embedded.Build());
-                MoodService.SendMoodReply(Context);
+            var embed = GetRandomGiphyByTag(text, "bunny");
+
+            if (embed != null) {
+                await ReplyAsync("", false, embed);
                 return;
             }
 
             await ReplyAsync("The bunnies are hiding :/");
+        }
+
+        private Embed GetRandomGiphyByTag(string embedDescription, string tag)
+        {
+            var url = RandomPictureService.GetRandomGiphyByTag(tag);
+
+            if (!string.IsNullOrEmpty(url))
+            {
+                return new EmbedBuilder()
+                    .WithDescription(embedDescription)
+                    .WithUrl(url)
+                    .Build();
+            }
+
+            return null;
         }
 
         [Command("mokepon")]
@@ -158,13 +166,11 @@ namespace RainBot.Modules
         [Remarks("No special usage.")]
         public async Task Mokepon(params string[] message)
         {
-            var url = RandomPictureService.GetRandomGiphyByTag("pokemon");
-            if (!string.IsNullOrEmpty(url))
+            var embed = GetRandomGiphyByTag("Pokeymun!", "bunny");
+
+            if (embed != null)
             {
-                var embedded = new EmbedBuilder();
-                embedded.Description = "Pokeymun!";
-                embedded.ImageUrl = url;
-                await ReplyAsync("", false, embedded.Build());
+                await ReplyAsync("", false, embed);
                 return;
             }
 
