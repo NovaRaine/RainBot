@@ -35,6 +35,7 @@ namespace RainBot.Modules
 
         [Command("nova")]
         [Alias("mommy")]
+        [Summary("About Nova")]
         public async Task AboutNova()
         {
             var emb = new EmbedBuilder();

@@ -4,6 +4,7 @@ using Discord.Commands;
 using RainBot.Services;
 using System.Linq;
 using Discord;
+using System.Text;
 
 namespace RainBot.Modules
 {
@@ -77,10 +78,8 @@ namespace RainBot.Modules
         private bool isNova(string msg)
         {
             return msg.ToLower() == "nova"
-                || msg.ToLower() == "rain"
                 || msg.ToLower() == "nova rain"
-                || msg.ToLower() == "dragon mom"
-                || msg.ToLower() == "supernova";
+                || msg.ToLower() == "dragon mom";
         }
 
         [Command("cat")]

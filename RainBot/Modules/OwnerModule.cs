@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using RainBot.Services;
 
 namespace RainBot.Modules
@@ -10,11 +11,17 @@ namespace RainBot.Modules
     public class OwnerModule : ModuleBase<SocketCommandContext>
     {
         public CommonCommands CommonCommands { get; set; }
+        public DiscordSocketClient Discord { get; set; }
+
+        public OwnerModule(DiscordSocketClient discord)
+        {
+            Discord = discord;
+        }
 
         [Command("version")]
         [Alias("ver")]
         [RequireOwner]
-        public Task PingAsync()
+        public Task Version()
             => ReplyAsync(Environment.GetEnvironmentVariable("Version"));
 
         [Command("info")]
@@ -37,6 +44,26 @@ namespace RainBot.Modules
                 .AppendLine($"IsBot: {user.IsBot}");
 
             await Context.Message.Author.SendMessageAsync(s.ToString());
+        }
+
+        [Command("getguilds")]
+        [RequireOwner]
+        public async Task test(string args = "")
+        {
+            if (args.ToLower() == "list")
+            {
+                var s = new StringBuilder();
+                foreach (var g in Discord.Guilds)
+                {
+                    s.AppendLine($"Guild: {g.Name}");
+                    s.AppendLine($"Owner: {g.Owner.Username} ({g.Owner.Id})");
+                    s.AppendLine();
+                }
+
+                await ReplyAsync(s.ToString());
+            }
+            else
+                await ReplyAsync($"Connected guilds: {Discord.Guilds.Count}");
         }
     }
 }
