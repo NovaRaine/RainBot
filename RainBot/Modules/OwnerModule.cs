@@ -101,6 +101,9 @@ namespace RainBot.Modules
                 return;
             }
 
+            _lastGuild = guildid;
+            _lastChannel = channelId;
+
             await guild.GetTextChannel(channelId).SendMessageAsync(string.Join(" ", msg));
             await ReplyAsync("Done! :)");
         }
