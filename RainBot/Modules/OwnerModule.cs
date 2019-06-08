@@ -78,13 +78,12 @@ namespace RainBot.Modules
                 return;
             }
 
-            var s = new StringBuilder();
             foreach (var c in guild.Channels)
             {
-                s.AppendLine($"Channel: {c.Name} ({c.Id})");
+                await ReplyAsync($"Channel: {c.Name} ({c.Id})");
             }
 
-            await ReplyAsync(s.ToString());
+            await ReplyAsync("done");
         }
 
         [Command("send")]
