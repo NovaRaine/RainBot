@@ -152,7 +152,7 @@ namespace RainBot.Modules
             {
                 return new EmbedBuilder()
                     .WithDescription(embedDescription)
-                    .WithUrl(url)
+                    .WithImageUrl(url)
                     .Build();
             }
 
@@ -165,7 +165,7 @@ namespace RainBot.Modules
         [Remarks("No special usage.")]
         public async Task Mokepon(params string[] message)
         {
-            var embed = GetRandomGiphyByTag("Pokeymun!", "bunny");
+            var embed = GetRandomGiphyByTag("Pokeymun!", "pokemon");
 
             if (embed != null)
             {
