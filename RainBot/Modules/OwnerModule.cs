@@ -13,6 +13,9 @@ namespace RainBot.Modules
         public CommonCommands CommonCommands { get; set; }
         public DiscordSocketClient Discord { get; set; }
 
+        private ulong _lastGuild { get; set; }
+        private ulong _lastChannel { get; set; }
+
         public OwnerModule(DiscordSocketClient discord)
         {
             Discord = discord;
@@ -99,6 +102,36 @@ namespace RainBot.Modules
             }
 
             await guild.GetTextChannel(channelId).SendMessageAsync(string.Join(" ", msg));
+            await ReplyAsync("Done! :)");
+        }
+
+        [Command("rsend")]
+        [RequireOwner]
+        public async Task Rsend(params string[] msg)
+        {
+            if (_lastChannel < 1 || _lastGuild < 1)
+            {
+                await ReplyAsync("Last channel or guild not set. Abort!");
+                return;
+            }
+
+            var guild = Discord.GetGuild(_lastGuild);
+
+            if (guild == null)
+            {
+                await ReplyAsync("Sorry mom, I found no guild with that ID");
+                return;
+            }
+
+            var channel = guild.GetTextChannel(_lastChannel);
+
+            if (guild == null)
+            {
+                await ReplyAsync("Sorry mom, I found no chennel with that ID");
+                return;
+            }
+
+            await channel.SendMessageAsync(string.Join(" ", msg));
             await ReplyAsync("Done! :)");
         }
     }
