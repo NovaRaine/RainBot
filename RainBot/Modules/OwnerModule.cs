@@ -66,9 +66,9 @@ namespace RainBot.Modules
                 await ReplyAsync($"Connected guilds: {Discord.Guilds.Count}");
         }
 
-        [Command("send")]
+        [Command("getchannels")]
         [RequireOwner]
-        public async Task Send(ulong guildid, params string[] msg)
+        public async Task GetChannels(ulong guildid)
         {
             var guild = Discord.GetGuild(guildid);
 
@@ -78,7 +78,28 @@ namespace RainBot.Modules
                 return;
             }
 
-            await guild.DefaultChannel.SendMessageAsync(string.Join(" ", msg));
+            var s = new StringBuilder();
+            foreach (var c in guild.Channels)
+            {
+                s.AppendLine($"Channel: {c.Name} ({c.Id})");
+            }
+
+            await ReplyAsync(s.ToString());
+        }
+
+        [Command("send")]
+        [RequireOwner]
+        public async Task Send(ulong guildid, ulong channelId, params string[] msg)
+        {
+            var guild = Discord.GetGuild(guildid);
+            
+            if (guild == null)
+            {
+                await ReplyAsync("Sorry mom, I found no guild with that ID");
+                return;
+            }
+
+            await guild.GetTextChannel(channelId).SendMessageAsync(string.Join(" ", msg));
             await ReplyAsync("Done! :)");
         }
     }
