@@ -1,13 +1,14 @@
 ﻿using System.Collections.Concurrent;
 using System.IO;
 using Newtonsoft.Json;
+using RainBot.Data;
 
 namespace RainBot.Core
 {
     public static class BotConfig
     {
         private static ConcurrentDictionary<string, string> _configuration = new ConcurrentDictionary<string, string>();
-        private static readonly JsonSerializer JsonSerializer = new JsonSerializer();
+        private static readonly JsonSerializer _jsonSerializer = new JsonSerializer();
 #if DEBUG
         private const string ConfigFile = @"c:\RainBot\Config.cfg";
 #endif
@@ -25,7 +26,18 @@ namespace RainBot.Core
             if (_configuration.IsEmpty) LoadConfig();
 
             _configuration.TryGetValue(value, out var res);
-            return res;
+
+            return res ?? string.Empty;
+        }
+
+        public static void SetValue(string key, string value)
+        {
+            if (_configuration.IsEmpty) LoadConfig();
+
+            if (!_configuration.ContainsKey(key))
+            {
+                _configuration.TryAdd(key, value);
+            }
         }
 
         private static void LoadConfig()
@@ -40,7 +52,7 @@ namespace RainBot.Core
             {
                 using (var reader = new JsonTextReader(sr))
                 {
-                    _configuration = JsonSerializer.Deserialize<ConcurrentDictionary<string, string>>(reader);
+                    _configuration = _jsonSerializer.Deserialize<ConcurrentDictionary<string, string>>(reader);
                 }
             }
         }

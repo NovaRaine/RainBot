@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using RainBot.ChatBot;
+using RainBot.Data;
 
 namespace RainBot.Core
 {
@@ -16,15 +18,25 @@ namespace RainBot.Core
         private readonly DiscordSocketClient _discord;
         private readonly IServiceProvider _services;
         private readonly ChatHandler _chatHandler;
+        private readonly RainBotContext _context;
 
-        public CommandHandlingService(IServiceProvider services)
+        private ConcurrentDictionary<ulong, string> _prefixes { get; } = new ConcurrentDictionary<ulong, string>();
+
+        public CommandHandlingService(IServiceProvider services, RainBotContext context)
         {
             _commands = services.GetRequiredService<CommandService>();
             _discord = services.GetRequiredService<DiscordSocketClient>();
             _chatHandler = services.GetRequiredService<ChatHandler>();
             _services = services;
+            _context = context;
 
             _discord.MessageReceived += MessageReceivedAsync;
+
+            //_prefixes = _context.GuildConfigs
+            //    .Where(x => x.Key == "Prefix")
+            //    .ToDictionary(x => x.GuildId, x => x.Value)
+            //    .ToConcurrent();
+
         }
 
         public async Task InitializeAsync()
@@ -40,7 +52,10 @@ namespace RainBot.Core
 
             CheckSpecialCases(message);
 
-            var prefix = BotConfig.GetValue("Prefix");
+            var guild = (message.Channel as SocketTextChannel)?.Guild;
+
+            var prefix = GetPrefix(guild?.Id);
+                        
             if (string.IsNullOrEmpty(prefix)) return;
 
             var argPos = prefix.Length;
@@ -84,6 +99,20 @@ namespace RainBot.Core
             }
         }
 
+        private string GetPrefix(ulong? id)
+        {
+            if (id == null)
+                return BotConfig.GetValue("Prefix");
+            var a = _context.GuildConfigs.ToList();
+
+            var prefix = _context.GuildConfigs.FirstOrDefault(x => x.Key == "Prefix" && x.GuildId == id.ToString())?.Value;
+
+            if (string.IsNullOrEmpty(prefix))
+                return BotConfig.GetValue("Prefix");
+            else
+                return prefix;
+        }
+
         private void CheckSpecialCases(SocketUserMessage message)
         {
             if ((message.Content.ToLower().Contains("+hug")
@@ -99,8 +128,15 @@ namespace RainBot.Core
                 message.Channel.SendMessageAsync("Thank you <3");
                 return;
             }
+            if ((message.MentionedUsers.FirstOrDefault()?.Id == 497491199918080002
+                || message.MentionedUsers.FirstOrDefault()?.Id == 498185985096679434)
+                && message.Content.Replace("<@497491199918080002>", "").Replace("<@498185985096679434>", "").Trim() == string.Empty)
+            {
+                // empty mention. get help
+                _chatHandler.GetHelp(new SocketCommandContext(_discord, message));
+            }
 
-            _chatHandler.HandleChatMessage((new SocketCommandContext(_discord, message)));
+            _chatHandler.HandleChatMessage(new SocketCommandContext(_discord, message));
         }
     }
 }

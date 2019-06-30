@@ -7,7 +7,9 @@ namespace RainBot.Core
     {
         public static Logger GetLogger()
         {
-            //return GetConsoleLogger();
+#if DEBUG
+            return GetConsoleLogger();
+#endif
             return GetSqlLogger();
         }
 

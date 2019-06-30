@@ -24,7 +24,7 @@ namespace RainBot
         {
             SetupLogging();
 
-            Environment.SetEnvironmentVariable("Version", "4.2.1_L");
+            Environment.SetEnvironmentVariable("Version", "4.2.2_L");
 
             var services = ConfigureServices();
 
@@ -35,7 +35,6 @@ namespace RainBot
 
             await _client.LoginAsync(TokenType.Bot, BotConfig.GetValue("DiscordToken"));
             await _client.StartAsync();
-            await _client.SetGameAsync($"{BotConfig.GetValue("Prefix")}help");
 
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
 
@@ -63,6 +62,7 @@ namespace RainBot
                 .AddSingleton<SoundReactionService>()
                 .AddSingleton<HelpService>()
                 .AddSingleton<RainFactService>()
+                .AddSingleton<AdministrationService>()
 
                 .AddSingleton<ChatServices>()
                 .AddSingleton<ChatHandler>()

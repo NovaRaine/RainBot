@@ -10,7 +10,8 @@ namespace RainBot.Data
     public class RainBotContext : DbContext
     {
         public DbSet<SpellEntity> Spells { get; set; }
-        public DbSet<SoundReactEntity> SoundReact { get; set; }
+        public DbSet<SoundReactEntity> SoundReacts { get; set; }
+        public DbSet<GuildConfigEntity> GuildConfigs { get; set; }
 
         public RainBotContext(DbContextOptions<RainBotContext> options) : base(options)
         {
@@ -19,18 +20,23 @@ namespace RainBot.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<SoundReactEntity>(ConfigureSoundReacts);
-            builder.Entity<SpellEntity>(ConfigureSpells);
+            builder.Entity<SoundReactEntity>(SetupSoundReacts);
+            builder.Entity<SpellEntity>(SetupSpells);
+            builder.Entity<GuildConfigEntity>(SetupConfiguration);
         }
 
-        private void ConfigureSoundReacts(EntityTypeBuilder<SoundReactEntity> builder)
+        private void SetupSoundReacts(EntityTypeBuilder<SoundReactEntity> builder)
         {
             builder.ToTable("SoundReacts");
         }
 
-        private void ConfigureSpells(EntityTypeBuilder<SpellEntity> builder)
+        private void SetupSpells(EntityTypeBuilder<SpellEntity> builder)
         {
             builder.ToTable("Spells");
+        }
+        private void SetupConfiguration(EntityTypeBuilder<GuildConfigEntity> builder)
+        {
+            builder.ToTable("GuildSpecificConfig");
         }
     }
 }

@@ -173,27 +173,7 @@ namespace RainBot.Modules
                 return;
             }
 
-            await ReplyAsync("Something happened.. sorry -.-");
-        }
-
-        [Command("chocolate")]
-        [Alias("choco")]
-        [Summary("Eat some chocolate, or share with someone else.")]
-        [Remarks("choco | choco @user")]
-        public async Task GetChocolate(params string[] message)
-        {
-            var embedded = new EmbedBuilder();
-            if (Context.Message.MentionedUsers.Count > 0)
-            {
-                embedded.Description = $"{Context.Message.Author.Username} throws a bunch of chocolate at {Context.Message.MentionedUsers.First().Username}";
-                embedded.ImageUrl = "https://upload.wikimedia.org/wikipedia/commons/7/70/Chocolate_%28blue_background%29.jpg";
-            }
-            else
-            {
-                embedded.Description = $"{Context.Message.Author.Username} noms some chocolate. Without sharing..";
-            }
-
-            await ReplyAsync("", false, embedded.Build());
+            await ReplyAsync("I couldn't find any mokepons :(");
         }
 
         [Command("love")]

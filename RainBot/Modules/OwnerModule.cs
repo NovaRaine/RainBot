@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using RainBot.Core;
 using RainBot.Services;
 
 namespace RainBot.Modules
@@ -12,13 +13,19 @@ namespace RainBot.Modules
     {
         public CommonCommands CommonCommands { get; set; }
         public DiscordSocketClient Discord { get; set; }
-
-        private ulong _lastGuild { get; set; }
-        private ulong _lastChannel { get; set; }
+        public AdministrationService AdministrationService { get; set; }
 
         public OwnerModule(DiscordSocketClient discord)
         {
             Discord = discord;
+        }
+
+        [Command("setprefix")]
+        [RequireOwner]
+        public async Task SetPrefix(string prefix)
+        {
+            AdministrationService.SetPrefix(prefix, (Context.Message.Channel as SocketTextChannel).Guild.Id);
+            await ReplyAsync($"New prefix: {prefix}");
         }
 
         [Command("version")]
@@ -101,8 +108,8 @@ namespace RainBot.Modules
                 return;
             }
 
-            _lastGuild = guildid;
-            _lastChannel = channelId;
+            BotConfig.SetValue("LastChannelId", $"{channelId}");
+            BotConfig.SetValue("LastGuildId", $"{guildid}");
 
             await guild.GetTextChannel(channelId).SendMessageAsync(string.Join(" ", msg));
             await ReplyAsync("Done! :)");
@@ -112,13 +119,19 @@ namespace RainBot.Modules
         [RequireOwner]
         public async Task Rsend(params string[] msg)
         {
-            if (_lastChannel < 1 || _lastGuild < 1)
+            var cid = BotConfig.GetValue("LastChannelId");
+            var gid = BotConfig.GetValue("LastGuildId");
+
+            if (string.IsNullOrEmpty(cid) || string.IsNullOrEmpty(gid))
             {
                 await ReplyAsync("Last channel or guild not set. Abort!");
                 return;
             }
 
-            var guild = Discord.GetGuild(_lastGuild);
+            var lastChannel = Convert.ToUInt64(cid);
+            var lastGuild = Convert.ToUInt64(gid);
+
+            var guild = Discord.GetGuild(lastGuild);
 
             if (guild == null)
             {
@@ -126,7 +139,7 @@ namespace RainBot.Modules
                 return;
             }
 
-            var channel = guild.GetTextChannel(_lastChannel);
+            var channel = guild.GetTextChannel(lastChannel);
 
             if (guild == null)
             {

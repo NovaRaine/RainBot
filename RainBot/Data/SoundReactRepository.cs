@@ -15,7 +15,7 @@ namespace RainBot.Data
 
         public List<SoundReactEntity> GetSoundReacts()
         {
-            return _context.SoundReact.ToList();
+            return _context.SoundReacts.ToList();
         }
     }
 }

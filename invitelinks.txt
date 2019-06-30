@@ -1,6 +1,6 @@
 
 //test
-https://discordapp.com/oauth2/authorize?client_id=498185985096679434
+https://discordapp.com/oauth2/authorize?client_id=498185985096679434&scope=bot
 
 //live
-https://discordapp.com/oauth2/authorize?client_id=497491199918080002
+https://discordapp.com/oauth2/authorize?client_id=497491199918080002&scope=bot

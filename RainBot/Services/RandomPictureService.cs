@@ -31,17 +31,28 @@ namespace RainBot.Services
             }
 
             var client = new WebClient();
+            JObject json;
 
             try
             {
                 var api = $"https://api.giphy.com/v1/gifs/random?api_key={apiKey}&tag={tag}&rating=PG";
                 var response = client.DownloadString(api);
-                var json = JObject.Parse(response);
-                return json.SelectToken("data").SelectToken("images").SelectToken("original").SelectToken("url").ToString();
+                json = JObject.Parse(response);
+                
             }
             catch (Exception ex)
             {
                 Log.Error($"Error connecting to Giphy. {ex.Message}");
+                return string.Empty;
+            }
+
+            try
+            {
+                return json.SelectToken("data").SelectToken("images").SelectToken("original").SelectToken("url").ToString();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Incorrect response for Giphy. {ex.Message}");
                 return string.Empty;
             }
         }

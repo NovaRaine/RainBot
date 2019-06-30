@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Discord.Commands;
@@ -65,6 +66,13 @@ namespace RainBot.ChatBot
         private static string RemoveSpecialCharacters(string str)
         {
             return str.Replace("?", "").Replace("!", "").Replace(".", "").Replace(",", "").Replace("rainbot", "").Trim();
+        }
+
+        internal void GetHelp(SocketCommandContext context)
+        {
+            var helpTemplate = _templates.FirstOrDefault(x => x.Pattern == "help me");
+            _chatServices.Context = context;
+            _chatServices.Execute(helpTemplate);
         }
 
         #endregion Parsing comments
